@@ -2,6 +2,7 @@
 
 import {createContext, useContext, useEffect, useMemo, useState} from 'react';
 
+import {DotField} from './dot-field';
 import {Scene} from './scene';
 
 type PromptState = {
@@ -56,6 +57,7 @@ export function Stage() {
   return (
     <PromptContext value={prompt}>
       <div className="stage">
+        <DotField />
         <Scene />
       </div>
     </PromptContext>
