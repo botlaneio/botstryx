@@ -65,18 +65,21 @@ export function BriefForm({initial}: {initial: Partial<ContactValues>}) {
     <form ref={form} action={action} onSubmit={onSubmit} noValidate className="ct-form">
       <fieldset className="ct-q">
         <legend><span className="mono">01</span>What are you building?</legend>
-        <TextArea label="What are you building?" isLabelHidden htmlName="brief" rows={5} size="lg" width="100%"
-          placeholder="What it is, who it’s for, and what a good result looks like."
-          value={values.brief} onChange={set('brief')} status={statusOf('brief')} />
-        {!values.brief && (
-          <div className="ct-starters" aria-label="Ways to start">
-            {STARTERS.map((s) => (
-              <button key={s} type="button" onClick={() => { set('brief')(s); requestAnimationFrame(() => form.current?.querySelector<HTMLElement>('[name="brief"]')?.focus()); }}>
-                {s.trim()}…
-              </button>
-            ))}
-          </div>
-        )}
+        {/* On a wide sheet the ways in sit inside the empty box, under the placeholder, and go once typing starts. */}
+        <div className="ct-brief">
+          <TextArea label="What are you building?" isLabelHidden htmlName="brief" rows={4} size="lg" width="100%"
+            placeholder="What it is, who it’s for, and what a good result looks like."
+            value={values.brief} onChange={set('brief')} status={statusOf('brief')} />
+          {!values.brief && (
+            <div className="ct-starters" aria-label="Ways to start">
+              {STARTERS.map((s) => (
+                <button key={s} type="button" onClick={() => { set('brief')(s); requestAnimationFrame(() => form.current?.querySelector<HTMLElement>('[name="brief"]')?.focus()); }}>
+                  {s.trim()}…
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </fieldset>
 
       <fieldset className="ct-q" aria-describedby={errors.need ? 'need-error' : undefined}>
