@@ -5,12 +5,12 @@ import Link from 'next/link';
 import {Button} from '@astryxdesign/core/Button';
 import {TextInput} from '@astryxdesign/core/TextInput';
 
-import {ArrowRight, ArrowUpRight} from '@/components/icons';
+import {ArrowUpRight} from '@/components/icons';
 import type {PostSummary} from '@/lib/insights';
 
 import {Cover} from './cover';
 
-/** The journal's index: the newest note set large, the rest as a list, filtered by topic or searched. */
+/** The journal's index: every note as a tile in a bento grid, filtered by topic or searched. */
 export function InsightsIndex({posts}: {posts: PostSummary[]}) {
   const [topic, setTopic] = useState('');
   const [query, setQuery] = useState('');
@@ -18,7 +18,6 @@ export function InsightsIndex({posts}: {posts: PostSummary[]}) {
   const topics = [...new Set(posts.map((p) => p.topic))];
   const shown = posts.filter((p) => (!topic || p.topic === topic) && (!search || `${p.title} ${p.dek} ${p.topic}`.toLowerCase().includes(search)));
   const open = !topic && !search;
-  const [lead, ...rest] = open ? shown : [undefined, ...shown];
 
   return (
     <div className="ins-index">
@@ -39,31 +38,35 @@ export function InsightsIndex({posts}: {posts: PostSummary[]}) {
         {shown.length} {shown.length === 1 ? 'note' : 'notes'} / {topic || 'Ideas put into practice'}
       </p>
 
-      {lead && (
-        <Link href={`/blog/${lead.slug}`} className="ins-lead">
-          <div className="ins-lead-art"><Cover kind={lead.cover} seed={lead.slug} /></div>
-          <div className="ins-lead-text">
-            <p className="mono"><i aria-hidden />The studio pick<span>{lead.topic}</span></p>
-            <h2>{lead.title}</h2>
-            <p>{lead.dek}</p>
-            <p className="mono ins-meta">{lead.date} · {lead.minutes} min read</p>
-            <span className="ins-read">Read the note <ArrowRight size={15} /></span>
-          </div>
-        </Link>
-      )}
-
-      <ol className="ins-list">
-        {rest.filter((p): p is PostSummary => !!p).map((p) => (
-          <li key={p.slug}>
-            <Link href={`/blog/${p.slug}`}>
-              <span className="mono ins-date">{p.date}</span>
-              <span className="ins-title"><b>{p.title}</b><span>{p.dek}</span></span>
-              <span className="mono ins-topic">{p.topic}<span>{p.minutes} min read</span></span>
-              <ArrowUpRight size={18} className="ins-arrow" />
+      {/* A bento grid: the newest note takes the large tile, the rest vary in size, and the invitation closes it. */}
+      <div className="bento" data-open={open}>
+        {shown.map((p, i) => {
+          const big = open && i === 0;
+          const art = big || !open || (i >= 3 && i <= 5);
+          return (
+            <Link key={p.slug} href={`/blog/${p.slug}`} className={big ? 'tile big' : 'tile'}>
+              <span className="tile-top mono">
+                <span>{big && <i aria-hidden />}{big ? 'The studio pick' : p.topic}</span>
+                <ArrowUpRight size={17} />
+              </span>
+              {art && <span className="tile-art"><Cover kind={p.cover} seed={p.slug} /></span>}
+              <span className="tile-text">
+                <b>{p.title}</b>
+                {(big || !art) && <span>{p.dek}</span>}
+              </span>
+              <span className="tile-meta mono">{big ? `${p.topic} · ` : ''}{p.date} · {p.minutes} min read</span>
             </Link>
-          </li>
-        ))}
-      </ol>
+          );
+        })}
+        {open && (
+          <aside className="tile invite">
+            <span className="tile-top mono"><span>From reading to building</span></span>
+            <h2>Good questions.<br />Better starting points.</h2>
+            <p>Have a project in mind? Tell us what you want to make possible.</p>
+            <Link href="/contact" className="invite-go">Talk to the studio <ArrowUpRight size={17} /></Link>
+          </aside>
+        )}
+      </div>
 
       {!shown.length && (
         <div className="ins-empty">
@@ -71,17 +74,6 @@ export function InsightsIndex({posts}: {posts: PostSummary[]}) {
           <p>Try another phrase or explore the full journal.</p>
           <Button label="Show all notes" variant="secondary" onClick={() => { setTopic(''); setQuery(''); }} />
         </div>
-      )}
-
-      {open && (
-        <aside className="ins-invite">
-          <p className="mono">From reading to building</p>
-          <h2>Good questions.<br />Better starting points.</h2>
-          <p>Have a project in mind? Tell us what you want to make possible.</p>
-          <Button label="Talk to the studio" variant="primary" size="lg" href="/contact">
-            <span className="inline-flex items-center gap-2.5">Talk to the studio <ArrowUpRight /></span>
-          </Button>
-        </aside>
       )}
     </div>
   );
