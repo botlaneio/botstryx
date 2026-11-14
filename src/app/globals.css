@@ -1076,7 +1076,7 @@ body {
   .spec-rail .rail-item:first-child { padding-left: 0; border-left-color: transparent; }
   .spec-rail dt, .spec-rail dd { margin: 0; }
   .spec-rail .name { font-size: clamp(1.05rem, 1.4vw, 1.45rem); }
-  .spec-rail .rail-item:first-child .name { font-size: clamp(1.6rem, 2.4vw, 2.4rem); letter-spacing: -0.04em; }
+  .spec-rail .rail-item:first-child .name, .spec-rail.stats .name { font-size: clamp(1.6rem, 2.4vw, 2.4rem); letter-spacing: -0.04em; }
   @media (max-width: 899px) {
     .spec-rail .rail-item:first-child { grid-column: 1 / -1; }
     .spec-rail .rail-item:nth-child(n + 2) { border-top: 1px solid var(--color-border); }
@@ -1459,5 +1459,330 @@ body {
   @media (prefers-reduced-motion: reduce) {
     .sketch i, .sketch .card, .path-panel { animation: none; }
     .frame, .explorer-detail, .explorer-list li::before, .path-track::before, .path-track i, .walk-progress li, .walk-cta { transition: none; }
+  }
+
+  /* ================================================================== */
+  /* The client portal                                                   */
+  /* ================================================================== */
+  .portal {
+    display: grid;
+    gap: 20px;
+    width: 100%;
+    max-width: 1320px;
+    margin-inline: auto;
+    padding: clamp(16px, 3vw, 36px) clamp(16px, 3vw, 40px) 64px;
+    color: var(--color-text-primary);
+  }
+  .portal-top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; }
+  .portal-title { display: grid; gap: 8px; }
+  .portal-title h1 { margin: 0; font-size: clamp(1.9rem, 3.4vw, 3rem); font-weight: 600; line-height: 1; letter-spacing: -0.045em; }
+  .portal-logo { justify-self: start; margin-bottom: 10px; border-radius: 4px; }
+  .portal-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .portal-actions { display: flex; align-items: center; gap: 6px; }
+  .portal-mark { display: block; width: 10px; height: 10px; background: var(--bl-blue); }
+  .portal-nav-foot { display: flex; align-items: center; gap: 10px; padding: 6px 4px; }
+  .portal-nav-foot > div { display: grid; min-width: 0; }
+
+  /* The headline figures: one ruled row, like the price rail on the home page. */
+  .portal-tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid var(--color-border-emphasized);
+  }
+  @media (min-width: 900px) { .portal-tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .portal-tiles > div { display: grid; gap: 6px; padding: 16px 18px 18px; border-left: 1px solid var(--color-border); }
+  .portal-tiles > div:first-child { padding-left: 0; border-left-color: transparent; }
+  @media (max-width: 899px) {
+    .portal-tiles > div:nth-child(3) { padding-left: 0; border-left-color: transparent; }
+    .portal-tiles > div:nth-child(n + 3) { border-top: 1px solid var(--color-border); }
+  }
+  .portal-tiles .mono { color: var(--color-text-secondary); }
+  .portal-tiles strong { font-size: clamp(1.6rem, 2.4vw, 2.3rem); font-weight: 600; line-height: 1; letter-spacing: -0.045em; }
+  .portal-tiles strong.due { color: var(--bl-blue); }
+  .portal-tiles em { color: var(--color-text-secondary); font-size: 13px; font-style: normal; }
+
+  .portal-grid { display: grid; gap: 20px; }
+  /* Grid items would otherwise grow to fit their widest content (the table, a row with a button) and push
+     past the screen; at 0 they take the column width and their content wraps or scrolls instead. */
+  .portal > *, .portal-grid > * { min-width: 0; }
+  .portal-table { min-width: 0; }
+  /* The table sits a clear step below its heading, like the other cards' content. */
+  .portal-card-head + .portal-table { margin-top: 10px; }
+  @media (min-width: 1100px) {
+    .portal-grid { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
+    .portal-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (min-width: 720px) and (max-width: 1099px) {
+    .portal-grid.three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  .portal-card { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; align-content: start; min-width: 0; height: 100%; scroll-margin-top: 20px; }
+  .portal-card-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  /* The title block only: the heading may also hold a control at its end, which keeps its own layout. */
+  .portal-card-head > div:first-child { display: grid; gap: 2px; }
+  .portal-chart { display: grid; gap: 10px; min-width: 0; }
+  .portal-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--color-text-secondary); font-size: 12.5px; }
+  .portal-legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .portal-legend i { width: 9px; height: 9px; border-radius: 2px; }
+
+  .portal-ring { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; }
+  .portal-ring .portal-legend { display: grid; gap: 8px; }
+  .ring-frame { position: relative; width: 168px; height: 168px; flex: none; }
+  .ring-centre { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+  .ring-centre strong { font-size: 2rem; font-weight: 600; line-height: 1; letter-spacing: -0.045em; }
+  .ring-centre span { color: var(--color-text-secondary); font-size: 12px; }
+
+  .rounds { display: grid; gap: 12px; align-content: start; }
+  .portal-price { margin: 0; font-size: clamp(2.2rem, 3.2vw, 3rem); font-weight: 600; line-height: 1; letter-spacing: -0.05em; }
+  .portal-price span { margin-left: 4px; color: var(--color-text-secondary); font-size: 0.9rem; font-weight: 400; letter-spacing: 0; }
+  .portal-price.small { font-size: 1.8rem; }
+  .portal-scope { margin: 0; border-top: 1px solid var(--color-border); }
+  .portal-scope div { display: flex; justify-content: space-between; gap: 16px; padding: 9px 0; border-bottom: 1px solid var(--color-border); font-size: 14px; }
+  .portal-scope dt { color: var(--color-text-secondary); }
+  .portal-scope dd { margin: 0; text-align: right; }
+  .after-launch { gap: 14px; }
+  .cell-stack { display: grid; gap: 4px; }
+  /* Buttons on this site are as wide as their label. */
+  .portal .astryx-button { justify-self: start; }
+
+  /* ================================================================== */
+  /* Ascend: the design system studio, the editor, and what it adds      */
+  /* ================================================================== */
+  .studio { display: grid; gap: 20px; }
+  .studio-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 28px;
+    padding: 14px 16px;
+    border-radius: var(--radius-container);
+    background: var(--color-background-surface);
+    box-shadow: 0 1px 1px light-dark(rgba(16, 24, 40, 0.05), rgba(0, 0, 0, 0.5)), 0 8px 20px -12px light-dark(rgba(16, 24, 40, 0.18), rgba(0, 0, 0, 0.6));
+  }
+  .studio-control { display: flex; align-items: center; gap: 10px; }
+  .studio-control .mono { color: var(--color-text-secondary); }
+  .swatches { display: flex; gap: 8px; }
+  .swatches button {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--sw);
+    box-shadow: 0 0 0 1px var(--color-border) inset;
+    transition: transform 0.25s var(--bl-ease), box-shadow 0.2s;
+  }
+  .swatches button:hover { transform: scale(1.08); }
+  .swatches button[aria-checked='true'] { box-shadow: 0 0 0 2px var(--color-background-surface), 0 0 0 4px var(--sw); }
+  .swatches button:focus-visible { outline: 2px solid var(--color-text-primary); outline-offset: 4px; }
+
+  /* The three pages: every value below comes from the --ds-* variables, so they change together. */
+  .studio-stage {
+    display: grid;
+    gap: 16px;
+    padding: clamp(14px, 2.4vw, 32px);
+    border-radius: var(--radius-container);
+    background:
+      radial-gradient(circle, color-mix(in srgb, var(--color-text-primary) 15%, transparent) 0.9px, transparent 1.4px) 0 0 / 20px 20px,
+      color-mix(in srgb, var(--color-text-primary) 4%, transparent);
+  }
+  @media (min-width: 900px) { .studio-stage { grid-template-columns: 1.25fr 1fr 1fr; align-items: start; } }
+  .ds-page {
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--color-background-surface);
+    box-shadow: 0 1px 1px light-dark(rgba(16, 24, 40, 0.05), rgba(0, 0, 0, 0.5)), 0 18px 36px -18px light-dark(rgba(16, 24, 40, 0.2), rgba(0, 0, 0, 0.6));
+    font-family: var(--ds-font);
+  }
+  .ds-page * { transition: border-radius 0.4s var(--bl-ease), background-color 0.4s, color 0.4s, letter-spacing 0.4s; }
+  .ds-bar { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--color-border); }
+  .ds-logo { font-weight: var(--ds-weight); letter-spacing: var(--ds-track); font-size: 13px; }
+  .ds-bar .mono { color: var(--color-text-secondary); font-size: 9.5px; }
+  /* One column the width of the page: without it, the cards size to their contents and spill past the edge. */
+  .ds-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 18px 16px 20px; }
+  .studio-stage > * { min-width: 0; }
+  .ds-h { font-weight: var(--ds-weight); letter-spacing: var(--ds-track); font-size: 17px; line-height: 1.05; }
+  .ds-h.big { font-size: clamp(1.4rem, 2.3vw, 2rem); }
+  .ds-line { display: block; height: 5px; border-radius: 3px; background: color-mix(in srgb, var(--color-text-primary) 18%, transparent); }
+  /* dw-*: widths. Not w-*, which Tailwind already uses for fixed sizes. */
+  .ds-line.dw-80 { width: 80%; } .ds-line.dw-60 { width: 60%; } .ds-line.dw-70 { width: 70%; } .ds-line.dw-90 { width: 90%; }
+  .ds-btn {
+    justify-self: start;
+    margin-top: 4px;
+    padding: 7px 12px;
+    border-radius: var(--ds-radius);
+    background: var(--ds-accent);
+    color: var(--ds-on);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .ds-btn.ghost { background: none; color: var(--ds-accent); box-shadow: 0 0 0 1.5px var(--ds-accent) inset; }
+  .ds-pic { display: block; height: 70px; margin-top: 4px; border-radius: var(--ds-radius); background: color-mix(in srgb, var(--ds-accent) 16%, transparent); }
+  .ds-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 6px 10px;
+    padding: 10px 12px;
+    border-radius: var(--ds-radius);
+    box-shadow: 0 0 0 1px var(--color-border) inset;
+    font-size: 13px;
+  }
+  .ds-card b { font-weight: var(--ds-weight); letter-spacing: var(--ds-track); }
+  .ds-card .ds-line { grid-column: 1 / -1; }
+  .ds-dot { width: 10px; height: 10px; border-radius: calc(var(--ds-radius) / 2); background: var(--ds-accent); }
+  .ds-people { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .ds-face { display: block; aspect-ratio: 1; border-radius: var(--ds-radius); background: color-mix(in srgb, var(--ds-accent) 20%, transparent); }
+
+  /* ---------- The editor ---------- */
+  .editor { display: grid; gap: 20px; }
+  @media (min-width: 900px) { .editor { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr); align-items: start; } }
+  .editor-panel {
+    display: grid;
+    gap: 16px;
+    padding: 20px;
+    border-radius: 18px;
+    background: var(--color-background-surface);
+    box-shadow:
+      0 1px 0 light-dark(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.08)) inset,
+      0 1px 1px light-dark(rgba(16, 24, 40, 0.05), rgba(0, 0, 0, 0.5)),
+      0 16px 32px -12px light-dark(rgba(16, 24, 40, 0.1), rgba(0, 0, 0, 0.55));
+  }
+  .editor-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .editor-top .mono { color: var(--color-text-secondary); }
+  .editor-state {
+    padding: 3px 8px;
+    border-radius: calc(var(--radius-element) - 4px);
+    background: color-mix(in srgb, var(--color-text-primary) 7%, transparent);
+    color: var(--color-text-secondary);
+    font-size: 12px;
+  }
+  .editor-state[data-changed='false'] { background: color-mix(in srgb, var(--bl-teal) 18%, transparent); color: var(--bl-teal-text); }
+  .editor-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .editor-note { margin: 0; color: var(--color-text-secondary); font-size: 13px; }
+  .editor-preview {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 14px;
+    background: var(--color-background-surface);
+    box-shadow:
+      0 1px 1px light-dark(rgba(16, 24, 40, 0.05), rgba(0, 0, 0, 0.5)),
+      0 24px 48px -20px light-dark(rgba(16, 24, 40, 0.22), rgba(0, 0, 0, 0.7));
+  }
+  .np { position: relative; padding: clamp(18px, 3vw, 36px); min-height: clamp(260px, 30vw, 380px); }
+  .np-nav { display: flex; align-items: center; gap: 18px; color: var(--color-text-secondary); font-size: 13px; }
+  .np-nav b { margin-right: auto; color: var(--color-text-primary); font-weight: 600; letter-spacing: -0.03em; }
+  .np-hero { display: grid; gap: 14px; justify-items: start; margin-top: clamp(28px, 5vw, 64px); }
+  .np-hero h3 {
+    max-width: 16ch;
+    margin: 0;
+    font-size: clamp(1.8rem, 3.6vw, 3.2rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.045em;
+    overflow-wrap: anywhere;
+  }
+  .np-hero p { max-width: 38ch; margin: 0; color: var(--color-text-secondary); font-size: clamp(0.95rem, 1.2vw, 1.1rem); overflow-wrap: anywhere; }
+  .np-btn { padding: 8px 14px; border-radius: var(--radius-element); background: var(--color-text-primary); color: var(--color-background-surface); font-size: 13px; font-weight: 550; }
+  /* A published change sweeps a soft highlight across the hero, once. */
+  .np-hero[data-draft='false'] { animation: published 1.1s var(--bl-ease); }
+  @keyframes published {
+    from { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--bl-teal) 22%, transparent), transparent) -100% 0 / 60% 100% no-repeat; }
+    to { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--bl-teal) 22%, transparent), transparent) 220% 0 / 60% 100% no-repeat; }
+  }
+  .np-flag {
+    position: absolute;
+    right: 14px; bottom: 14px;
+    padding: 5px 8px;
+    border-radius: calc(var(--radius-element) - 4px);
+    background: var(--color-text-primary);
+    color: var(--color-background-surface);
+    font-size: 9.5px;
+  }
+
+  /* ---------- What Ascend adds ---------- */
+  .adds { display: grid; gap: 20px; }
+  @media (min-width: 900px) { .adds { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .add { display: grid; align-content: start; gap: 10px; }
+  .add h3 { margin: 10px 0 0; font-size: clamp(1.15rem, 1.5vw, 1.4rem); font-weight: 600; letter-spacing: -0.03em; }
+  .add p { max-width: 40ch; margin: 0; color: var(--color-text-secondary); font-size: 0.98rem; line-height: 1.45; }
+  .add-visual {
+    min-height: 230px;
+    padding: 18px;
+    border-radius: var(--radius-container);
+    background: color-mix(in srgb, var(--color-text-primary) 4%, transparent);
+  }
+  .pages-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; align-content: center; }
+  .pages-grid span {
+    display: grid;
+    gap: 3px;
+    padding: 8px;
+    border-radius: 6px;
+    background: var(--color-background-surface);
+    font-size: 12px;
+    font-weight: 500;
+    box-shadow: 0 1px 1px light-dark(rgba(16, 24, 40, 0.06), rgba(0, 0, 0, 0.4));
+    transition: transform 0.3s var(--bl-ease);
+  }
+  .pages-grid span:hover { transform: translateY(-2px); }
+  .pages-grid em { color: var(--color-text-secondary); font-size: 9px; font-style: normal; }
+  .flow { display: grid; grid-template-columns: 1fr 0.7fr 1fr; align-items: center; }
+  .flow-form { display: grid; gap: 7px; padding: 12px; border-radius: 8px; background: var(--color-background-surface); box-shadow: 0 1px 1px light-dark(rgba(16, 24, 40, 0.06), rgba(0, 0, 0, 0.4)); }
+  .flow-form .mono { color: var(--color-text-secondary); font-size: 9.5px; }
+  .flow-form i { display: block; height: 14px; border-radius: 4px; box-shadow: 0 0 0 1px var(--color-border) inset; }
+  .flow-form i.short { width: 50%; background: var(--bl-blue); box-shadow: none; }
+  .flow-lines { width: 100%; height: 130px; overflow: visible; }
+  .flow-lines path {
+    fill: none;
+    stroke: var(--bl-blue);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 3 4;
+    animation: flow-dash 1.6s linear infinite;
+  }
+  @keyframes flow-dash { to { stroke-dashoffset: -14; } }
+  .flow-tools { display: grid; gap: 22px; }
+  .flow-tools span { padding: 7px 10px; border-radius: 7px; background: var(--color-background-surface); font-size: 12.5px; font-weight: 550; text-align: center; box-shadow: 0 1px 1px light-dark(rgba(16, 24, 40, 0.06), rgba(0, 0, 0, 0.4)); }
+  .serp { display: grid; gap: 14px; align-content: center; }
+  .serp-query {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: var(--color-background-surface);
+    font-size: 13px;
+    box-shadow: 0 1px 1px light-dark(rgba(16, 24, 40, 0.06), rgba(0, 0, 0, 0.4));
+  }
+  .serp-query i { width: 10px; height: 10px; border: 1.5px solid var(--color-text-secondary); border-radius: 50%; }
+  .serp-result { display: grid; gap: 4px; padding: 4px 6px; font-size: 13px; }
+  .serp-site { color: var(--color-text-secondary); font-size: 11.5px; }
+  .serp-result b { color: var(--bl-blue); font-size: 15px; font-weight: 550; }
+  .serp-result > span:not(.serp-site):not(.serp-links) { color: var(--color-text-secondary); }
+  .serp-links { display: flex; gap: 12px; margin-top: 4px; color: var(--bl-blue); font-size: 12px; }
+
+  /* ---------- Questions ---------- */
+  .faq { border-top: 1px solid var(--color-border-emphasized); }
+  .faq details { border-bottom: 1px solid var(--color-border); }
+  .faq summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 0;
+    cursor: pointer;
+    font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    list-style: none;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary:focus-visible { outline: 2px solid var(--color-text-primary); outline-offset: 2px; border-radius: 4px; }
+  .faq summary i { position: relative; flex: none; width: 13px; height: 13px; color: var(--color-text-secondary); }
+  .faq summary i::before, .faq summary i::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1.5px; margin-top: -0.75px; background: currentColor; transition: rotate 0.35s var(--bl-ease); }
+  .faq summary i::after { rotate: 90deg; }
+  .faq details[open] summary i::after { rotate: 0deg; }
+  .faq p { max-width: 62ch; margin: 0 0 22px; color: var(--color-text-secondary); font-size: 1rem; line-height: 1.5; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flow-lines path, .np-hero { animation: none !important; }
+    .ds-page * { transition: none; }
   }
 }
