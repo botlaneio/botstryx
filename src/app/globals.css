@@ -2592,7 +2592,9 @@ body {
   .hm-how { display: grid; }
   .hm-steps { position: relative; margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--color-border); }
   /* The line down the side fills as the steps are read. */
-  .hm-steps::after { content: ''; position: absolute; left: -1.5px; top: 0; width: 2px; height: 100%; background: var(--apx-hot); transform-origin: top; transform: scaleY(var(--p, 1)); }
+  .hm-steps::after { content: ''; position: absolute; left: -1.5px; top: 0; width: 2px; height: 100%; border-radius: 2px; background: var(--apx-hot); box-shadow: 0 0 4px 1px var(--apx-hot), 0 0 14px 3px color-mix(in srgb, var(--apx-hot) 75%, transparent), 0 0 32px 4px color-mix(in srgb, var(--apx-hot) 40%, transparent); transform-origin: top; transform: scaleY(var(--p, 1)); }
+  /* A bright tip leads the line as it fills. */
+  .hm-steps::before { content: ''; position: absolute; z-index: 1; left: -4.5px; top: calc(var(--p, 1) * 100% - 4px); width: 8px; height: 8px; border-radius: 50%; background: light-dark(#fff, #e8edff); box-shadow: 0 0 0 2px var(--apx-hot), 0 0 12px 2px var(--apx-hot), 0 0 32px 6px color-mix(in srgb, var(--apx-hot) 45%, transparent); opacity: clamp(0, calc(var(--p, 1) * 40), 1); }
   .hm-steps > li { --on: clamp(0, calc((var(--p, 1) * var(--n) - var(--i)) * 4), 1); display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 8px clamp(12px, 2vw, 32px); padding: clamp(26px, 4.6vh, 52px) 0 clamp(26px, 4.6vh, 52px) clamp(18px, 3vw, 44px); opacity: calc(0.3 + 0.7 * var(--on)); }
   .hm-steps > li + li { border-top: 1px solid var(--color-border); }
   .hm-step-no { padding-top: 0.75em; color: color-mix(in srgb, var(--apx-hot) calc(var(--on) * 100%), var(--color-text-secondary)); }
