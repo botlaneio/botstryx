@@ -1,7 +1,10 @@
+import {Suspense} from 'react';
 import type {Metadata, Viewport} from 'next';
 import {Instrument_Sans, JetBrains_Mono} from 'next/font/google';
 
 import './globals.css'; // first: declares the cascade-layer order
+import {LaneLauncher} from '@/components/brand/lane-launcher';
+
 import {Providers} from './providers';
 
 const instrument = Instrument_Sans({
@@ -33,7 +36,11 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
   return (
     <html lang="en" className={`${instrument.variable} ${jetbrains.variable}`} suppressHydrationWarning>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          {/* It reads the page's address, so it waits outside the prerendered shell. */}
+          <Suspense fallback={null}><LaneLauncher /></Suspense>
+        </Providers>
       </body>
     </html>
   );

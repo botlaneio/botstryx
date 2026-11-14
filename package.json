@@ -17,7 +17,8 @@
     "next": "16.4.6",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "recharts": "^3.10.1"
+    "recharts": "^3.10.1",
+    "simple-icons": "^16.37.0"
   },
   "devDependencies": {
     "@astryxdesign/cli": "^0.7.15",
