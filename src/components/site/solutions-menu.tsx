@@ -16,6 +16,28 @@ export const BUILD = [
   {href: '/custom-solutions/ai-assistant', title: 'AI Assistant', body: "Answers visitors' questions, trained on your business.", price: '$2,500 one-time'},
 ];
 
+// The packages inside Websites and Web Apps: names and page addresses from botpro's src/lib/catalog.ts, prices
+// from its price book (src/lib/pricing/plans.ts). Care and AI Assistant have nothing beneath them.
+// The desktop menu and the mobile menu both read this list, so they always show the same packages.
+export const PACKAGES: Record<string, {all: string; items: {href: string; name: string; price: string}[]}> = {
+  '/websites': {
+    all: 'All Websites',
+    items: [
+      {href: '/websites/business-sites', name: 'Core', price: '$2,500 one-time'},
+      {href: '/websites/company-sites', name: 'Ascend', price: '$4,900 one-time'},
+      {href: '/websites/brand-sites', name: 'Apex', price: '$7,900 one-time'},
+    ],
+  },
+  '/web-apps': {
+    all: 'All Web Apps',
+    items: [
+      {href: '/web-apps/scoping-sprint', name: 'Scoping sprint', price: '$1,500 one-time'},
+      {href: '/web-apps/mvp', name: 'MVP development', price: '$9,500 one-time'},
+      {href: '/web-apps/full-product', name: 'Full product build', price: 'From $18,000 one-time'},
+    ],
+  },
+};
+
 // slotLane: name, status, host and line from botpro's src/lib/lanes.ts and the header's product line; the three
 // reasons from src/lib/products.ts.
 export const SLOT = {
@@ -37,7 +59,7 @@ export function SolutionsMenu() {
       onOpenChange={setOpen}
       placement="below"
       alignment="center"
-      width="min(940px, calc(100vw - 32px))"
+      width="min(1060px, calc(100vw - 32px))"
       padding={0}
       content={
         <div className="mega">
@@ -54,6 +76,18 @@ export function SolutionsMenu() {
                     <span className="body">{item.body}</span>
                     <span className="price mono">{item.price}</span>
                   </Link>
+                  {PACKAGES[item.href] && (
+                    <ul className="mega-packs" aria-label={item.title + " packages"}>
+                      {PACKAGES[item.href].items.map((pk) => (
+                        <li key={pk.href}>
+                          <Link href={pk.href} onClick={close} className="mega-pack">
+                            <span>{pk.name}</span>
+                            <span className="price mono">{pk.price}</span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               ))}
             </ul>

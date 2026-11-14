@@ -10,7 +10,7 @@ import {Logo} from '@/components/brand/logo';
 import {ArrowRight, ArrowUpRight, GitHubMark, GoogleMark, Mail, MicrosoftMark} from '@/components/icons';
 
 import {Hamburger} from './hamburger';
-import {BUILD, SLOT} from './solutions-menu';
+import {BUILD, PACKAGES, SLOT} from './solutions-menu';
 
 const delay = (i: number) => ({'--i': i}) as React.CSSProperties;
 
@@ -29,27 +29,6 @@ type LaneId = 'build' | 'slot';
 // Pages that carry an offer of their own, where the Founding Ten line would be a second, different discount.
 // The Core page offers 10% off.
 const OWN_OFFER = ['/websites/business-sites'];
-
-// The packages inside Websites and Web Apps: names and page addresses from botpro's src/lib/catalog.ts, prices
-// from its price book (src/lib/pricing/plans.ts). Care and AI Assistant have nothing beneath them.
-const PACKAGES: Record<string, {all: string; items: {href: string; name: string; price: string}[]}> = {
-  '/websites': {
-    all: 'All Websites',
-    items: [
-      {href: '/websites/business-sites', name: 'Core', price: '$2,500 one-time'},
-      {href: '/websites/company-sites', name: 'Ascend', price: '$4,900 one-time'},
-      {href: '/websites/brand-sites', name: 'Apex', price: '$7,900 one-time'},
-    ],
-  },
-  '/web-apps': {
-    all: 'All Web Apps',
-    items: [
-      {href: '/web-apps/scoping-sprint', name: 'Scoping sprint', price: '$1,500 one-time'},
-      {href: '/web-apps/mvp', name: 'MVP development', price: '$9,500 one-time'},
-      {href: '/web-apps/full-product', name: 'Full product build', price: 'From $18,000 one-time'},
-    ],
-  },
-};
 
 // The icon in front of each entry. The two lanes' icons have a part that moves when the lane is unfolded
 // (.lift and .slot, animated in globals.css from the row's aria-expanded).
