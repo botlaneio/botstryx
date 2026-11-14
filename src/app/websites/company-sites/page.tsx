@@ -1,10 +1,12 @@
 import type {Metadata} from 'next';
 
-import {PlaceholderPage} from '@/components/site/placeholder-page';
+import {AscendPage} from '@/components/offers/ascend-page';
 
-export const metadata: Metadata = {title: 'Ascend · botLane'};
+export const metadata: Metadata = {
+  title: 'Ascend · botLane',
+  description: 'A complete company website on a design system of its own, with an editor your team actually enjoys using. Up to twelve pages, connected to the tools you already work in.',
+};
 
-// The address is set up; the page's content is still to be written.
-export default function AscendPage() {
-  return <PlaceholderPage title="Ascend" path="/websites/company-sites" />;
+export default function AscendWebsitePage() {
+  return <AscendPage />;
 }
