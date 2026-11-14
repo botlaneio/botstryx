@@ -1956,7 +1956,8 @@ body {
   .apx-ledger, .apx-run { margin: 0; padding: 0; list-style: none; }
   .apx-ledger li { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 8px 0; align-items: baseline; padding-block: clamp(20px, 3vh, 30px); border-top: 1px solid var(--color-border); }
   .apx-ledger li:last-child { border-bottom: 1px solid var(--color-border); }
-  .apx-ledger .mono { color: var(--color-text-secondary); }
+  .apx-ledger .num-badge { align-self: center; font-size: 12.5px; }
+  .apx-ledger li:hover .num-badge, .apx-run li:hover .num-badge { border-color: var(--apx-hot); background: var(--apx-hot); color: light-dark(#fff, #0b1020); box-shadow: 0 0 0 4px color-mix(in srgb, var(--apx-hot) 14%, transparent); }
   .apx-ledger h3 { margin: 0; font-size: clamp(1.35rem, 2.7vw, 2.6rem); font-weight: 550; line-height: 1.04; letter-spacing: -0.04em; transition: transform 0.5s var(--bl-ease); }
   .apx-ledger p { grid-column: 2; max-width: 46ch; margin: 0; color: var(--color-text-secondary); font-size: 1rem; line-height: 1.45; }
   @media (min-width: 960px) {
@@ -1967,7 +1968,7 @@ body {
 
   .apx-run { display: grid; gap: 28px 0; }
   .apx-run li { display: grid; gap: 12px; align-content: start; padding: 18px 24px 0 0; border-top: 1px solid var(--color-text-primary); }
-  .apx-run .mono { color: var(--color-text-secondary); }
+  .apx-run .num-badge { font-size: 12px; }
   .apx-run h3 { margin: 6px 0 0; font-size: clamp(1.2rem, 1.6vw, 1.55rem); font-weight: 600; line-height: 1.05; letter-spacing: -0.03em; }
   .apx-run p { max-width: 34ch; margin: 0; color: var(--color-text-secondary); font-size: 0.97rem; line-height: 1.45; }
   @media (min-width: 640px) { .apx-run { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -2033,8 +2034,11 @@ body {
   .ct-q { display: grid; gap: 14px; min-width: 0; margin: 0; padding: 0; border: 0; }
   .ct-q legend { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; padding: 0; font-size: clamp(1.35rem, 2vw, 1.9rem); font-weight: 600; line-height: 1.05; letter-spacing: -0.04em; }
   .ct-q legend { align-items: center; }
-  .ct-step { display: inline-grid; place-items: center; flex: none; min-width: 2.3em; height: 1.6em; padding: 0 0.5em; border: 1px solid color-mix(in srgb, var(--apx-hot) 35%, transparent); border-radius: 999px; background: color-mix(in srgb, var(--apx-hot) 10%, transparent); color: var(--apx-hot); font-size: 0.6em; font-weight: 600; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; transition: background-color 0.25s, color 0.25s, border-color 0.25s, box-shadow 0.25s; }
-  .ct-step[data-done] { border-color: var(--apx-hot); background: var(--apx-hot); color: light-dark(#fff, #0b1020); box-shadow: 0 0 0 4px color-mix(in srgb, var(--apx-hot) 14%, transparent); }
+
+  /* A numbered step as a small tinted pill; it fills solid when its step is done or in focus. */
+  .num-badge { display: inline-grid; place-items: center; flex: none; justify-self: start; min-width: 2.3em; height: 1.6em; padding: 0 0.5em; border: 1px solid color-mix(in srgb, var(--apx-hot) 35%, transparent); border-radius: 999px; background: color-mix(in srgb, var(--apx-hot) 10%, transparent); color: var(--apx-hot); font-weight: 600; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; transition: background-color 0.25s, color 0.25s, border-color 0.25s, box-shadow 0.25s; }
+  .num-badge[data-done] { border-color: var(--apx-hot); background: var(--apx-hot); color: light-dark(#fff, #0b1020); box-shadow: 0 0 0 4px color-mix(in srgb, var(--apx-hot) 14%, transparent); }
+  .ct-q legend .num-badge { font-size: 0.6em; }
   .ct-starters { display: flex; flex-wrap: wrap; gap: 8px; }
   .ct-starters button { padding: 7px 11px; border: 1px solid var(--color-border); border-radius: var(--radius-element); color: var(--color-text-secondary); font-size: 13.5px; cursor: pointer; transition: color 0.2s, border-color 0.2s; }
   .ct-starters button:hover { border-color: var(--color-text-secondary); color: var(--color-text-primary); }

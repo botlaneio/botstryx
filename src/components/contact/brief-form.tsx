@@ -65,7 +65,7 @@ export function BriefForm({initial}: {initial: Partial<ContactValues>}) {
   return (
     <form ref={form} action={action} onSubmit={onSubmit} noValidate className="ct-form">
       <fieldset className="ct-q">
-        <legend><span className="mono ct-step" data-done={done[0] || undefined}>01</span>What are you building?</legend>
+        <legend><span className="mono num-badge" data-done={done[0] || undefined}>01</span>What are you building?</legend>
         {/* On a wide sheet the ways in sit inside the empty box, under the placeholder, and go once typing starts. */}
         <div className="ct-brief">
           <TextArea label="What are you building?" isLabelHidden htmlName="brief" rows={4} size="lg" width="100%"
@@ -84,7 +84,7 @@ export function BriefForm({initial}: {initial: Partial<ContactValues>}) {
       </fieldset>
 
       <fieldset className="ct-q" aria-describedby={errors.need ? 'need-error' : undefined}>
-        <legend><span className="mono ct-step" data-done={done[1] || undefined}>02</span>What do you need from us?</legend>
+        <legend><span className="mono num-badge" data-done={done[1] || undefined}>02</span>What do you need from us?</legend>
         <div className="ct-needs">
           {NEEDS.map((n) => (
             <label key={n.id} className="ct-need">
@@ -99,7 +99,7 @@ export function BriefForm({initial}: {initial: Partial<ContactValues>}) {
       </fieldset>
 
       <fieldset className="ct-q">
-        <legend><span className="mono ct-step" data-done={done[2] || undefined}>03</span>Who should we reply to?</legend>
+        <legend><span className="mono num-badge" data-done={done[2] || undefined}>03</span>Who should we reply to?</legend>
         <div className="ct-who">
           <TextInput label="Your name" htmlName="name" autoComplete="name" size="lg" width="100%" placeholder="Jane Miller"
             value={values.name} onChange={set('name')} status={statusOf('name')} />

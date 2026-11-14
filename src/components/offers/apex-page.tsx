@@ -83,7 +83,7 @@ export function ApexPage() {
         <ol className="apx-ledger">
           {LEDGER.map(([name, note], i) => (
             <li key={name}>
-              <span className="mono">{String(i + 1).padStart(2, '0')}</span>
+              <span className="mono num-badge">{String(i + 1).padStart(2, '0')}</span>
               <h3>{name}</h3>
               <p>{note}</p>
             </li>
@@ -99,7 +99,7 @@ export function ApexPage() {
         <ol className="apx-run">
           {STEPS.map(([title, body], i) => (
             <li key={title}>
-              <span className="mono">Step 0{i + 1}</span>
+              <span className="mono num-badge">Step 0{i + 1}</span>
               <h3>{title}</h3>
               <p>{body}</p>
             </li>
