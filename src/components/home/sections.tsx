@@ -2,6 +2,7 @@ import Link from 'next/link';
 import {siGmail, siGooglecalendar, siGooglemeet, siHubspot, siNotion, siStripe, siZoom, type SimpleIcon} from 'simple-icons';
 
 import {BotMark} from '@/components/brand/bot-mark';
+import {DotField} from '@/components/hero/dot-field';
 import {ArrowRight, ArrowUpRight, Check} from '@/components/icons';
 import {Cover} from '@/components/insights/cover';
 import {postsByDate, summary} from '@/lib/insights';
@@ -329,6 +330,7 @@ function Close() {
   return (
     <section aria-labelledby="hm-close" className="wrap hm-end">
       <div className="hm-close hm-in">
+        <DotField />
         <div className="hm-close-say">
           <Link href="/solutions" className="hm-offer">
             <span className="mono">Founding Ten</span>{pct}% off for our first {FOUNDING.places} clients <ArrowRight size={14} />

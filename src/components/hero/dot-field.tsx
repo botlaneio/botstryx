@@ -1,11 +1,11 @@
 'use client';
 
-// The hero's dot grid, made live: dots near a moving pointer are pushed along its path and light up, and a
+// A dot grid, made live (the hero's, and the homepage's closing panel): dots near a moving pointer are pushed along its path and light up, and a
 // click or tap sends a ripple out through them. Each dot sits on a spring tied to its neighbours, so a push
 // travels a little way and settles. Ported from botpro (src/components/home/waves-hero/DotGrid.jsx), which is
 // based on React Bits: MIT + Commons Clause, Copyright (c) 2026 David Haz.
 //
-// The plain CSS grid in .stage::before stays as the fallback: it shows until this canvas has drawn, and stays
+// The plain CSS grid on the box it sits in (its ::before) stays as the fallback: it shows until this canvas has drawn, and stays
 // if WebGL 2 is missing. It only redraws while something is moving.
 
 import {useEffect, useRef} from 'react';
@@ -98,7 +98,8 @@ export function DotField() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const stage = canvas?.closest<HTMLElement>('.stage');
+    // The box the grid fills: it is marked once the grid has drawn, so its CSS grid can step aside.
+    const stage = canvas?.parentElement;
     if (!canvas || !stage) return;
     const gl = canvas.getContext('webgl2', {alpha: true, premultipliedAlpha: true, antialias: false});
     if (!gl) return;
