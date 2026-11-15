@@ -7,6 +7,13 @@
 	// The site's address until a custom domain is set, plus a preview address for each uploaded version.
 	"workers_dev": true,
 	"preview_urls": true,
+	// Logs and traces in the Cloudflare dashboard (Workers → botstryx → Observability), kept in sync with
+	// what was switched on there. Errors like 1101 show up here with their stack.
+	"observability": {
+		"logs": { "enabled": true, "head_sampling_rate": 1, "invocation_logs": true, "persist": true },
+		"traces": { "enabled": true, "head_sampling_rate": 1, "persist": true },
+		"issue_detection": { "enabled": true }
+	},
 	"assets": {
 		"directory": ".open-next/assets",
 		"binding": "ASSETS"
