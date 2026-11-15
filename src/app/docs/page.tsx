@@ -1,10 +1,12 @@
 import type {Metadata} from 'next';
 
-import {PlaceholderPage} from '@/components/site/placeholder-page';
+import {DocsPage} from '@/components/docs/docs-page';
 
-export const metadata: Metadata = {title: 'Documentation · botLane'};
+export const metadata: Metadata = {
+  title: 'Documentation · botLane',
+  description: 'How slotLane works: share a link, guests pick a time, and the booking lands in Google Calendar. Not launched yet.',
+};
 
-// The address is set up; the page's content is still to be written.
 export default function DocumentationPage() {
-  return <PlaceholderPage title="Documentation" path="/docs" />;
+  return <DocsPage />;
 }

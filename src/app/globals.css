@@ -3571,3 +3571,303 @@ body {
     .lane-spot { animation: none; outline: 3px solid light-dark(#2f55f0, #8098ff); }
   }
 }
+
+@layer components {
+  /* ================================================================== */
+  /* Documentation (src/components/docs/docs-page.tsx)                   */
+  /* ================================================================== */
+  /* The shared stage clips overflow, which stops a sticky contents list from holding. */
+  .stage:has(.docs) { overflow: visible; }
+  .docs { padding-block: clamp(8px, 2vh, 28px) clamp(64px, 10vh, 120px); }
+
+  .docs-hero {
+    display: grid;
+    justify-items: start;
+    gap: 14px;
+    max-width: 70ch;
+    padding-bottom: clamp(28px, 4vh, 48px);
+    margin-bottom: clamp(24px, 4vh, 40px);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .docs-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    color: var(--color-text-secondary);
+  }
+  .docs-kicker i { width: 6px; height: 6px; background: var(--bl-blue); }
+  .docs-hero h1 {
+    margin: 0;
+    font-size: clamp(2.6rem, 5vw, 4.6rem);
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    text-wrap: balance;
+  }
+  .docs-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 5px 8px;
+    border-radius: calc(var(--radius-element) - 4px);
+    background: color-mix(in srgb, var(--bl-teal) 22%, transparent);
+    color: var(--bl-teal-text);
+  }
+  .docs-badge i { width: 6px; height: 6px; background: var(--bl-teal); }
+  .docs-dek {
+    max-width: 36ch;
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+    text-wrap: pretty;
+  }
+  .docs-status {
+    max-width: 70ch;
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.45;
+  }
+  .docs-jump {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    justify-self: start;
+    width: fit-content;
+    margin-top: 4px;
+    font-weight: 550;
+    letter-spacing: -0.01em;
+  }
+  .docs-jump svg { transition: transform 0.25s var(--bl-ease); }
+  .docs-jump:hover svg { transform: translateX(3px); }
+
+  .docs-layout { display: grid; align-items: start; gap: 20px; }
+  .docs-prose { min-width: 0; max-width: 70ch; }
+  .docs-section { display: grid; gap: 12px; }
+  .docs-section + .docs-section { margin-top: clamp(40px, 6vh, 72px); }
+  .docs-prose h2 {
+    margin: 0;
+    font-size: clamp(1.7rem, 2.4vw, 2.15rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+    scroll-margin-top: 28px;
+    text-wrap: balance;
+  }
+  .docs-prose h3 {
+    margin: 18px 0 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    scroll-margin-top: 28px;
+    text-wrap: balance;
+  }
+  .docs-prose p {
+    max-width: 70ch;
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+  .docs-prose h2 + p { color: var(--color-text-primary); }
+  .docs-prose ul { list-style: disc; }
+  .docs-prose ol { list-style: decimal; }
+  .docs-prose :is(ul, ol) {
+    max-width: 70ch;
+    margin: 0;
+    padding-left: 1.2em;
+    color: var(--color-text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.55;
+  }
+  .docs-prose li + li { margin-top: 0.55em; }
+  .docs-prose .docs-steps { padding-left: 0; list-style: none; }
+  .docs-prose a {
+    color: var(--color-text-primary);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-text-primary) 35%, transparent);
+    text-underline-offset: 3px;
+  }
+  .docs-prose a:hover { text-decoration-color: var(--color-text-primary); }
+  .docs-label { margin-top: 8px; color: var(--color-text-secondary); }
+
+  .docs-steps {
+    display: grid;
+    gap: 18px;
+    margin: 4px 0 0;
+    padding-left: 0;
+    list-style: none;
+    counter-reset: docs-step;
+  }
+  .docs-steps li { display: grid; gap: 6px; }
+  .docs-steps li + li { margin-top: 0; }
+  .docs-steps h3 {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 0;
+  }
+  .docs-steps h3::before {
+    content: counter(docs-step, decimal-leading-zero);
+    counter-increment: docs-step;
+    flex: none;
+    color: var(--bl-teal-text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+  }
+
+  .docs-rows {
+    display: grid;
+    margin: 0;
+    border-top: 1px solid var(--color-border);
+  }
+  .docs-rows div {
+    display: grid;
+    gap: 4px;
+    padding-block: 12px;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .docs-rows dt { font-weight: 600; letter-spacing: -0.02em; }
+  .docs-rows dd { margin: 0; color: var(--color-text-secondary); line-height: 1.5; }
+
+  .docs-faq { border-top: 1px solid var(--color-border); }
+  .docs-qa { border-bottom: 1px solid var(--color-border); }
+  .docs-qa summary {
+    position: relative;
+    display: block;
+    margin-inline: -8px;
+    padding: 14px 32px 14px 8px;
+    border-radius: calc(var(--radius-element) - 4px);
+    font-weight: 550;
+    letter-spacing: -0.02em;
+    line-height: 1.35;
+    cursor: pointer;
+    list-style: none;
+  }
+  .docs-qa summary::-webkit-details-marker { display: none; }
+  .docs-qa summary::after {
+    content: '';
+    position: absolute;
+    top: 1.15em;
+    right: 10px;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid var(--color-text-secondary);
+    border-bottom: 1.5px solid var(--color-text-secondary);
+    transform: translateY(-60%) rotate(45deg);
+  }
+  .docs-qa[open] summary::after { transform: translateY(-20%) rotate(225deg); }
+  .docs-qa summary:hover { background: color-mix(in srgb, var(--color-text-primary) 6%, transparent); }
+  .docs-answer { padding: 0 8px 16px; }
+
+  .docs-stuck {
+    display: grid;
+    justify-items: start;
+    gap: 14px;
+    margin-top: clamp(48px, 8vh, 88px);
+    padding: clamp(22px, 3vw, 32px);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-container);
+    background: var(--color-background-surface);
+  }
+  .docs-stuck h2 { margin: 0; }
+  .docs-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+  /* Buttons hug their label and sit at the left. Grid stretch would widen them. */
+  .docs .astryx-button { justify-self: start; width: fit-content; max-width: 100%; }
+
+  .docs-toc summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-block: 12px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    list-style: none;
+  }
+  .docs-toc summary::-webkit-details-marker { display: none; }
+  .docs-toc summary::after {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+  }
+  .docs-toc[open] summary::after { transform: translateY(2px) rotate(225deg); }
+  .docs-toc ol { margin: 0; padding: 0; list-style: none; }
+  .docs-toc a {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 7px 8px;
+    border-radius: calc(var(--radius-element) - 4px);
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    line-height: 1.35;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .docs-toc a::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    flex: none;
+    margin-top: 0.4em;
+    background: transparent;
+  }
+  .docs-toc a:hover { background: color-mix(in srgb, var(--color-text-primary) 6%, transparent); color: var(--color-text-primary); }
+  .docs-toc a[aria-current='location'] { color: var(--bl-teal-text); }
+  .docs-toc a[aria-current='location']::before { background: var(--bl-teal); }
+  .docs-toc ol ol a { padding-left: 18px; font-size: 13.5px; }
+
+  .docs a:focus-visible,
+  .docs summary:focus-visible,
+  .docs .astryx-button:focus-visible {
+    outline: 2px solid var(--color-text-primary);
+    outline-offset: -2px;
+  }
+  .docs-prose a:focus-visible { outline-offset: 2px; border-radius: 2px; }
+
+  @media (min-width: 640px) {
+    .docs-rows div { grid-template-columns: 9.5rem minmax(0, 1fr); gap: 16px; align-items: baseline; }
+  }
+
+  .docs-toc-desk { display: none; }
+  .docs-toc-desk > .mono { margin: 0 0 8px; color: var(--color-text-secondary); }
+
+  @media (min-width: 960px) {
+    .docs-layout { grid-template-columns: 14rem minmax(0, 70ch); column-gap: clamp(32px, 4vw, 72px); justify-content: start; }
+    /* The nav has to be as tall as the article, or the sticky list has nowhere to travel. */
+    .docs-layout > nav { align-self: stretch; }
+    .docs-toc-phone { display: none; }
+    .docs-toc-desk {
+      display: block;
+      position: sticky;
+      top: 24px;
+      max-height: calc(100svh - 48px);
+      overflow: auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html:has(.docs) { scroll-behavior: smooth; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .docs-toc a, .docs-jump svg { transition: none; }
+    html:has(.docs) { scroll-behavior: auto; }
+  }
+}
