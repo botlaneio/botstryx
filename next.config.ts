@@ -4,8 +4,9 @@ const nextConfig: NextConfig = {
   // Lets other devices on the local network (an iPad, a phone) load the dev server's scripts. Without it the
   // page arrives as static HTML and nothing interactive works. Update the address if this PC's IP changes.
   allowedDevOrigins: ["192.168.0.103"],
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Off: with Cache Components on, every page hung on Cloudflare Workers (OpenNext 1.20) and returned 500.
+  // Turn it back on only after checking `npm run preview` serves pages.
+  cacheComponents: false,
   turbopack: {
     rules: {
       "*.css": {
