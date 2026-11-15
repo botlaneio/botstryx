@@ -7,7 +7,8 @@ import {TextInput} from '@astryxdesign/core/TextInput';
 
 import {sendBrief, type ContactState} from '@/app/contact/actions';
 import {ArrowRight, ArrowUpRight, Check} from '@/components/icons';
-import {HONEYPOT, NEEDS, check, type ContactField, type ContactValues, type FieldErrors} from '@/lib/contact';
+import {BRIEF_FILL, clearPendingFill, takePendingFill, type BriefFill} from '@/lib/brief-fill';
+import {HONEYPOT, NEEDS, check, isNeed, type ContactField, type ContactValues, type FieldErrors} from '@/lib/contact';
 
 // Ways in, for a visitor staring at an empty box. Each one starts the sentence; they finish it.
 const STARTERS = ['A website for my ', 'A client portal where ', 'A booking system for ', 'An internal tool that '];
@@ -29,6 +30,33 @@ export function BriefForm({initial}: {initial: Partial<ContactValues>}) {
   // When the visitor started, so the server can tell a person from a script.
   useEffect(() => {
     if (started.current) started.current.value = String(Date.now());
+  }, []);
+
+  // agentLane can fill the form in while it talks (src/lib/brief-fill.ts): on arrival, and while the form is open.
+  useEffect(() => {
+    const apply = (fill: BriefFill | null) => {
+      if (!fill) return;
+      const clean: Partial<ContactValues> = {};
+      for (const k of ['brief', 'name', 'email', 'company'] as const) {
+        const v = fill[k];
+        if (typeof v === 'string' && v.trim()) clean[k] = v.trim().slice(0, k === 'brief' ? 4000 : 200);
+      }
+      if (typeof fill.need === 'string' && isNeed(fill.need)) clean.need = fill.need;
+      if (!Object.keys(clean).length) return;
+      setValues((s) => ({...s, ...clean}));
+      setErrors({});
+      clearPendingFill();
+      const el = form.current;
+      if (el) {
+        el.scrollIntoView({behavior: 'smooth', block: 'center'});
+        el.classList.add('lane-spot');
+        setTimeout(() => el.classList.remove('lane-spot'), 2600);
+      }
+    };
+    apply(takePendingFill());
+    const onFill = (e: Event) => apply((e as CustomEvent<BriefFill>).detail);
+    window.addEventListener(BRIEF_FILL, onFill);
+    return () => window.removeEventListener(BRIEF_FILL, onFill);
   }, []);
 
   const set = (f: ContactField) => (v: string) => {

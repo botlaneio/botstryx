@@ -54,6 +54,12 @@
 			"name": "BRIEF_LIMITER",
 			"namespace_id": "1002",
 			"simple": { "limit": 5, "period": 60 }
+		},
+		{
+			// Intro calls agentLane books (src/app/api/lane/book): 3 a minute per visitor.
+			"name": "BOOK_LIMITER",
+			"namespace_id": "1003",
+			"simple": { "limit": 3, "period": 60 }
 		}
 	],
 	"vars": {
@@ -64,4 +70,6 @@
 	//   GEMINI_API_KEY   agentLane's replies
 	//   RESEND_API_KEY   sends the new-brief email
 	//   BRIEF_NOTIFY_TO  who receives it (comma-separate several addresses)
+	//   GOOGLE_SERVICE_ACCOUNT  the service account key (JSON) agentLane books intro calls with
+	//   GOOGLE_CALENDAR_ID      the calendar it books into (the studio's Google Workspace address)
 }
