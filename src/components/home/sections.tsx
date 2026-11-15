@@ -183,11 +183,11 @@ function Tools() {
         <Link href="/custom-solutions" className="apx-more">Explore custom solutions <ArrowRight size={14} /></Link>
       </Head>
       <div className="hm-bus hm-in">
-        <ul className="hm-bus-row up">{TOOLS_ABOVE.map(([t, icon], i) => <li key={t} style={css({'--k': i})}><Mark icon={icon} />{t}</li>)}</ul>
+        <ul className="hm-bus-row up">{TOOLS_ABOVE.map(([t, icon], i) => <li key={t} title={t} style={css({'--k': i})}><Mark icon={icon} /><span className="hm-tool-name">{t}</span></li>)}</ul>
         <div className="hm-bus-line" aria-hidden>
           <span className="hm-hub"><BotMark size={34} animated={false} />Your website</span>
         </div>
-        <ul className="hm-bus-row down">{TOOLS_BELOW.map(([t, icon], i) => <li key={t} style={css({'--k': i + 4})}><Mark icon={icon} />{t}</li>)}</ul>
+        <ul className="hm-bus-row down">{TOOLS_BELOW.map(([t, icon], i) => <li key={t} title={t} style={css({'--k': i + 4})}><Mark icon={icon} /><span className="hm-tool-name">{t}</span></li>)}</ul>
       </div>
     </section>
   );
