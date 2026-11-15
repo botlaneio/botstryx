@@ -40,6 +40,13 @@ npm run deploy                          # build and publish to Cloudflare
   `npm run db:migrate` (live) and `npm run db:migrate:local` (the copy `next dev` uses).
 - Read briefs: `npx wrangler d1 execute botstryx --remote --command "SELECT * FROM briefs ORDER BY id DESC"`
   or the D1 page in the Cloudflare dashboard.
+- agentLane's voice agent is ElevenLabs agent `agent_7301m6k3hy5bfrmbtnbnr8q64760` (src/components/brand/lane-voice.tsx). It only
+  accepts calls from botlane.io and www.botlane.io. Its client tools run in the browser: show_section, open_page,
+  fill_brief (fills the contact form; the visitor sends it), find_call_times and book_intro_call.
+- Intro calls: 20 minutes, weekdays 10:00-18:00 India time, 12 hours' notice, two weeks ahead (`CALL` in
+  src/lib/calendar.ts). Booked into Google Calendar with a Meet link by a Workspace service account with
+  domain-wide delegation. Secrets: `GOOGLE_SERVICE_ACCOUNT` (the JSON key) and `GOOGLE_CALENDAR_ID` (the calendar's
+  address). Without them, Lane says booking isn't switched on. Limited to 3 bookings a minute per visitor.
 - After changing bindings in `wrangler.jsonc`, run `npm run cf-typegen` to refresh `cloudflare-env.d.ts`.
 - No incremental cache is set up. If pages start using ISR or cached fetches, add an R2 bucket
   (https://opennext.js.org/cloudflare/caching).

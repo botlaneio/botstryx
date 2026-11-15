@@ -4,14 +4,30 @@ import {useEffect, useRef, useState} from 'react';
 import {usePathname, useRouter} from 'next/navigation';
 import {useConversation} from '@elevenlabs/react';
 
+import {fillBrief} from '@/lib/brief-fill';
+import {isNeed} from '@/lib/contact';
+
 // Talking to Lane: a voice call with the ElevenLabs agent botpro used ("Lane – botlane.io guide (orb)"), in its
 // custom voice. The agent is public but only accepts calls from botlane.io and www.botlane.io (its allowlist in
 // ElevenLabs), so voice works on the live site and not on localhost or workers.dev.
 //
-// It has two client tools, which run here in the browser:
-//   show_section  scrolls the homepage to a section and lights it up for a moment
-//   open_page     goes to another page while the call carries on (Lane lives in the root layout, so it stays)
+// Its client tools run here in the browser:
+//   show_section     scrolls the homepage to a section and lights it up for a moment
+//   open_page        goes to another page while the call carries on (Lane lives in the root layout, so it stays)
+//   fill_brief       fills in the contact form from the conversation; the visitor checks it and sends it
+//   find_call_times  open intro-call times from the studio's calendar, said in the visitor's own time zone
+//   book_intro_call  books a time the visitor has confirmed, with a Meet link and an emailed invite
 export const LANE_AGENT_ID = 'agent_7301m6k3hy5bfrmbtnbnr8q64760';
+
+// The visitor's own time zone, for saying call times the way they'd read them.
+const zone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
+const say = (iso: string) =>
+  new Date(iso).toLocaleString('en-GB', {timeZone: zone(), weekday: 'long', day: 'numeric', month: 'long', hour: 'numeric', minute: '2-digit', hour12: true});
+
+async function api<T>(path: string, init?: RequestInit): Promise<T & {error?: string}> {
+  const res = await fetch(path, init);
+  return (await res.json().catch(() => ({error: 'No answer from the server.'}))) as T & {error?: string};
+}
 
 // The agent's section names, and where each one is on this homepage.
 const SECTIONS: Record<string, string> = {
@@ -80,6 +96,33 @@ export function LaneVoice() {
         const to = PAGE_FALLBACK[asked] ?? asked;
         router.push(to);
         return to === asked ? `Opened ${to}.` : `That page isn't on the site yet, so I opened ${to} instead.`;
+      },
+      fill_brief: async (p: {brief?: string; need?: string; name?: string; email?: string; company?: string}) => {
+        const values = {
+          brief: p.brief ?? '', name: p.name ?? '', email: p.email ?? '', company: p.company ?? '',
+          need: p.need && isNeed(p.need) ? p.need : '',
+        };
+        if (here.current !== '/contact') router.push('/contact');
+        fillBrief(values);
+        const filled = Object.entries(values).filter(([, v]) => v).map(([k]) => k);
+        return `The brief form is filled in (${filled.join(', ') || 'nothing yet'}). Ask them to check it and press Send brief. You can't send it for them.`;
+      },
+      find_call_times: async ({day}: {day?: string}) => {
+        const q = day && /^\d{4}-\d{2}-\d{2}$/.test(day) ? `?day=${day}` : '';
+        const r = await api<{slots: string[]; minutes: number}>(`/api/lane/slots${q}`);
+        if (r.error) return r.error;
+        if (!r.slots.length) return day ? 'No open times that day. Offer to look at other days.' : 'No open times in the next two weeks. Suggest sending a brief instead.';
+        return `Open ${r.minutes}-minute intro calls, in the visitor's time zone (${zone()}). Offer two or three, then book the one they pick by passing its start value exactly:\n` +
+          r.slots.map((iso) => `${say(iso)} (start: ${iso})`).join('\n');
+      },
+      book_intro_call: async (p: {start?: string; name?: string; email?: string; note?: string}) => {
+        const r = await api<{booked: string; meet: string | null}>('/api/lane/book', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(p),
+        });
+        if (r.error) return r.error;
+        return `Booked for ${say(r.booked)} their time. Google is emailing the invite to ${p.email}${r.meet ? `, with the Meet link ${r.meet}` : ''}.`;
       },
     },
     onMessage: ({message, role}) => {
