@@ -3,7 +3,7 @@ import {getCloudflareContext} from '@opennextjs/cloudflare';
 import {CALL, NotConfigured, findSlots} from '@/lib/calendar';
 import {calendarEnv, visitor} from '@/lib/calendar-env';
 
-// Open intro-call times for agentLane to offer: GET /api/lane/slots, or ?day=YYYY-MM-DD (a day in India time).
+// Open intro-call times for agentLane to offer: GET /api/lane/slots, or ?day=YYYY-MM-DD.
 // Times come back in UTC; the browser says them in the visitor's own time zone.
 export async function GET(request: Request) {
   const limit = await getCloudflareContext().env.LANE_LIMITER?.limit({key: visitor(request)}).catch(() => ({success: true}));

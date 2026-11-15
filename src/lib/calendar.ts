@@ -8,16 +8,44 @@ import 'server-only';
 //   GOOGLE_CALENDAR_ID      the calendar to book into, which is also the user it acts as (the studio's address)
 // Without them, finding times and booking both answer that booking isn't switched on.
 
+// When intro calls can be booked: two weekday windows, each fixed to its own time zone (daylight saving followed).
+//   US Central 8:00-12:00  the whole US gets a morning, the UK and Europe an afternoon (19:30-23:30 India in winter)
+//   India 11:00-13:00      the Gulf, India, Singapore and Australia get a daytime slot
 export const CALL = {
   minutes: 20,
   every: 30, // a slot starts every 30 minutes, so calls keep 10 minutes free after them
-  days: [1, 2, 3, 4, 5], // Monday to Friday
-  from: 10 * 60, // 10:00 India time, in minutes from midnight
-  until: 18 * 60, // the last call ends by 18:00
-  offset: 330, // India Standard Time is UTC+5:30 all year
+  days: [1, 2, 3, 4, 5], // Monday to Friday, in each window's own zone
+  windows: [
+    {zone: 'America/Chicago', from: 8 * 60, until: 12 * 60},
+    {zone: 'Asia/Kolkata', from: 11 * 60, until: 13 * 60},
+  ],
   noticeHours: 12,
   aheadDays: 14,
 };
+
+/** Minutes a zone is ahead of UTC at a moment (negative west of Greenwich), daylight saving included. */
+function zoneOffset(at: number, zone: string): number {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en-US', {timeZone: zone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'})
+      .formatToParts(at).map((p) => [p.type, Number(p.value)]),
+  );
+  return (Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute) - Math.floor(at / 60_000) * 60_000) / 60_000;
+}
+
+/** The moment a wall-clock time happens in a zone: a date (as a UTC midnight) plus minutes into that day. */
+function zoned(dayUtcMidnight: number, minutes: number, zone: string): Date {
+  const guess = dayUtcMidnight + minutes * 60_000;
+  const first = guess - zoneOffset(guess, zone) * 60_000;
+  return new Date(guess - zoneOffset(first, zone) * 60_000);
+}
+
+/** A zone's calendar date at a moment, as a UTC midnight. */
+function zoneDay(at: number, zone: string): number {
+  const d = new Date(at + zoneOffset(at, zone) * 60_000);
+  return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+}
+
+type Slot = {start: Date; day: number; window: number};
 
 export interface CalendarEnv {
   GOOGLE_SERVICE_ACCOUNT?: string;
@@ -69,25 +97,24 @@ async function google<T>(env: CalendarEnv, path: string, init: RequestInit = {})
   return (await res.json()) as T;
 }
 
-/** Every slot start in the window that falls in working hours, before checking the calendar. */
-function candidates(from: Date, to: Date): Date[] {
-  const out: Date[] = [];
-  const earliest = Date.now() + CALL.noticeHours * 3600_000;
-  // Walk the days in India time: shift by the offset, read the date, shift back.
-  const startDay = new Date(from.getTime() + CALL.offset * 60_000);
-  startDay.setUTCHours(0, 0, 0, 0);
-  for (let day = startDay.getTime(); day < to.getTime() + CALL.offset * 60_000; day += 86_400_000) {
-    if (!CALL.days.includes(new Date(day).getUTCDay())) continue;
-    for (let m = CALL.from; m + CALL.minutes <= CALL.until; m += CALL.every) {
-      const start = new Date(day + (m - CALL.offset) * 60_000);
-      if (start.getTime() >= Math.max(earliest, from.getTime()) && start < to) out.push(start);
+/** Every slot in the windows between two moments, before checking the calendar, earliest first. */
+function candidates(from: Date, to: Date): Slot[] {
+  const out: Slot[] = [];
+  const earliest = Math.max(Date.now() + CALL.noticeHours * 3600_000, from.getTime());
+  for (const [i, w] of CALL.windows.entries()) {
+    for (let day = zoneDay(from.getTime(), w.zone); day <= zoneDay(to.getTime(), w.zone); day += 86_400_000) {
+      if (!CALL.days.includes(new Date(day).getUTCDay())) continue;
+      for (let m = w.from; m + CALL.minutes <= w.until; m += CALL.every) {
+        const start = zoned(day, m, w.zone);
+        if (start.getTime() >= earliest && start < to) out.push({start, day, window: i});
+      }
     }
   }
-  return out;
+  return out.sort((a, b) => a.start.getTime() - b.start.getTime());
 }
 
 /** Open slot starts between two moments, with the calendar's busy times taken out. */
-export async function openSlots(env: CalendarEnv, from: Date, to: Date): Promise<Date[]> {
+export async function openSlots(env: CalendarEnv, from: Date, to: Date): Promise<Slot[]> {
   const all = candidates(from, to);
   if (!all.length) return [];
   const id = env.GOOGLE_CALENDAR_ID!;
@@ -97,27 +124,31 @@ export async function openSlots(env: CalendarEnv, from: Date, to: Date): Promise
   });
   const busy = (fb.calendars[id]?.busy ?? []).map((b) => [Date.parse(b.start), Date.parse(b.end)]);
   const len = CALL.minutes * 60_000;
-  return all.filter((s) => !busy.some(([b0, b1]) => s.getTime() < b1 && s.getTime() + len > b0));
+  return all.filter(({start}) => !busy.some(([b0, b1]) => start.getTime() < b1 && start.getTime() + len > b0));
 }
 
-/** The next open slots: one day's, or the first few days that have any. */
+/** The next open slots: one day's (that date in each window's own zone), or the first few days that have any. */
 export async function findSlots(env: CalendarEnv, day?: string): Promise<Date[]> {
   if (day && /^\d{4}-\d{2}-\d{2}$/.test(day)) {
-    const from = new Date(`${day}T00:00:00+05:30`);
-    const to = new Date(from.getTime() + 86_400_000);
-    const ahead = Date.now() + CALL.aheadDays * 86_400_000;
-    return from.getTime() > ahead ? [] : openSlots(env, from, to);
+    const midnight = Date.parse(`${day}T00:00:00Z`);
+    if (midnight > Date.now() + CALL.aheadDays * 86_400_000) return [];
+    // Wide enough to hold that date in any zone; each slot then keeps only its own zone's date.
+    const slots = await openSlots(env, new Date(midnight - 14 * 3600_000), new Date(midnight + 38 * 3600_000));
+    return slots.filter((s) => s.day === midnight).map((s) => s.start);
   }
   const now = new Date();
   const slots = await openSlots(env, now, new Date(now.getTime() + CALL.aheadDays * 86_400_000));
-  // A few from each of the first three days that have room, so the choice isn't all one morning.
-  const byDay = new Map<string, Date[]>();
+  // A few from each window on each of the first three days that have room, so visitors anywhere get times that
+  // suit them (the browser puts the ones in the visitor's waking hours first).
+  const byDay = new Map<number, Date[]>();
+  const perWindow = new Map<string, number>();
   for (const s of slots) {
-    const key = new Date(s.getTime() + CALL.offset * 60_000).toISOString().slice(0, 10);
+    const key = Math.floor(s.start.getTime() / 86_400_000);
     if (!byDay.has(key) && byDay.size >= 3) break;
-    const list = byDay.get(key) ?? [];
-    if (list.length < 3) list.push(s);
-    byDay.set(key, list);
+    const taken = perWindow.get(`${key}:${s.window}`) ?? 0;
+    if (taken >= 4) continue;
+    perWindow.set(`${key}:${s.window}`, taken + 1);
+    byDay.set(key, [...(byDay.get(key) ?? []), s.start]);
   }
   return [...byDay.values()].flat();
 }
@@ -126,7 +157,7 @@ export async function findSlots(env: CalendarEnv, day?: string): Promise<Date[]>
 export async function bookCall(env: CalendarEnv, start: Date, guest: {name: string; email: string; note?: string}) {
   const end = new Date(start.getTime() + CALL.minutes * 60_000);
   const open = await openSlots(env, new Date(start.getTime() - 60_000), new Date(end.getTime() + 60_000));
-  if (!open.some((s) => s.getTime() === start.getTime())) return {ok: false as const, reason: 'taken'};
+  if (!open.some((s) => s.start.getTime() === start.getTime())) return {ok: false as const, reason: 'taken'};
   const event = await google<{htmlLink: string; hangoutLink?: string}>(env, `/calendars/${encodeURIComponent(env.GOOGLE_CALENDAR_ID!)}/events?conferenceDataVersion=1&sendUpdates=all`, {
     method: 'POST',
     body: JSON.stringify({
