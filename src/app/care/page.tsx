@@ -1,10 +1,12 @@
 import type {Metadata} from 'next';
 
-import {PlaceholderPage} from '@/components/site/placeholder-page';
+import {CarePage} from '@/components/offers/care-page';
 
-export const metadata: Metadata = {title: 'Care · botLane'};
+export const metadata: Metadata = {
+  title: 'Care · botLane',
+  description: 'Hosting, security updates, uptime monitoring, backups and monthly edits for a live website. Care from $99 a month, Care Plus $199.',
+};
 
-// The address is set up; the page's content is still to be written.
-export default function CarePage() {
-  return <PlaceholderPage title="Care" path="/care" />;
+export default function CareRoute() {
+  return <CarePage />;
 }
