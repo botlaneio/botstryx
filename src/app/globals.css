@@ -1956,7 +1956,8 @@ body {
   .apx-ledger, .apx-run { margin: 0; padding: 0; list-style: none; }
   .apx-ledger li { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 8px 0; align-items: baseline; padding-block: clamp(20px, 3vh, 30px); border-top: 1px solid var(--color-border); }
   .apx-ledger li:last-child { border-bottom: 1px solid var(--color-border); }
-  .apx-ledger .mono { color: var(--color-text-secondary); }
+  .apx-ledger .num-badge { align-self: center; font-size: 12.5px; }
+  .apx-ledger li:hover .num-badge, .apx-run li:hover .num-badge { border-color: var(--apx-hot); background: var(--apx-hot); color: light-dark(#fff, #0b1020); box-shadow: 0 0 0 4px color-mix(in srgb, var(--apx-hot) 14%, transparent); }
   .apx-ledger h3 { margin: 0; font-size: clamp(1.35rem, 2.7vw, 2.6rem); font-weight: 550; line-height: 1.04; letter-spacing: -0.04em; transition: transform 0.5s var(--bl-ease); }
   .apx-ledger p { grid-column: 2; max-width: 46ch; margin: 0; color: var(--color-text-secondary); font-size: 1rem; line-height: 1.45; }
   @media (min-width: 960px) {
@@ -1967,7 +1968,7 @@ body {
 
   .apx-run { display: grid; gap: 28px 0; }
   .apx-run li { display: grid; gap: 12px; align-content: start; padding: 18px 24px 0 0; border-top: 1px solid var(--color-text-primary); }
-  .apx-run .mono { color: var(--color-text-secondary); }
+  .apx-run .num-badge { font-size: 12px; }
   .apx-run h3 { margin: 6px 0 0; font-size: clamp(1.2rem, 1.6vw, 1.55rem); font-weight: 600; line-height: 1.05; letter-spacing: -0.03em; }
   .apx-run p { max-width: 34ch; margin: 0; color: var(--color-text-secondary); font-size: 0.97rem; line-height: 1.45; }
   @media (min-width: 640px) { .apx-run { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -2032,7 +2033,12 @@ body {
   .ct-form { display: grid; gap: clamp(34px, 5.5vh, 56px); }
   .ct-q { display: grid; gap: 14px; min-width: 0; margin: 0; padding: 0; border: 0; }
   .ct-q legend { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; padding: 0; font-size: clamp(1.35rem, 2vw, 1.9rem); font-weight: 600; line-height: 1.05; letter-spacing: -0.04em; }
-  .ct-q legend .mono { color: var(--apx-hot); }
+  .ct-q legend { align-items: center; }
+
+  /* A numbered step as a small tinted pill; it fills solid when its step is done or in focus. */
+  .num-badge { display: inline-grid; place-items: center; flex: none; justify-self: start; min-width: 2.3em; height: 1.6em; padding: 0 0.5em; border: 1px solid color-mix(in srgb, var(--apx-hot) 35%, transparent); border-radius: 999px; background: color-mix(in srgb, var(--apx-hot) 10%, transparent); color: var(--apx-hot); font-weight: 600; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; transition: background-color 0.25s, color 0.25s, border-color 0.25s, box-shadow 0.25s; }
+  .num-badge[data-done] { border-color: var(--apx-hot); background: var(--apx-hot); color: light-dark(#fff, #0b1020); box-shadow: 0 0 0 4px color-mix(in srgb, var(--apx-hot) 14%, transparent); }
+  .ct-q legend .num-badge { font-size: 0.6em; }
   .ct-starters { display: flex; flex-wrap: wrap; gap: 8px; }
   .ct-starters button { padding: 7px 11px; border: 1px solid var(--color-border); border-radius: var(--radius-element); color: var(--color-text-secondary); font-size: 13.5px; cursor: pointer; transition: color 0.2s, border-color 0.2s; }
   .ct-starters button:hover { border-color: var(--color-text-secondary); color: var(--color-text-primary); }
@@ -2536,17 +2542,23 @@ body {
   .hm-bus-row li svg { flex: none; }
   .hm-hub { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 10px; padding: 9px 20px 9px 12px; border-radius: var(--radius-element); background: var(--color-text-primary); box-shadow: var(--hm-lift-sm); color: var(--color-background-body); font-size: 1.02rem; font-weight: 600; letter-spacing: -0.02em; }
   .hm-hub .bot-eye-blue { fill: light-dark(#8098ff, #2f55f0); }
-  @media (min-width: 860px) {
-    .hm-bus-row { flex-wrap: nowrap; justify-content: space-around; }
-    .hm-bus-line { margin-block: var(--reach); }
-    /* A line from each app to the main one, and a signal running along it. */
-    .hm-bus-row li::before { content: ''; position: absolute; left: 50%; width: 1px; height: calc(var(--reach) + 32px); background: var(--color-border-emphasized, var(--color-border)); }
-    .hm-bus-row.up li::before { top: 100%; }
-    .hm-bus-row.down li::before { bottom: 100%; }
-    .hm-bus-row li::after { content: ''; position: absolute; left: calc(50% - 2.5px); width: 6px; height: 6px; border-radius: 50%; background: var(--apx-hot); opacity: 0; animation: 3.6s calc(var(--k) * 0.52s) infinite var(--bl-ease); }
-    .hm-bus-row.up li::after { top: 100%; animation-name: hm-down; }
-    .hm-bus-row.down li::after { bottom: 100%; animation-name: hm-up; }
+  /* On a narrow screen the apps show as logos only, one row each, so the lines to the hub still line up. */
+  @media (max-width: 859.98px) {
+    .hm-bus { --reach: 22px; }
+    .hm-bus-row li { padding: 13px; }
+    .hm-bus-row li svg { width: 22px; height: 22px; }
+    .hm-tool-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   }
+  /* The apps on two rails, a line from each to the hub. */
+  .hm-bus-row { flex-wrap: nowrap; justify-content: space-around; }
+  .hm-bus-line { margin-block: var(--reach); }
+  /* A line from each app to the main one, and a signal running along it. */
+  .hm-bus-row li::before { content: ''; position: absolute; left: 50%; width: 1px; height: calc(var(--reach) + 32px); background: var(--color-border-emphasized, var(--color-border)); }
+  .hm-bus-row.up li::before { top: 100%; }
+  .hm-bus-row.down li::before { bottom: 100%; }
+  .hm-bus-row li::after { content: ''; position: absolute; left: calc(50% - 2.5px); width: 6px; height: 6px; border-radius: 50%; background: var(--apx-hot); opacity: 0; animation: 3.6s calc(var(--k) * 0.52s) infinite var(--bl-ease); }
+  .hm-bus-row.up li::after { top: 100%; animation-name: hm-down; }
+  .hm-bus-row.down li::after { bottom: 100%; animation-name: hm-up; }
   @keyframes hm-down { 0% { opacity: 0; transform: none; } 12%, 48% { opacity: 1; } 60%, 100% { opacity: 0; transform: translateY(calc(var(--reach) + 28px)); } }
   @keyframes hm-up { 0% { opacity: 0; transform: translateY(calc(-1 * (var(--reach) + 28px))); } 12%, 48% { opacity: 1; } 60%, 100% { opacity: 0; transform: none; } }
 
@@ -2586,10 +2598,14 @@ body {
   .hm-how { display: grid; }
   .hm-steps { position: relative; margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--color-border); }
   /* The line down the side fills as the steps are read. */
-  .hm-steps::after { content: ''; position: absolute; left: -1.5px; top: 0; width: 2px; height: 100%; background: var(--apx-hot); transform-origin: top; transform: scaleY(var(--p, 1)); }
+  .hm-steps::after { content: ''; position: absolute; left: -1.5px; top: 0; width: 2px; height: 100%; border-radius: 2px; background: var(--apx-hot); box-shadow: 0 0 4px 1px var(--apx-hot), 0 0 14px 3px color-mix(in srgb, var(--apx-hot) 75%, transparent), 0 0 32px 4px color-mix(in srgb, var(--apx-hot) 40%, transparent); transform-origin: top; transform: scaleY(var(--p, 1)); }
+  /* A bright tip leads the line as it fills. */
+  .hm-steps::before { content: ''; position: absolute; z-index: 1; left: -4.5px; top: calc(var(--p, 1) * 100% - 4px); width: 8px; height: 8px; border-radius: 50%; background: light-dark(#fff, #e8edff); box-shadow: 0 0 0 2px var(--apx-hot), 0 0 12px 2px var(--apx-hot), 0 0 32px 6px color-mix(in srgb, var(--apx-hot) 45%, transparent); opacity: clamp(0, calc(var(--p, 1) * 40), 1); }
   .hm-steps > li { --on: clamp(0, calc((var(--p, 1) * var(--n) - var(--i)) * 4), 1); display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 8px clamp(12px, 2vw, 32px); padding: clamp(26px, 4.6vh, 52px) 0 clamp(26px, 4.6vh, 52px) clamp(18px, 3vw, 44px); opacity: calc(0.3 + 0.7 * var(--on)); }
   .hm-steps > li + li { border-top: 1px solid var(--color-border); }
-  .hm-step-no { padding-top: 0.75em; color: color-mix(in srgb, var(--apx-hot) calc(var(--on) * 100%), var(--color-text-secondary)); }
+  .hm-step-no { position: relative; z-index: 0; padding-top: 0.75em; color: color-mix(in srgb, color-mix(in srgb, var(--apx-hot) 70%, light-dark(var(--apx-hot), #fff)) calc(var(--on) * 100%), var(--color-text-secondary)); font-weight: 600; text-shadow: 0 0 2px color-mix(in srgb, light-dark(transparent, var(--apx-hot)) calc(var(--on) * 100%), transparent), 0 0 10px color-mix(in srgb, light-dark(transparent, var(--apx-hot)) calc(var(--on) * 100%), transparent); }
+  /* A soft halo behind the number once its step is reached. */
+  .hm-step-no::before { content: ''; position: absolute; z-index: -1; left: 1.1em; top: 1.25em; width: 46px; height: 46px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--apx-hot) 38%, transparent), transparent 68%); opacity: var(--on); translate: -50% -50%; pointer-events: none; }
   .hm-steps h3 { margin: 0; font-size: clamp(1.7rem, 3.2vw, 3.3rem); font-weight: 600; line-height: 1; letter-spacing: -0.05em; }
   .hm-steps p { max-width: 46ch; margin: 14px 0 0; color: var(--color-text-secondary); font-size: 1.05rem; line-height: 1.45; text-wrap: pretty; }
   .hm-steps ul { display: flex; flex-wrap: wrap; gap: 6px; margin: 18px 0 0; padding: 0; list-style: none; }
