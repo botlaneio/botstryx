@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 import {ArrowUp} from '@/components/icons';
 import {LANE_GREETING, LANE_LIMITS, LANE_STARTERS} from '@/lib/lane';
+import {LANE_OPEN} from '@/lib/lane-open';
 
 import {BotMark} from './bot-mark';
 
@@ -121,6 +122,19 @@ export function LaneLauncher() {
       abort.current = null;
     }
   }
+
+  // Other parts of the page can open the chat, and ask a question with it (src/lib/lane-open.ts).
+  const sendLatest = useRef(send);
+  useEffect(() => { sendLatest.current = send; });
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      setOpen(true);
+      const ask = (e as CustomEvent<{ask?: string}>).detail?.ask;
+      if (ask) sendLatest.current(ask);
+    };
+    window.addEventListener(LANE_OPEN, onOpen);
+    return () => window.removeEventListener(LANE_OPEN, onOpen);
+  }, []);
 
   const empty = turns.length === 0;
 
