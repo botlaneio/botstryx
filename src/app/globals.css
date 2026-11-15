@@ -2851,8 +2851,12 @@ body {
   }
 
   /* ---- The opening screen: the statement, with the status board beside it ---- */
-  .care-hero-grid { display: grid; gap: clamp(28px, 4vh, 48px); align-items: end; }
+  .care-hero-grid { display: grid; gap: clamp(28px, 4vh, 48px); align-items: center; }
   .care-title { font-size: clamp(3rem, 9.4vw, 11rem); }
+  /* Care, Web Apps and the app stage pages open on their content, not on a full screen. The Apex frame's
+     full-height opening pins its text to the bottom, which left an empty band under the header here. */
+  .care .apx-open, .wa .apx-open { min-height: 0; }
+  .care .apx-hero, .wa .apx-hero { justify-content: flex-start; padding-top: clamp(40px, 8vh, 88px); }
   @media (min-width: 1100px) {
     .care-hero-grid { grid-template-columns: minmax(0, 1fr) minmax(360px, 430px); }
   }
