@@ -1,10 +1,12 @@
 import type {Metadata} from 'next';
 
-import {PlaceholderPage} from '@/components/site/placeholder-page';
+import {AssistantPage} from '@/components/offers/assistant-page';
 
-export const metadata: Metadata = {title: 'AI Assistant · botLane'};
+export const metadata: Metadata = {
+  title: 'AI Assistant · botLane',
+  description: 'An assistant on your website that answers visitors’ questions about your business, day and night. Trained on your services, prices, policies and FAQs, and hands enquiries to you when a person is needed. $2,500 one-time.',
+};
 
-// The address is set up; the page's content is still to be written.
-export default function AIAssistantPage() {
-  return <PlaceholderPage title="AI Assistant" path="/custom-solutions/ai-assistant" />;
+export default function AIAssistantRoute() {
+  return <AssistantPage />;
 }
