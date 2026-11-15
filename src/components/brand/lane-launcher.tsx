@@ -97,7 +97,7 @@ export function LaneLauncher() {
         signal: ctrl.signal,
       });
       if (!res.ok || !res.body) {
-        const {error} = await res.json().catch(() => ({error: ''}));
+        const {error} = (await res.json().catch(() => ({}))) as {error?: string};
         reply(error || 'Lane is offline right now. Send us a brief at /contact and we’ll reply ourselves.', true);
         return;
       }

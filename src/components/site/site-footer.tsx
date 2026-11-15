@@ -65,9 +65,8 @@ const COLUMNS = [
   },
 ];
 
-/** The year for the copyright line. Cached, so reading the clock does not hold up the rest of the page. */
+/** The year for the copyright line. */
 async function year() {
-  'use cache';
   return new Date().getFullYear();
 }
 
