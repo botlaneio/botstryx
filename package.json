@@ -16,6 +16,7 @@
   "dependencies": {
     "@astryxdesign/core": "^0.7.15",
     "@astryxdesign/theme-neutral": "^0.7.15",
+    "@elevenlabs/react": "1.20.2",
     "@google/genai": "^3.3.0",
     "@heroicons/react": "^2.2.0",
     "@opennextjs/cloudflare": "1.20.15",

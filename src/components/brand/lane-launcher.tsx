@@ -6,6 +6,9 @@ import Link from 'next/link';
 import {ArrowUp} from '@/components/icons';
 import {LANE_GREETING, LANE_LIMITS, LANE_STARTERS} from '@/lib/lane';
 import {LANE_OPEN} from '@/lib/lane-open';
+import {ConversationProvider} from '@elevenlabs/react';
+
+import {LaneVoice} from './lane-voice';
 
 import {BotMark} from './bot-mark';
 
@@ -45,6 +48,8 @@ export function LaneLauncher() {
     }
   });
   const [draft, setDraft] = useState('');
+  // Type to Lane (Gemini, through /api/lane) or talk to it (the ElevenLabs voice agent, in lane-voice.tsx).
+  const [mode, setMode] = useState<'type' | 'talk'>('type');
   const [busy, setBusy] = useState(false);
   const input = useRef<HTMLTextAreaElement>(null);
   const log = useRef<HTMLDivElement>(null);
@@ -59,13 +64,13 @@ export function LaneLauncher() {
   useEffect(() => { log.current?.scrollTo({top: log.current.scrollHeight}); }, [turns, open]);
   useEffect(() => {
     if (!open) return;
-    input.current?.focus();
+    if (mode === 'type') input.current?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { setOpen(false); launcher.current?.focus(); }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [open]);
+  }, [open, mode]);
   useEffect(() => () => abort.current?.abort(), []);
 
   async function send(text: string) {
@@ -129,6 +134,7 @@ export function LaneLauncher() {
   useEffect(() => {
     const onOpen = (e: Event) => {
       setOpen(true);
+      setMode('type');
       const ask = (e as CustomEvent<{ask?: string}>).detail?.ask;
       if (ask) sendLatest.current(ask);
     };
@@ -139,7 +145,7 @@ export function LaneLauncher() {
   const empty = turns.length === 0;
 
   return (
-    <>
+    <ConversationProvider>
       {open && (
         <section className="lane-chat" role="dialog" aria-modal="false" aria-labelledby="lane-chat-title">
           <header className="lane-chat-head">
@@ -148,7 +154,11 @@ export function LaneLauncher() {
               <h2 id="lane-chat-title">agentLane</h2>
               <p>{busy ? 'Typing…' : 'Answers about botLane, day and night'}</p>
             </div>
-            {!empty && (
+            <div className="lane-mode" role="radiogroup" aria-label="Type or talk to Lane">
+              <button type="button" role="radio" aria-checked={mode === 'type'} onClick={() => setMode('type')}>Type</button>
+              <button type="button" role="radio" aria-checked={mode === 'talk'} onClick={() => setMode('talk')}>Talk</button>
+            </div>
+            {!empty && mode === 'type' && (
               <button type="button" className="lane-chat-new" onClick={() => { abort.current?.abort(); setTurns([]); input.current?.focus(); }}>
                 New chat
               </button>
@@ -158,6 +168,7 @@ export function LaneLauncher() {
             </button>
           </header>
 
+          {mode === 'talk' ? <LaneVoice /> : (<>
           <div className="lane-chat-log" ref={log} aria-live="polite">
             <p className="lane-msg bot">{LANE_GREETING}</p>
             {empty && (
@@ -187,6 +198,7 @@ export function LaneLauncher() {
             />
             <button type="submit" aria-label="Send" disabled={!draft.trim() || busy}><ArrowUp size={16} /></button>
           </form>
+          </>)}
           <p className="lane-chat-note">Lane is an AI assistant and can make mistakes. For a quote, <Link href="/contact">send a brief</Link>.</p>
         </section>
       )}
@@ -213,6 +225,6 @@ export function LaneLauncher() {
           </svg>
         </span>
       </button>
-    </>
+    </ConversationProvider>
   );
 }

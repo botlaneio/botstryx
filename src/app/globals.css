@@ -3525,3 +3525,49 @@ body {
     .ad-picks button, .al-asks button { transition: none; }
   }
 }
+
+@layer components {
+  /* ================================================================== */
+  /* Talking to Lane (src/components/brand/lane-voice.tsx)               */
+  /* ================================================================== */
+  .lane-mode { display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: color-mix(in srgb, var(--color-text-primary) 7%, transparent); }
+  .lane-mode button { padding: 5px 11px; border-radius: 999px; color: var(--color-text-secondary); font-size: 12.5px; font-weight: 550; cursor: pointer; transition: background-color 0.2s, color 0.2s; }
+  .lane-mode button[aria-checked='true'] { background: var(--color-background-surface); color: var(--color-text-primary); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14); }
+
+  .lane-voice { display: flex; flex-direction: column; min-height: 0; padding: 4px 16px 12px; }
+  .lane-voice-stage { display: grid; justify-items: center; gap: 10px; padding: 18px 0 12px; text-align: center; }
+  .lane-voice-state { margin: 0; font-weight: 600; letter-spacing: -0.02em; }
+  .lane-voice-hint { max-width: 30ch; margin: 0; color: var(--color-text-secondary); font-size: 13.5px; line-height: 1.45; }
+  .lane-voice-log { flex: 1; display: flex; flex-direction: column; gap: 8px; min-height: 0; overflow-y: auto; padding: 6px 2px; }
+  .lane-voice-problem { margin: 8px 0 0; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, #e5484d 10%, transparent); color: light-dark(#b42318, #ff9592); font-size: 13.5px; line-height: 1.4; }
+  .lane-voice-bar { display: flex; gap: 8px; margin-top: auto; padding-top: 12px; }
+  .lane-voice-bar button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 14px; font-weight: 600; cursor: pointer; transition: transform 0.2s, opacity 0.2s; }
+  .lane-voice-bar button:active { transform: scale(0.98); }
+  .lane-voice-start { background: var(--lc-hot); color: light-dark(#fff, #0b1020); }
+  .lane-voice-mute { background: color-mix(in srgb, var(--color-text-primary) 8%, transparent); }
+  .lane-voice-mute[aria-pressed='true'] { background: var(--color-text-primary); color: var(--color-background-surface); }
+  .lane-voice-mute:disabled { opacity: 0.5; cursor: default; }
+  .lane-voice-end { background: #e5484d; color: #fff; }
+
+  /* The orb: three soft rings that swell with the voice (--level, 0 to 1) and turn blue while Lane speaks. */
+  .lane-orb { --level: 0; position: relative; display: grid; place-items: center; width: 112px; height: 112px; }
+  .lane-orb i { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--lc-hot) 55%, #fff), var(--lc-hot) 60%, color-mix(in srgb, var(--lc-hot) 70%, #000)); transition: transform 0.12s linear, opacity 0.3s; }
+  .lane-orb i:nth-child(1) { opacity: 0.18; transform: scale(calc(1 + var(--level) * 0.5)); filter: blur(6px); }
+  .lane-orb i:nth-child(2) { opacity: 0.35; transform: scale(calc(0.86 + var(--level) * 0.3)); }
+  .lane-orb i:nth-child(3) { transform: scale(calc(0.68 + var(--level) * 0.14)); box-shadow: 0 10px 30px -8px var(--lc-hot); }
+  .lane-voice[data-status='disconnected'] .lane-orb i:nth-child(3), .lane-voice[data-status='error'] .lane-orb i:nth-child(3) { animation: lane-orb-idle 3.2s ease-in-out infinite; }
+  .lane-voice[data-status='connecting'] .lane-orb i:nth-child(1) { animation: lane-orb-wait 1.2s ease-in-out infinite; }
+  .lane-voice:not([data-speaking])[data-status='connected'] .lane-orb i { filter: saturate(0.55); }
+  .lane-voice:not([data-speaking])[data-status='connected'] .lane-orb i:nth-child(1) { filter: blur(6px) saturate(0.55); }
+  @keyframes lane-orb-idle { 50% { transform: scale(0.74); } }
+  @keyframes lane-orb-wait { 50% { transform: scale(1.35); opacity: 0.05; } }
+
+  /* A section Lane is pointing at, lit for a moment. */
+  .lane-spot { animation: lane-spot 2.6s var(--bl-ease); border-radius: var(--radius-container, 20px); }
+  @keyframes lane-spot { 0%, 70% { box-shadow: 0 0 0 3px light-dark(#2f55f0, #8098ff), 0 0 60px -10px light-dark(#2f55f0, #8098ff); } 100% { box-shadow: 0 0 0 0 transparent; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lane-orb i { transition: none; animation: none !important; }
+    .lane-spot { animation: none; outline: 3px solid light-dark(#2f55f0, #8098ff); }
+  }
+}
