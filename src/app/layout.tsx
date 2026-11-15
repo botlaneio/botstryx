@@ -4,6 +4,7 @@ import {Instrument_Sans, JetBrains_Mono} from 'next/font/google';
 
 import './globals.css'; // first: declares the cascade-layer order
 import {LaneLauncher} from '@/components/brand/lane-launcher';
+import {SITE_URL} from '@/lib/site';
 
 import {Providers} from './providers';
 
@@ -21,6 +22,9 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  // Makes canonical and social-preview links absolute, on botlane.io whatever address served the page.
+  metadataBase: new URL(SITE_URL),
+  alternates: {canonical: './'},
   title: 'botLane · Custom websites and web apps, built properly',
   description: 'Design that looks right. Engineering that stays right. Custom design and engineering, from first idea to life after launch.',
 };
