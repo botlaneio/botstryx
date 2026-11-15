@@ -24,12 +24,22 @@ The site runs on Cloudflare Workers through the OpenNext adapter (`@opennextjs/c
 ```bash
 npx wrangler login                      # once, in a browser
 npx wrangler secret put GEMINI_API_KEY  # once: agentLane's key, kept as a Worker secret
+npx wrangler secret put RESEND_API_KEY  # once: sends the new-brief email
+npx wrangler secret put BRIEF_NOTIFY_TO # once: who gets new-brief emails (comma-separate several)
 npm run preview                         # build and run the Worker locally
 npm run deploy                          # build and publish to Cloudflare
 ```
 
 - agentLane's rate limit (12 messages a minute per visitor) is the `LANE_LIMITER` binding in
   `wrangler.jsonc`, counted by Cloudflare. `next dev` simulates it; elsewhere the route counts in memory.
+- Contact briefs are saved to the D1 database `botstryx` (binding `DB`, table `briefs`) and emailed to
+  `BRIEF_NOTIFY_TO` from `briefs@botlane.io` via Resend (`src/lib/briefs.ts`). The email's Reply-To is the
+  visitor. Without the Resend secrets briefs are still saved. The form is limited to 5 briefs a minute per
+  visitor (`BRIEF_LIMITER`).
+- Database schema lives in `migrations/`. Add a new numbered `.sql` file for each change, then
+  `npm run db:migrate` (live) and `npm run db:migrate:local` (the copy `next dev` uses).
+- Read briefs: `npx wrangler d1 execute botstryx --remote --command "SELECT * FROM briefs ORDER BY id DESC"`
+  or the D1 page in the Cloudflare dashboard.
 - After changing bindings in `wrangler.jsonc`, run `npm run cf-typegen` to refresh `cloudflare-env.d.ts`.
 - No incremental cache is set up. If pages start using ISR or cached fetches, add an R2 bucket
   (https://opennext.js.org/cloudflare/caching).
