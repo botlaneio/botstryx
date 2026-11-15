@@ -1,10 +1,12 @@
 import type {Metadata} from 'next';
 
-import {PlaceholderPage} from '@/components/site/placeholder-page';
+import {ScopingSprintPage} from '@/components/offers/scoping-sprint-page';
 
-export const metadata: Metadata = {title: 'Scoping sprint · botLane'};
+export const metadata: Metadata = {
+  title: 'Scoping sprint · botLane',
+  description: 'For anyone with an app idea who needs a clear plan and a fixed quote. Requirements and user flows, clickable wireframes, a technical plan and a fixed quote in 1–2 weeks, for $1,500, credited towards your build.',
+};
 
-// The address is set up; the page's content is still to be written.
-export default function ScopingsprintPage() {
-  return <PlaceholderPage title="Scoping sprint" path="/web-apps/scoping-sprint" />;
+export default function ScopingSprintRoute() {
+  return <ScopingSprintPage />;
 }

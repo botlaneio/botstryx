@@ -7,6 +7,7 @@ import {SiteHeader} from '@/components/site/site-header';
 import {APPS, FOUNDING, money} from '@/lib/pricing';
 
 import {ProductAnatomy} from './product-anatomy';
+import {StageFits} from './stage-fits';
 
 // The full product build. Facts from the price book (src/lib/pricing.ts): from $18,000, the timeline set during
 // scoping, "Launching a production product", the five inclusions, the sprint and its credit, and the Founding
@@ -14,7 +15,6 @@ import {ProductAnatomy} from './product-anatomy';
 const CONTACT = '/contact?need=web-app';
 const [SPRINT, MVP, FULL] = APPS;
 const pct = Math.round(FOUNDING.discount * 100);
-const timeline = FULL.specs?.find(([k]) => k === 'Timeline')?.[1] ?? '';
 
 const FACTS: [string, string][] = [
   [`${money(FULL.amount)}+`, 'One-time build'],
@@ -78,19 +78,7 @@ export function FullProductPage() {
           <p className="mono">Where it fits</p>
           <h2 id="fits-title">The last of three stages.</h2>
         </header>
-        <ol className="fp-stages">
-          {APPS.map((p, i) => (
-            <li key={p.id} data-here={p.id === FULL.id || undefined}>
-              <span className="mono num-badge">0{i + 1}</span>
-              <h3>{p.name}</h3>
-              <p className="mono fp-stage-price">{p.from ? 'From ' : ''}{money(p.amount)}</p>
-              <p>{p.bestFor}</p>
-              {p.id === FULL.id && <p className="mono fp-here">You are here · Timeline {timeline.toLowerCase()}</p>}
-              {p.id === SPRINT.id && <p className="fp-credit"><Check size={14} />{SPRINT.terms}</p>}
-            </li>
-          ))}
-        </ol>
-        <Link href="/web-apps" className="apx-more fp-all">See all three stages <ArrowRight size={14} /></Link>
+        <StageFits here={FULL.id} />
       </section>
 
       <section aria-labelledby="asked-title" className="wrap apx-block">

@@ -1,10 +1,12 @@
 import type {Metadata} from 'next';
 
-import {PlaceholderPage} from '@/components/site/placeholder-page';
+import {MvpPage} from '@/components/offers/mvp-page';
 
-export const metadata: Metadata = {title: 'MVP development · botLane'};
+export const metadata: Metadata = {
+  title: 'MVP development · botLane',
+  description: 'For testing the idea with real users or investors: the core workflow working end to end, with sign-in and real data, deployed for real users in 4–6 weeks. $9,500.',
+};
 
-// The address is set up; the page's content is still to be written.
-export default function MVPdevelopmentPage() {
-  return <PlaceholderPage title="MVP development" path="/web-apps/mvp" />;
+export default function MvpRoute() {
+  return <MvpPage />;
 }
