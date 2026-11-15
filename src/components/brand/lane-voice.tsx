@@ -28,9 +28,9 @@ const SECTIONS: Record<string, string> = {
 const PAGE_FALLBACK: Record<string, string> = {
   '/custom-solutions/workflow-automation': '/custom-solutions',
   '/custom-solutions/document-processing': '/custom-solutions',
-  '/products/syncc': '/products',
-  '/products/scriblane': '/products',
-  '/products/flowlane': '/products',
+  '/products/syncc': '/products/slotlane',
+  '/products/scriblane': '/products/slotlane',
+  '/products/flowlane': '/products/slotlane',
 };
 
 type Line = {id: number; who: 'me' | 'lane'; text: string};

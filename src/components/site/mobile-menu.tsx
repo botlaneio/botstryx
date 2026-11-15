@@ -54,8 +54,6 @@ const SlotIcon = () => (
 );
 
 const LINK_ICONS: Record<string, React.ReactNode> = {
-  // Products: a box.
-  '/products': <svg {...ico}><path d="M10 2.5l6.5 3.6v7.8L10 17.5l-6.5-3.6V6.1z" /><path d="M3.5 6.1L10 9.8l6.5-3.7M10 9.8v7.7" /></svg>,
   // Pricing: a price tag.
   '/solutions': <svg {...ico}><path d="M3 4.5v5.1a1.5 1.5 0 0 0 .44 1.06l6.4 6.4a1.5 1.5 0 0 0 2.12 0l4.6-4.6a1.5 1.5 0 0 0 0-2.12l-6.4-6.4A1.5 1.5 0 0 0 9.1 3.5H4a1 1 0 0 0-1 1z" /><circle cx="6.75" cy="7.25" r="1" /></svg>,
   // Insights: a page of writing.
@@ -67,7 +65,7 @@ const LINK_ICONS: Record<string, React.ReactNode> = {
 /**
  * The menu on small screens. The button sits in the header; the menu is a panel that slides in from the right
  * over two thirds of the screen, while the page behind steps back like the card beneath it in a stack.
- * It opens on five entries only; buildLane and slotLane each unfold to show what is inside, one at a time.
+ * It opens on four entries only; buildLane and slotLane each unfold to show what is inside, one at a time.
  */
 export function MobileMenu({links}: {links: {label: string; href: string}[]}) {
   const [open, setOpen] = useState(false);
@@ -82,7 +80,7 @@ export function MobileMenu({links}: {links: {label: string; href: string}[]}) {
   // Marks the entry for the page being viewed.
   const pathname = usePathname();
   const here = (href: string) => (pathname === href ? ('page' as const) : undefined);
-  // Every opening starts from the five entries, with nothing unfolded.
+  // Every opening starts from the four entries, with nothing unfolded.
   const onOpenChange = (next: boolean) => {
     if (next) setLane(null);
     setOpen(next);
@@ -118,7 +116,7 @@ export function MobileMenu({links}: {links: {label: string; href: string}[]}) {
                           </li>
                         );
                       }
-                      // Websites and Web Apps unfold once more, to the packages inside them.
+                      // Websites and Web Apps are headings, not pages: they unfold once more, to the packages inside them.
                       const isOpen = pack === item.href;
                       const panel = `mnav-pack-${item.href.slice(1)}`;
                       return (
@@ -138,9 +136,6 @@ export function MobileMenu({links}: {links: {label: string; href: string}[]}) {
                                   </Link>
                                 </li>
                               ))}
-                              <li>
-                                <Link href={item.href} onClick={close} aria-current={here(item.href)} className="mnav-pack all">{packages.all} <ArrowUpRight size={12} /></Link>
-                              </li>
                             </ul>
                           </div>
                         </li>

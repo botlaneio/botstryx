@@ -19,9 +19,8 @@ export const BUILD = [
 // The packages inside Websites and Web Apps: names and page addresses from botpro's src/lib/catalog.ts, prices
 // from its price book (src/lib/pricing/plans.ts). Care and AI Assistant have nothing beneath them.
 // The desktop menu and the mobile menu both read this list, so they always show the same packages.
-export const PACKAGES: Record<string, {all: string; items: {href: string; name: string; price: string}[]}> = {
+export const PACKAGES: Record<string, {items: {href: string; name: string; price: string}[]}> = {
   '/websites': {
-    all: 'All Websites',
     items: [
       {href: '/websites/business-sites', name: 'Core', price: '$2,500 one-time'},
       {href: '/websites/company-sites', name: 'Ascend', price: '$4,900 one-time'},
@@ -29,7 +28,6 @@ export const PACKAGES: Record<string, {all: string; items: {href: string; name: 
     ],
   },
   '/web-apps': {
-    all: 'All Web Apps',
     items: [
       {href: '/web-apps/scoping-sprint', name: 'Scoping sprint', price: '$1,500 one-time'},
       {href: '/web-apps/mvp', name: 'MVP development', price: '$9,500 one-time'},
@@ -71,11 +69,20 @@ export function SolutionsMenu() {
             <ul className="mega-items">
               {BUILD.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} onClick={close} className="mega-item">
-                    <span className="title">{item.title}</span>
-                    <span className="body">{item.body}</span>
-                    <span className="price mono">{item.price}</span>
-                  </Link>
+                  {/* Websites and Web Apps are headings over their packages, not links: the owner's call. */}
+                  {PACKAGES[item.href] ? (
+                    <div className="mega-item mega-heading">
+                      <h3 className="title">{item.title}</h3>
+                      <span className="body">{item.body}</span>
+                      <span className="price mono">{item.price}</span>
+                    </div>
+                  ) : (
+                    <Link href={item.href} onClick={close} className="mega-item">
+                      <span className="title">{item.title}</span>
+                      <span className="body">{item.body}</span>
+                      <span className="price mono">{item.price}</span>
+                    </Link>
+                  )}
                   {PACKAGES[item.href] && (
                     <ul className="mega-packs" aria-label={item.title + " packages"}>
                       {PACKAGES[item.href].items.map((pk) => (

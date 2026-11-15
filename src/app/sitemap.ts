@@ -7,7 +7,7 @@ import {SITE_URL} from '@/lib/site';
 const PAGES = [
   '', '/solutions', '/websites', '/websites/business-sites', '/websites/company-sites', '/websites/brand-sites',
   '/web-apps', '/web-apps/scoping-sprint', '/web-apps/mvp', '/web-apps/full-product', '/care',
-  '/custom-solutions', '/custom-solutions/ai-assistant', '/products', '/products/slotlane',
+  '/custom-solutions', '/custom-solutions/ai-assistant', '/products/slotlane',
   '/blog', '/changelog', '/docs', '/help', '/contact', '/privacy', '/terms',
 ];
 

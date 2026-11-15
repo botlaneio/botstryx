@@ -10,7 +10,6 @@ import {SolutionsMenu} from './solutions-menu';
 import {ThemeToggle} from './theme-toggle';
 
 const NAV = [
-  {label: 'Products', href: '/products'},
   // botpro's pricing overview lives on /solutions; its own buttons call it "See pricing".
   {label: 'Pricing', href: '/solutions'},
   {label: 'Insights', href: '/blog'},
