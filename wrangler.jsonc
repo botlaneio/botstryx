@@ -5,6 +5,12 @@
 	"compatibility_date": "2026-10-30",
 	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
 	// The site's address until a custom domain is set, plus a preview address for each uploaded version.
+	// botlane.io and www serve this site (custom domains: Cloudflare manages their DNS and certificates).
+	// They used to point at the botpro Worker; reattach them there to switch back.
+	"routes": [
+		{ "pattern": "botlane.io", "custom_domain": true },
+		{ "pattern": "www.botlane.io", "custom_domain": true }
+	],
 	"workers_dev": true,
 	"preview_urls": true,
 	// Logs and traces in the Cloudflare dashboard (Workers → botstryx → Observability), kept in sync with
