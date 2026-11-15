@@ -17,3 +17,7 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
+// Lets `next dev` reach the Cloudflare bindings in wrangler.jsonc (like the chat's rate limiter), simulated locally.
+import {initOpenNextCloudflareForDev} from '@opennextjs/cloudflare';
+initOpenNextCloudflareForDev();

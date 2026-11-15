@@ -1,0 +1,29 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "botstryx",
+	"main": ".open-next/worker.js",
+	"compatibility_date": "2026-11-01",
+	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"services": [
+		// The Worker calling itself, used by OpenNext for caching. The service name must match "name" above.
+		{ "binding": "WORKER_SELF_REFERENCE", "service": "botstryx" }
+	],
+	"images": {
+		// Next.js image optimisation, done by Cloudflare Images.
+		"binding": "IMAGES"
+	},
+	"ratelimits": [
+		{
+			// agentLane's guard against one visitor flooding the chat: 12 messages a minute each. Counted by
+			// Cloudflare at the edge, so it holds across restarts and every server. See src/app/api/lane/route.ts.
+			"name": "LANE_LIMITER",
+			"namespace_id": "1001",
+			"simple": { "limit": 12, "period": 60 }
+		}
+	]
+	// GEMINI_API_KEY is a secret, not a variable here: `npx wrangler secret put GEMINI_API_KEY`.
+}

@@ -16,6 +16,24 @@ the computer's LAN address in `allowedDevOrigins`; change it if the address chan
 
 Before finishing any change: `npx tsc --noEmit` and `npx eslint src` must both pass.
 
+## Deploy (Cloudflare Workers)
+
+The site runs on Cloudflare Workers through the OpenNext adapter (`@opennextjs/cloudflare`). Config is in
+`wrangler.jsonc` (Worker name, bindings) and `open-next.config.ts`.
+
+```bash
+npx wrangler login                      # once, in a browser
+npx wrangler secret put GEMINI_API_KEY  # once: agentLane's key, kept as a Worker secret
+npm run preview                         # build and run the Worker locally
+npm run deploy                          # build and publish to Cloudflare
+```
+
+- agentLane's rate limit (12 messages a minute per visitor) is the `LANE_LIMITER` binding in
+  `wrangler.jsonc`, counted by Cloudflare. `next dev` simulates it; elsewhere the route counts in memory.
+- After changing bindings in `wrangler.jsonc`, run `npm run cf-typegen` to refresh `cloudflare-env.d.ts`.
+- No incremental cache is set up. If pages start using ISR or cached fetches, add an R2 bucket
+  (https://opennext.js.org/cloudflare/caching).
+
 ## Stack
 
 - Next.js 16.4.6 (App Router, Turbopack, `cacheComponents`). This version differs from older Next.js:
