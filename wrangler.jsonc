@@ -65,6 +65,34 @@
 	"vars": {
 		// Who new-brief emails come from (a botlane.io address, verified in Resend).
 		"BRIEF_NOTIFY_FROM": "Botlane <briefs@botlane.io>"
+	},
+	// Bindings for branch previews. Cloudflare builds every non-production branch and runs `npx wrangler preview`,
+	// which refuses to run without this block (the top-level bindings above are not copied into previews).
+	// Previews have no secrets unless set with `npx wrangler preview secret`, so they send no email or Gemini calls.
+	"previews": {
+		"vars": {
+			"BRIEF_NOTIFY_FROM": "Botlane <briefs@botlane.io>"
+		},
+		"d1_databases": [
+			{
+				// The production database: a brief sent from a preview is saved next to real ones.
+				// Point this at a separate D1 database to keep previews apart.
+				"binding": "DB",
+				"database_name": "botstryx",
+				"database_id": "47408264-e7b8-430f-98aa-8bf747d4a9ec"
+			}
+		],
+		"ratelimits": [
+			// Their own counters (namespace ids 2001-2003), so testing a preview never uses up a visitor's limit.
+			{ "name": "LANE_LIMITER", "namespace_id": "2001", "simple": { "limit": 12, "period": 60 } },
+			{ "name": "BRIEF_LIMITER", "namespace_id": "2002", "simple": { "limit": 5, "period": 60 } },
+			{ "name": "BOOK_LIMITER", "namespace_id": "2003", "simple": { "limit": 3, "period": 60 } }
+		],
+		"images": {
+			"binding": "IMAGES"
+		}
+		// WORKER_SELF_REFERENCE is left out: previews don't support service bindings, and OpenNext only needs it
+		// once an incremental cache is set up (see open-next.config.ts).
 	}
 	// Secrets, set with `npx wrangler secret put <NAME>`, never written here:
 	//   GEMINI_API_KEY   agentLane's replies
