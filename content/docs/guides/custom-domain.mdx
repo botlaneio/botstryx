@@ -1,0 +1,27 @@
+---
+title: Custom domain
+description: Put a slotLane booking page on your own domain, on Cloud and on Self-host.
+status: draft
+---
+
+{/* content/docs/syncc/guides/custom-domain.mdx */}
+
+Your booking page can live on your own domain, for example book.yourcompany.com, on both Cloud and Self-host, with no vendor branding.
+
+## How it works per plan
+
+- Cloud: the custom-domain setup is done for you. You point the domain. The certificate and hosting are handled.
+- Self-host: the included Caddy setup fetches and renews the HTTPS certificate once your DNS points at your server.
+
+## Steps
+
+1. Decide the hostname, for example book.yourcompany.com.
+2. Add the DNS record at your DNS provider.
+3. Set the domain in slotLane and wait for the certificate.
+4. Open the domain and book a test slot.
+
+## Common mistakes
+
+- Testing too early. DNS can take a while. A failing certificate fetch usually just needs time.
+
+See also [Quickstart](/docs/quickstart) and [Troubleshooting](/docs/troubleshooting).

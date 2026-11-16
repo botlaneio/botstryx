@@ -1,0 +1,27 @@
+---
+title: Time zones
+description: Guests see slots in their own time zone. Your availability stays in yours.
+status: draft
+---
+
+{/* content/docs/syncc/concepts/time-zones.mdx */}
+
+## The problem
+
+Half of scheduling pain is time zone maths. "10:30 your time" goes wrong the moment one side guesses, and it goes wrong twice a year around daylight-saving changes.
+
+## How it works
+
+- Your availability is set in your time zone.
+- Each guest sees slots in their own time zone, detected automatically, with an easy way to change it.
+- The conversion is DST-safe. A slot that crosses a daylight-saving switch still lands at the right moment for both sides.
+
+## A worked example
+
+You are in Kolkata (UTC+5:30) and offer Mondays 14:00–17:00. A guest in New York (UTC-4 in October) sees those hours as 04:30–07:30 their time. Nobody does the maths, and nobody books a 2 a.m. call by mistake.
+
+## What it does not do
+
+It does not show the guest your time zone by default. They always see their own.
+
+See also [Booking page](/docs/guides/booking-page) and [FAQ](/docs/faq).

@@ -1,0 +1,30 @@
+---
+title: Overview
+description: Share one link. People pick a time, and it lands in your calendar. slotLane is not launched yet.
+status: soon
+---
+
+{/* content/docs/syncc/overview.mdx. Status, host and tagline from botpro src/lib/lanes.ts. Features and prices from botpro src/lib/products.ts. */}
+
+slotLane is scheduling software, and it is not launched yet. Its address is slotlane.cloud. You share one link. Your guest picks a time that suits them. The booking lands in your Google Calendar with a Meet or Zoom link.
+
+It is built for one owner: one admin account and one set of availability. Teams and round-robin are not supported yet.
+
+## What you get
+
+- Your booking page on your own domain, for example book.yourcompany.com, with your brand name and colour, and no vendor branding on any plan.
+- Google Calendar sync, with Meet or Zoom links made for every booking. slotLane checks busy times across the calendars you choose, writes each booking, and updates or removes it when plans change.
+- Email confirmations, with a calendar invite (.ics) that opens in Google, Outlook and Apple Calendar. Guests reschedule or cancel from a signed link. They do not need an account.
+- Double booking is impossible, even when two people click at once. The final check runs inside a database transaction with a unique index. The second person sees a friendly "just taken" message.
+- Paid bookings by UPI, card or netbanking through Razorpay.
+- WhatsApp confirmations and reminders.
+- Move over from Calendly in one import: event types and weekly hours.
+- Unlimited event types and bookings on every plan.
+
+## Price
+
+One flat price per booking page, never per seat. Billed yearly, $7 a month. Month to month, $9 a month.
+
+## Two ways to run it
+
+Cloud is hosted for you. Self-host runs on your server as one small app with one SQLite file. One command makes a consistent backup. Both include the same features.

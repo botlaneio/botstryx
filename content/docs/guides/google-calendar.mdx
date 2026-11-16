@@ -1,0 +1,33 @@
+---
+title: Google Calendar
+description: Connect Google Calendar so slotLane checks busy times and writes each booking.
+status: draft
+---
+
+{/* content/docs/syncc/guides/google-calendar.mdx */}
+
+Google Calendar is the calendar slotLane syncs with. The connection checks your busy times, writes each booking, and updates or removes the event when plans change.
+
+## Before you start
+
+- The Google account that owns the calendar you take meetings on.
+- If you use Zoom, your Zoom account details for that integration.
+
+## Steps
+
+1. Connect your Google account and grant the permissions slotLane asks for.
+2. Choose the calendars slotLane checks for busy times. Include every calendar that can make you unavailable.
+3. Choose the calendar slotLane writes bookings to.
+4. On each event type, pick Google Meet or Zoom. The meeting link is created for each booking.
+
+## Good to know
+
+- Calendar tokens are stored encrypted (AES-256-GCM).
+- Disconnecting a calendar stops sync. Existing bookings stay on the books.
+
+## Common mistakes
+
+- Not checking a second calendar. Personal appointments block your time only if that calendar is in the busy check.
+- Writing to a shared calendar you do not control. Bookings are updated and removed as plans change. Pick a calendar you own.
+
+See also [Booking page](/docs/guides/booking-page) and [Double booking](/docs/how-it-works/double-booking).

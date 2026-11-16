@@ -1,0 +1,42 @@
+---
+title: FAQ
+description: Guests, calendars, meeting links, time zones, domains, teams and price.
+status: draft
+---
+
+{/* content/docs/syncc/faq.mdx. The price answer follows botpro src/lib/products.ts. */}
+
+<details>
+<summary>Do my guests need an account?</summary>
+No. Guests pick a time and give their name and email. To reschedule or cancel they use the signed link in their confirmation email. No sign-up, and no password.
+</details>
+
+<details>
+<summary>Which calendars does slotLane work with?</summary>
+Google Calendar. slotLane checks busy times across the calendars you choose and writes each booking to one of them. Invites go out as .ics files, which open in Google, Outlook and Apple Calendar.
+</details>
+
+<details>
+<summary>Does it create the meeting link for me?</summary>
+Yes. Pick Google Meet or Zoom on an event type and each booking gets its own link. It goes into the emails and the calendar invite, and shows next to the booking in your dashboard.
+</details>
+
+<details>
+<summary>How are time zones handled?</summary>
+Guests see times in their own time zone, detected automatically and easy to change. Your availability stays in yours. The maths is DST-safe. See [Time zones](/docs/how-it-works/time-zones).
+</details>
+
+<details>
+<summary>Can I use my own domain?</summary>
+Yes, on Cloud and on Self-host. On Self-host, the included Caddy setup fetches and renews the HTTPS certificate. On Cloud, that part is done for you. See [Custom domain](/docs/guides/custom-domain).
+</details>
+
+<details>
+<summary>Can my team use it?</summary>
+Not today. slotLane is built for one owner's calendar: one admin account and one set of availability. Teams and round-robin are not supported yet. See [Limits](/docs/limits).
+</details>
+
+<details>
+<summary>What does it cost?</summary>
+One flat price per booking page, never per seat. Billed yearly, $7 a month. Month to month, $9 a month.
+</details>

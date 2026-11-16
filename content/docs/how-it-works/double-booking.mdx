@@ -1,0 +1,28 @@
+---
+title: Double booking
+description: How slotLane keeps one start time for one booking, even when two guests click at once.
+status: draft
+---
+
+{/* content/docs/syncc/concepts/how-double-booking-is-prevented.mdx */}
+
+## The problem
+
+Availability is checked when a guest opens your page and picks a time. Two guests can pick the same slot in the same second. A check-then-book gap is all a double booking needs.
+
+## How it works
+
+The final check does not happen in the page, or in application code. It runs inside a database transaction guarded by a unique index. A given start time can be held exactly once. If two guests race for it, the database admits one booking and rejects the other. Every time, even on a busy day.
+
+## A worked example
+
+1. Asha and Dev both open your page and both see 10:30 on Monday.
+2. Both confirm within the same second.
+3. The database writes Asha's booking. The unique index rejects Dev's.
+4. Dev sees a friendly "just taken" message and picks another slot. No apology emails, and no manual cleanup.
+
+## What it does not do
+
+It does not stop you from double-booking yourself by adding events straight into Google Calendar. slotLane checks those busy times before offering slots, so they stay protected.
+
+See also [Google Calendar](/docs/guides/google-calendar) and [Limits](/docs/limits).
