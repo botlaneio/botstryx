@@ -112,8 +112,14 @@ export function LaneVoice() {
         const r = await api<{slots: string[]; minutes: number}>(`/api/lane/slots${q}`);
         if (r.error) return r.error;
         if (!r.slots.length) return day ? 'No open times that day. Offer to look at other days.' : 'No open times in the next two weeks. Suggest sending a brief instead.';
-        return `Open ${r.minutes}-minute intro calls, in the visitor's time zone (${zone()}). Offer two or three, then book the one they pick by passing its start value exactly:\n` +
-          r.slots.map((iso) => `${say(iso)} (start: ${iso})`).join('\n');
+        // Times in the visitor's waking hours (7:00-21:00 their time) first; the rest after, in case they ask.
+        const hour = (iso: string) => Number(new Date(iso).toLocaleString('en-GB', {timeZone: zone(), hour: '2-digit', hour12: false}));
+        const awake = r.slots.filter((iso) => hour(iso) >= 7 && hour(iso) < 21);
+        const late = r.slots.filter((iso) => !awake.includes(iso));
+        const list = (xs: string[]) => xs.map((iso) => `${say(iso)} (start: ${iso})`).join('\n');
+        return `Open ${r.minutes}-minute intro calls, in the visitor's time zone (${zone()}). Offer two or three from the first list, then book the one they pick by passing its start value exactly.\n` +
+          (awake.length ? `Good times for them:\n${list(awake)}` : 'None fall in their usual waking hours; check whether early or late suits them.') +
+          (late.length ? `\nOutside their usual hours (only if they ask):\n${list(late)}` : '');
       },
       book_intro_call: async (p: {start?: string; name?: string; email?: string; note?: string}) => {
         const r = await api<{booked: string; meet: string | null}>('/api/lane/book', {
