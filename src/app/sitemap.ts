@@ -3,13 +3,12 @@ import type {MetadataRoute} from 'next';
 import {POSTS} from '@/lib/insights';
 import {SITE_URL} from '@/lib/site';
 
-// Public pages with real content. Placeholder pages are noindex and stay out until they are written.
-// Sign-in pages stay out. Add a path here when a page is added under src/app.
+// Every public page. Sign-in pages stay out. Add a path here when a page is added under src/app.
 const PAGES = [
-  '', '/solutions', '/websites/business-sites', '/websites/company-sites', '/websites/brand-sites',
+  '', '/solutions', '/websites', '/websites/business-sites', '/websites/company-sites', '/websites/brand-sites',
   '/web-apps', '/web-apps/scoping-sprint', '/web-apps/mvp', '/web-apps/full-product', '/care',
-  '/custom-solutions/ai-assistant',
-  '/blog', '/docs', '/contact',
+  '/custom-solutions', '/custom-solutions/ai-assistant', '/products/slotlane',
+  '/blog', '/changelog', '/docs', '/help', '/contact', '/privacy', '/terms',
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
