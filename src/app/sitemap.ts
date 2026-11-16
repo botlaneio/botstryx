@@ -3,7 +3,7 @@ import type {MetadataRoute} from 'next';
 import {POSTS} from '@/lib/insights';
 import {SITE_URL} from '@/lib/site';
 
-// Every public page. Add a path here when a page is added under src/app (sign-in pages stay out).
+// Every public page. Sign-in pages stay out. Add a path here when a page is added under src/app.
 const PAGES = [
   '', '/solutions', '/websites', '/websites/business-sites', '/websites/company-sites', '/websites/brand-sites',
   '/web-apps', '/web-apps/scoping-sprint', '/web-apps/mvp', '/web-apps/full-product', '/care',
