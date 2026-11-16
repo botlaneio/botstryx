@@ -28,7 +28,13 @@ npx wrangler secret put RESEND_API_KEY  # once: sends the new-brief email
 npx wrangler secret put BRIEF_NOTIFY_TO # once: who gets new-brief emails (comma-separate several)
 npm run preview                         # build and run the Worker locally
 npm run deploy                          # build and publish to Cloudflare
+npm run upload                          # build and upload a preview version (not live)
 ```
+
+Cloudflare builds each push (Workers Builds, set in the dashboard under Workers → botstryx → Settings →
+Build). `main` runs the deploy command, `npm run deploy`. Every other branch runs the non-production
+deploy command, which must be `npm run upload`: Cloudflare's default there, `npx wrangler versions upload`,
+skips the OpenNext build and fails with ".open-next/worker.js was not found".
 
 - agentLane's rate limit (12 messages a minute per visitor) is the `LANE_LIMITER` binding in
   `wrangler.jsonc`, counted by Cloudflare. `next dev` simulates it; elsewhere the route counts in memory.
