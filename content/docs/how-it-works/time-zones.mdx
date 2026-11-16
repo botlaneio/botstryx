@@ -1,0 +1,21 @@
+---
+title: Time zones
+description: Guests see times in their timezone. You set your availability in yours.
+status: live
+---
+
+{/* The lead is from src/components/offers/slotlane-page.tsx. The daylight-saving note and the worked example agree with it. */}
+
+Available times are shown in the guest's timezone. You set your availability in your own timezone.
+
+## How it works
+
+- Your availability is set in your time zone.
+- Each guest sees slots in their own time zone, detected automatically, with an easy way to change it.
+- The conversion is DST-safe. A slot that crosses a daylight-saving switch still lands at the right moment for both sides.
+
+## A worked example
+
+You are in Kolkata (UTC+5:30) and offer Mondays 14:00–17:00. A guest in New York (UTC-4 in October) sees those hours as 04:30–07:30 their time.
+
+See also [Booking page](/docs/guides/booking-page) and [FAQ](/docs/faq).

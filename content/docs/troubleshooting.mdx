@@ -1,0 +1,19 @@
+---
+title: Troubleshooting
+description: When a booking is missing from Google Calendar, or two people seem to share a time.
+status: live
+---
+
+{/* The calendar check agrees with src/components/offers/slotlane-page.tsx. The double-booking line uses that page's transaction wording. */}
+
+## A booking is not in Google Calendar
+
+slotLane checks Google Calendar for conflicts and adds every booking to it. Reconnect Google Calendar and confirm the calendar that receives bookings.
+
+## A guest says they never got the confirmation email
+
+Both sides get the confirmation by email. Ask the guest to check spam. They can also reschedule or cancel from the link in that email, once it arrives.
+
+## Two guests booked the same slot
+
+This should not be possible. The final check runs inside one database transaction, so two people can never take the same time, even when they click at once. If you see a true double booking, treat it as a bug and [contact us](/contact).

@@ -1,0 +1,13 @@
+{
+  "title": "Guides",
+  "pages": [
+    "booking-page",
+    "custom-domain",
+    "google-calendar",
+    "team-scheduling",
+    "payments-razorpay",
+    "whatsapp-notifications",
+    "import-from-calendly",
+    "embedding"
+  ]
+}
