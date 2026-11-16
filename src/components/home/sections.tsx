@@ -197,7 +197,7 @@ function Tools() {
 /* 4. Our own products: slotLane                                               */
 /* -------------------------------------------------------------------------- */
 
-const SLOT_FEATURES = ['A booking page on your own domain', 'Google Calendar, with Meet or Zoom links', 'Flat pricing per page'];
+const SLOT_FEATURES = ['A booking page on your own domain', 'Google Calendar, with Meet or Zoom links', 'Team scheduling, polls and routing forms'];
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 // Which times each day offers in the drawing; the picked one is marked in the markup below.
 const TIMES = ['09:00', '10:30', '13:00', '14:30', '16:00'];
@@ -211,7 +211,7 @@ function Products() {
       </Head>
       <Link href="/products/slotlane" className="hm-lane hm-in">
         <div className="hm-lane-say">
-          <p className="mono"><i aria-hidden />slotLane<span>Coming soon</span></p>
+          <p className="mono"><i aria-hidden />slotLane<span>30 days free</span></p>
           <h3>A time that works. Without the back-and-forth.</h3>
           <p>Share your link. Let people choose a time. Find the meeting in your calendar.</p>
           <ul>{SLOT_FEATURES.map((f) => <li key={f}><Check size={14} />{f}</li>)}</ul>

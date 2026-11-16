@@ -1,10 +1,12 @@
 import type {Metadata} from 'next';
 
-import {PlaceholderPage} from '@/components/site/placeholder-page';
+import {WebsitesPage} from '@/components/offers/websites-page';
 
-export const metadata: Metadata = {title: 'Websites · botLane'};
+export const metadata: Metadata = {
+  title: 'Websites · botLane',
+  description: 'Core, Ascend and Apex: custom websites for getting online properly, for growing companies, and for brands where the site is the experience. From $2,500 one-time.',
+};
 
-// The address is set up; the page's content is still to be written.
-export default function WebsitesPage() {
-  return <PlaceholderPage title="Websites" path="/websites" />;
+export default function WebsitesRoute() {
+  return <WebsitesPage />;
 }
