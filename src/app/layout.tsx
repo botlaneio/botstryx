@@ -5,7 +5,7 @@ import {Instrument_Sans, JetBrains_Mono} from 'next/font/google';
 import './globals.css'; // first: declares the cascade-layer order
 import {LaneLauncher} from '@/components/brand/lane-launcher';
 import {jsonLdScript, siteJsonLd} from '@/lib/seo';
-import {SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL} from '@/lib/site';
+import {DEFAULT_SHARE_IMAGE, SHARE_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL} from '@/lib/site';
 
 import {Providers} from './providers';
 
@@ -35,8 +35,9 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     type: 'website',
     locale: 'en',
+    images: [{url: DEFAULT_SHARE_IMAGE, width: SHARE_IMAGE.width, height: SHARE_IMAGE.height, alt: SHARE_IMAGE.alt, type: SHARE_IMAGE.type}],
   },
-  twitter: {card: 'summary_large_image'},
+  twitter: {card: 'summary_large_image', images: [DEFAULT_SHARE_IMAGE]},
 };
 
 export const viewport: Viewport = {

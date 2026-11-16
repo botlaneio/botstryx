@@ -10,6 +10,7 @@ import {SiteFooter} from '@/components/site/site-footer';
 import {SiteHeader} from '@/components/site/site-header';
 import {POSTS, anchor, findPost, formatDate, postsByDate, readingMinutes} from '@/lib/insights';
 import {jsonLdScript, postJsonLd} from '@/lib/seo';
+import {postShareImage, SHARE_IMAGE} from '@/lib/site';
 
 type Props = {params: Promise<{slug: string}>};
 
@@ -19,6 +20,7 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
   const post = findPost((await params).slug);
   if (!post) return {};
   const description = post.dek;
+  const image = postShareImage(post.slug);
   return {
     title: `${post.title} · botLane`,
     description,
@@ -30,8 +32,9 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
       url: `/blog/${post.slug}`,
       siteName: 'botLane',
       locale: 'en',
+      images: [{url: image, width: SHARE_IMAGE.width, height: SHARE_IMAGE.height, alt: post.title, type: SHARE_IMAGE.type}],
     },
-    twitter: {card: 'summary_large_image', title: post.title, description},
+    twitter: {card: 'summary_large_image', title: post.title, description, images: [image]},
   };
 }
 

@@ -1,4 +1,4 @@
-import {SITE_DESCRIPTION, SITE_NAME, SITE_URL, SHARE_IMAGE} from '@/lib/site';
+import {postShareImage, SITE_DESCRIPTION, SITE_NAME, SITE_URL, SHARE_IMAGE} from '@/lib/site';
 import type {Post} from '@/lib/insights';
 
 const ORGANIZATION_ID = `${SITE_URL}/#organization`;
@@ -54,7 +54,7 @@ export function postJsonLd(post: Post) {
         mainEntityOfPage: {'@type': 'WebPage', '@id': url},
         image: {
           '@type': 'ImageObject',
-          url: `${url}/opengraph-image`,
+          url: `${SITE_URL}${postShareImage(post.slug)}`,
           width: SHARE_IMAGE.width,
           height: SHARE_IMAGE.height,
         },

@@ -4,6 +4,7 @@ import {InsightsIndex} from '@/components/insights/insights-index';
 import {SiteFooter} from '@/components/site/site-footer';
 import {SiteHeader} from '@/components/site/site-header';
 import {postsByDate, summary} from '@/lib/insights';
+import {DEFAULT_SHARE_IMAGE, SHARE_IMAGE} from '@/lib/site';
 
 const title = 'Insights · botLane';
 const description = 'Practical notes on websites, booking, automation, and the work behind them.';
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
     siteName: 'botLane',
     type: 'website',
     locale: 'en',
-    images: [{url: '/opengraph-image', width: 1200, height: 630, alt: 'botLane · Custom websites and web apps, built properly'}],
+    images: [{url: DEFAULT_SHARE_IMAGE, width: SHARE_IMAGE.width, height: SHARE_IMAGE.height, alt: SHARE_IMAGE.alt, type: SHARE_IMAGE.type}],
   },
   twitter: {card: 'summary_large_image', title, description},
 };
