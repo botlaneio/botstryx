@@ -30,6 +30,11 @@ npm run preview                         # build and run the Worker locally
 npm run deploy                          # build and publish to Cloudflare
 ```
 
+Cloudflare builds every push (Workers Builds: Workers → botstryx → Settings → Build). `main` runs
+`npx opennextjs-cloudflare deploy`. Other branches run `npx opennextjs-cloudflare build`, then
+`npx wrangler preview`, which needs the `previews` block in `wrangler.jsonc`. When you add or change a
+binding, add it to `previews` too, or the PR check fails.
+
 - agentLane's rate limit (12 messages a minute per visitor) is the `LANE_LIMITER` binding in
   `wrangler.jsonc`, counted by Cloudflare. `next dev` simulates it; elsewhere the route counts in memory.
 - Contact briefs are saved to the D1 database `botstryx` (binding `DB`, table `briefs`) and emailed to
