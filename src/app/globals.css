@@ -185,6 +185,33 @@ body {
   @media (min-width: 768px) {
     .display { font-size: clamp(3rem, 7.7vw, 8.2rem); text-wrap: nowrap; }
   }
+  /* The typed headline (typewriter-headline.tsx). Sized to the box it sits in, from --tw-fit, the longest line's
+     width in ems: in two lines at most on a phone, and on one line from 768px up. */
+  .tw-fit { container-type: inline-size; }
+  .display.tw { font-size: min(11.2vw, 100cqi / (var(--tw-fit) / 2 + 1.4)); text-wrap: wrap; }
+  @media (min-width: 768px) {
+    .display.tw { font-size: clamp(2rem, min(7.7vw, 100cqi / var(--tw-fit)), 8.2rem); text-wrap: nowrap; }
+  }
+  /* Every phrase sits unseen in the same cell as the typed one, so the line holds the room of the longest. */
+  .tw-slot { display: grid; }
+  .tw-slot > * { grid-area: 1 / 1; }
+  .tw-ghost { visibility: hidden; }
+  .tw-caret {
+    display: inline-block;
+    width: 0.06em;
+    height: 0.82em;
+    margin-left: 0.05em;
+    vertical-align: -0.06em;
+    border-radius: 1px;
+    background: currentColor;
+    animation: tw-blink 1s steps(1) infinite;
+  }
+  /* Solid while the letters move; it blinks only while a phrase is held. */
+  .tw-caret[data-typing] { animation: none; }
+  @keyframes tw-blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .tw-caret { display: none; }
+  }
   /* flow-root keeps each line's negative margins inside it, so the line still measures exactly one line-height. */
   .display .line { display: flow-root; position: relative; }
   .display .rise {
@@ -2719,6 +2746,9 @@ body {
     transition: box-shadow 0.3s var(--bl-ease), scale 0.3s var(--bl-ease), translate 0.3s var(--bl-ease);
   }
   .lane:active .lane-disc { scale: 0.96; }
+  /* Out of the way of the homepage hero's prompt box while it is on screen (lane-launcher.tsx). */
+  .lane { transition: opacity 0.25s var(--bl-ease), translate 0.25s var(--bl-ease), visibility 0s; }
+  .lane[data-aside] { opacity: 0; translate: 0 12px; visibility: hidden; pointer-events: none; transition: opacity 0.25s var(--bl-ease), translate 0.25s var(--bl-ease), visibility 0s 0.25s; }
   .lane:focus-visible { outline: none; }
   .lane:focus-visible .lane-disc { box-shadow: 0 0 0 2px var(--color-background-body), 0 0 0 4px var(--color-text-primary); }
   /* Clipped on the drawing itself: Safari lets a moving layer escape its parent's rounded corners. */
@@ -2776,7 +2806,7 @@ body {
   @media (prefers-reduced-motion: reduce) {
     .lane-lean { animation: none; transform: translate(8px, 10px) rotate(-14deg); }
     .lane-eye { animation: none; }
-    .lane-bot, .lane-say, .lane-disc { transition: none; }
+    .lane, .lane-bot, .lane-say, .lane-disc { transition: none; }
   }
 }
 
