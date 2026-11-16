@@ -27,11 +27,11 @@ const BUILDS = [
 // one screen readers, search engines and visitors who turn motion off get.
 const HEADLINE = 'We design and build';
 const PHRASES = [
-  'websites that convert.',
-  'web apps that scale.',
-  'booking systems that just work.',
-  'dashboards your team actually uses.',
-  'products that outlast the launch.',
+  'Websites that convert.',
+  'Web apps that scale.',
+  'Booking systems that just work.',
+  'Dashboards your team actually uses.',
+  'Products that outlast the launch.',
 ];
 
 const NEEDS = [
