@@ -70,8 +70,8 @@ export function TypewriterHeadline({staticText, phrases, className}: Props) {
 
   const shown = still ? phrases[0] : phrases[at.i]?.slice(0, at.n);
   const typing = !still && at.phase !== 'hold';
-  // The headline is sized so the longest phrase fits the width on one line from 768px up, and in two lines below
-  // that. Instrument Sans at this weight and tracking sets about 0.45em a character; the 0.2 is room for the caret.
+  // The headline is sized so the longest line fits the width on one line, phones included. Instrument Sans at this
+  // weight and tracking sets about 0.45em a character; the 0.2 is room for the caret.
   const fit = Math.max(staticText.length, ...phrases.map((p) => p.length)) * 0.45 + 0.2;
 
   return (

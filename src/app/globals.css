@@ -186,12 +186,9 @@ body {
     .display { font-size: clamp(3rem, 7.7vw, 8.2rem); text-wrap: nowrap; }
   }
   /* The typed headline (typewriter-headline.tsx). Sized to the box it sits in, from --tw-fit, the longest line's
-     width in ems: in two lines at most on a phone, and on one line from 768px up. */
+     width in ems, so every phrase stays on one line at any width: nothing wraps, so nothing below moves. */
   .tw-fit { container-type: inline-size; }
-  .display.tw { font-size: min(11.2vw, 100cqi / (var(--tw-fit) / 2 + 1.4)); text-wrap: wrap; }
-  @media (min-width: 768px) {
-    .display.tw { font-size: clamp(2rem, min(7.7vw, 100cqi / var(--tw-fit)), 8.2rem); text-wrap: nowrap; }
-  }
+  .display.tw { font-size: min(7.7vw, 100cqi / var(--tw-fit), 8.2rem); text-wrap: nowrap; }
   /* Every phrase sits unseen in the same cell as the typed one, so the line holds the room of the longest. */
   .tw-slot { display: grid; }
   .tw-slot > * { grid-area: 1 / 1; }
