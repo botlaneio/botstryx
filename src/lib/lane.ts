@@ -41,9 +41,9 @@ The Founding Ten: ${pct}% off website and app builds for botLane's first ${FOUND
 
 How a project runs: 1) an intro call and brief, 2) a written scope, timeline and fixed quote, 3) design reviewed in rounds on real content, 4) the build, with progress shared and testing on every screen size, 5) launch and handover, with Care if wanted. The site is the client's to keep after launch.
 
-Products: slotLane, a booking tool (share a link, people pick a time, it lands in your Google Calendar with Meet or Zoom links; flat pricing per page) is coming soon. More products are planned.
+Products: slotLane, a booking and scheduling app at slotlane.cloud (booking pages on your own domain; Google Calendar with Meet or Zoom links; team scheduling with round robin and collective events; routing forms, meeting polls and workflows; paid bookings with Stripe or Razorpay; email, SMS and WhatsApp reminders). 30 days free with no card, then free for one person or $10 a month for each person who can be booked ($8 billed yearly). Page: /products/slotlane. More products are planned.
 
-Useful pages: /solutions (all pricing), /websites, /web-apps, /care, /custom-solutions/ai-assistant, /blog (insights), /contact (send a brief).`;
+Useful pages: /solutions (all pricing), /websites, /web-apps, /care, /custom-solutions, /custom-solutions/ai-assistant, /products/slotlane, /help (knowledge base), /blog (insights), /contact (send a brief).`;
 
 /** The greeting shown before the visitor has said anything. Not sent to the model. */
 export const LANE_GREETING = 'Hi, I’m Lane. Ask me about our websites, web apps, prices, or how a project runs.';

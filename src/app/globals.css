@@ -3873,3 +3873,131 @@ body {
     html:has(.docs) { scroll-behavior: auto; }
   }
 }
+
+@layer components {
+  /* ================================================================== */
+  /* Hub and reading pages: Websites, Custom Solutions, slotLane,         */
+  /* Knowledge base, Changelog, Terms and Privacy. On the Apex frame.     */
+  /* ================================================================== */
+  .hub {
+    --hub-edge: inset 0 1px 0 light-dark(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.07));
+    --hub-lift: var(--hub-edge), 0 1px 2px light-dark(rgba(16, 24, 40, 0.07), rgba(0, 0, 0, 0.5)), 0 18px 40px -18px light-dark(rgba(16, 24, 40, 0.24), rgba(0, 0, 0, 0.9));
+    --hub-card: light-dark(var(--color-background-surface), color-mix(in srgb, #fff 4%, var(--color-background-surface)));
+  }
+  /* slotLane's own colour is teal (rule 5 in HANDOFF.md). */
+  .sl { --apx-hot: var(--bl-teal-text); }
+  .hub .apx-open { min-height: 0; }
+  .hub .apx-hero { justify-content: flex-start; padding-top: clamp(40px, 8vh, 88px); }
+  .hub-title { font-size: clamp(3rem, 9.4vw, 10.5rem); }
+  .hub-title em { font-style: normal; color: var(--apx-hot); }
+
+  /* ---- Websites: the three packages ---- */
+  .ws-packs { display: grid; gap: 16px; margin: 0; padding: 0; list-style: none; }
+  .ws-packs > li { display: grid; align-content: start; gap: 14px; padding: 26px 24px; border-radius: var(--radius-container); background: var(--hub-card); box-shadow: var(--hub-lift); }
+  .ws-packs > li[data-spotlight] { outline: 1.5px solid var(--apx-hot); outline-offset: -1.5px; }
+  .ws-packs > li > .apx-more { justify-self: start; margin-top: 4px; }
+  .ws-fit { display: flex; align-items: center; gap: 10px; margin: 0; color: var(--color-text-secondary); }
+  .ws-packs h3 { margin: 4px 0 0; font-size: clamp(2rem, 3.4vw, 3rem); font-weight: 600; line-height: 1; letter-spacing: -0.05em; }
+  .ws-packs h3 a:hover { color: var(--apx-hot); }
+  .ws-tagline { margin: 0; font-size: 1.1rem; line-height: 1.35; letter-spacing: -0.015em; }
+  .ws-price { display: flex; align-items: baseline; gap: 10px; margin: 0; }
+  .ws-price b { font-size: clamp(1.8rem, 2.6vw, 2.4rem); font-weight: 600; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+  .ws-price .mono, .ws-meta { color: var(--color-text-secondary); }
+  .ws-meta { margin: 0; }
+  .ws-packs ul, .cs-offer-card ul { display: grid; gap: 9px; margin: 4px 0 0; padding: 14px 0 0; border-top: 1px solid var(--color-border); list-style: none; font-size: 0.95rem; }
+  .ws-packs ul li, .cs-offer-card ul li { display: flex; gap: 10px; align-items: baseline; }
+  .ws-packs ul svg, .cs-offer-card ul svg { flex: none; translate: 0 2px; color: var(--apx-hot); }
+  .ws-best { margin: 0; color: var(--color-text-secondary); font-size: 0.95rem; line-height: 1.45; }
+  .ws-founding { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin: 28px 0 0; color: var(--color-text-secondary); }
+  .ws-founding .mono { color: var(--apx-hot); }
+  @media (min-width: 900px) { .ws-packs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+  /* ---- Websites: side by side ---- */
+  .ws-table-wrap { overflow-x: auto; scrollbar-width: thin; }
+  .ws-table { width: 100%; min-width: 36rem; border-collapse: collapse; font-size: 0.97rem; }
+  .ws-table thead th { padding: 0 12px 18px; text-align: center; vertical-align: bottom; }
+  .ws-table thead th:first-child { width: 40%; }
+  .ws-table thead a { display: block; font-size: 1.35rem; font-weight: 600; letter-spacing: -0.03em; }
+  .ws-table thead a:hover { color: var(--apx-hot); }
+  .ws-table thead .mono { color: var(--color-text-secondary); }
+  .ws-group th { padding: 28px 0 10px; border-bottom: 1px solid var(--color-text-primary); text-align: left; }
+  .ws-table tbody th[scope='row'] { padding: 14px 16px 14px 0; border-bottom: 1px solid var(--color-border); font-weight: 400; text-align: left; }
+  .ws-table td { padding: 14px 12px; border-bottom: 1px solid var(--color-border); text-align: center; color: var(--color-text-primary); }
+  .ws-table td:last-child { background: color-mix(in srgb, var(--apx-hot) 5%, transparent); }
+  .ws-table td svg { display: inline-block; color: var(--apx-hot); }
+  .ws-no { color: var(--color-text-secondary); opacity: 0.5; }
+
+  /* ---- Two closing cards: one inked, one plain ---- */
+  .hub-pair { display: grid; gap: 16px; }
+  .hub-card { display: grid; align-content: start; justify-items: start; gap: 16px; padding: clamp(26px, 4vw, 44px); border: 1px solid var(--color-border); border-radius: var(--radius-container); transition: border-color 0.3s var(--bl-ease); }
+  a.hub-card:hover { border-color: var(--color-text-secondary); }
+  .hub-card > .mono { margin: 0; color: var(--color-text-secondary); }
+  .hub-card h2, .hub-card-title { max-width: 18ch; margin: 0; font-size: clamp(1.8rem, 3.4vw, 3rem); font-weight: 600; line-height: 1.02; letter-spacing: -0.045em; text-wrap: balance; }
+  .hub-card p:not(.mono, .hub-card-title) { max-width: 40ch; margin: 0; color: var(--color-text-secondary); line-height: 1.45; }
+  .hub-card-ink { border-color: transparent; background: var(--hub-card); box-shadow: var(--hub-lift); }
+  .hub-card .astryx-button { margin-top: 8px; }
+  @media (min-width: 860px) { .hub-pair { grid-template-columns: 1.15fr 0.85fr; } }
+
+  /* ---- An offer told on the left, its card on the right ---- */
+  .cs-offer { display: grid; gap: clamp(28px, 4vw, 56px); align-items: start; }
+  .cs-offer-say { display: grid; gap: 18px; justify-items: start; }
+  .cs-offer-say p { max-width: 46ch; margin: 0; color: var(--color-text-secondary); font-size: 1.05rem; line-height: 1.5; }
+  .cs-offer-say strong { color: var(--color-text-primary); }
+  .cs-offer-say .cs-pain { color: var(--color-text-primary); font-size: clamp(1.3rem, 2.2vw, 2rem); line-height: 1.2; letter-spacing: -0.03em; text-wrap: pretty; }
+  .cs-offer-card { display: grid; gap: 14px; justify-items: start; padding: 26px 24px; border-radius: var(--radius-container); background: var(--hub-card); box-shadow: var(--hub-lift); }
+  .cs-offer-card > .mono { margin: 0; color: var(--color-text-secondary); }
+  .cs-offer-card ul { justify-self: stretch; }
+  .cs-sub { margin: -6px 0 0; color: var(--color-text-secondary); font-size: 0.93rem; }
+  @media (min-width: 900px) { .cs-offer { grid-template-columns: minmax(0, 1fr) minmax(340px, 420px); } }
+  @media (min-width: 1100px) { .cs-run { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+  /* ---- Knowledge base ---- */
+  .kb-topics { display: grid; gap: 0; border-top: 1px solid var(--color-border-emphasized, var(--color-border)); }
+  .kb-topics a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--color-border); }
+  .kb-topics b { font-size: 1.1rem; font-weight: 600; letter-spacing: -0.02em; }
+  .kb-topics span { grid-row: 2; color: var(--color-text-secondary); font-size: 0.93rem; }
+  .kb-topics svg { grid-row: 1 / 3; grid-column: 2; color: var(--color-text-secondary); transition: translate 0.3s var(--bl-ease); }
+  .kb-topics a:hover svg { translate: 0 3px; color: var(--apx-hot); }
+  @media (min-width: 760px) { .kb-topics { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; } }
+  @media (min-width: 1100px) { .kb-topics { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .kb-topic { display: grid; gap: 24px; padding-block: clamp(48px, 9vh, 104px) 0; scroll-margin-top: 24px; }
+  .kb-topic header { display: grid; gap: 12px; }
+  .kb-topic header .mono { margin: 0; color: var(--color-text-secondary); }
+  .kb-topic h2 { margin: 0; font-size: clamp(1.9rem, 4vw, 3.6rem); font-weight: 600; line-height: 0.98; letter-spacing: -0.045em; }
+  .kb-topic .faq a, .legal-body a { text-decoration: underline; text-underline-offset: 2px; }
+  @media (min-width: 960px) { .kb-topic { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 56px; } .kb-topic header { align-self: start; } }
+
+  /* ---- Changelog ---- */
+  .cl { padding-block: clamp(32px, 6vh, 72px) clamp(72px, 13vh, 168px); }
+  .cl-day { display: grid; gap: 16px; padding-block: 28px; border-top: 1px solid var(--color-text-primary); }
+  .cl-day h2 { margin: 0; color: var(--color-text-secondary); }
+  .cl-day ol { display: grid; margin: 0; padding: 0; list-style: none; }
+  .cl-day li { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 16px; padding-block: 18px; border-bottom: 1px solid var(--color-border); }
+  .cl-day li:last-child { border-bottom: 0; }
+  .cl-day h3 { margin: 0; font-size: clamp(1.15rem, 1.6vw, 1.45rem); font-weight: 600; letter-spacing: -0.03em; }
+  .cl-day p { max-width: 62ch; margin: 6px 0 10px; color: var(--color-text-secondary); line-height: 1.5; }
+  .cl-tag { justify-self: start; align-self: start; margin-top: 3px; padding: 3px 7px; border: 1px solid var(--color-border); border-radius: calc(var(--radius-element) - 4px); color: var(--color-text-secondary); font-size: 10.5px; }
+  .cl-tag[data-tag='New'] { border-color: var(--apx-hot); color: var(--apx-hot); }
+  @media (min-width: 960px) { .cl-day { grid-template-columns: 14rem minmax(0, 1fr); gap: 40px; } }
+
+  /* ---- Terms and Privacy: a plain reading page ---- */
+  .legal { padding-block: clamp(40px, 8vh, 88px) clamp(72px, 13vh, 160px); }
+  .legal-head { display: grid; gap: 20px; max-width: 52rem; padding-bottom: clamp(28px, 5vh, 48px); border-bottom: 1px solid var(--color-border-emphasized, var(--color-border)); }
+  .legal-head h1 { margin: 0 0 0 -0.04em; font-size: clamp(2.8rem, 7.4vw, 7rem); font-weight: 600; line-height: 0.92; letter-spacing: -0.055em; }
+  .legal-summary p { max-width: 46ch; margin: 0; color: var(--color-text-secondary); font-size: clamp(1.05rem, 1.35vw, 1.3rem); line-height: 1.4; }
+  .legal-grid { display: grid; gap: 40px; padding-top: clamp(32px, 6vh, 56px); }
+  .legal-toc .mono { margin: 0 0 10px; color: var(--color-text-secondary); }
+  .legal-toc ol { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; font-size: 0.93rem; }
+  .legal-toc a { display: inline-flex; min-height: 34px; align-items: center; color: var(--color-text-secondary); }
+  .legal-toc a:hover { color: var(--color-text-primary); }
+  .legal-body { display: grid; gap: 44px; max-width: 68ch; min-width: 0; }
+  .legal-body section { display: grid; gap: 14px; scroll-margin-top: 24px; }
+  .legal-body h2 { margin: 0; font-size: clamp(1.4rem, 2vw, 1.8rem); font-weight: 600; letter-spacing: -0.035em; }
+  .legal-body p, .legal-body ul { margin: 0; color: var(--color-text-secondary); line-height: 1.6; }
+  .legal-body ul { display: grid; gap: 8px; padding-left: 1.2em; }
+  .legal-body strong { color: var(--color-text-primary); font-weight: 600; }
+  @media (min-width: 1000px) {
+    .legal-grid { grid-template-columns: 14rem minmax(0, 1fr); gap: 72px; }
+    .legal-toc { position: sticky; top: 24px; align-self: start; }
+  }
+}

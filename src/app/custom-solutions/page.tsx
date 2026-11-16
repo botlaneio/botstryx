@@ -1,10 +1,12 @@
 import type {Metadata} from 'next';
 
-import {PlaceholderPage} from '@/components/site/placeholder-page';
+import {CustomSolutionsPage} from '@/components/offers/custom-solutions-page';
 
-export const metadata: Metadata = {title: 'Custom Solutions · botLane'};
+export const metadata: Metadata = {
+  title: 'Custom Solutions · botLane',
+  description: 'AI and automation, built around how you work: an AI Assistant for your website at $2,500 one-time, or something of your own, scoped and quoted after a short call.',
+};
 
-// The address is set up; the page's content is still to be written.
-export default function CustomSolutionsPage() {
-  return <PlaceholderPage title="Custom Solutions" path="/custom-solutions" />;
+export default function CustomSolutionsRoute() {
+  return <CustomSolutionsPage />;
 }

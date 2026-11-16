@@ -32,7 +32,7 @@ const COLUMNS = [
   {
     id: 'lanes',
     heading: 'Products',
-    links: [{href: '/products/slotlane', label: 'slotLane', soon: true}],
+    links: [{href: '/products/slotlane', label: 'slotLane', soon: false}],
     note: 'More lanes opening up soon.',
   },
   {

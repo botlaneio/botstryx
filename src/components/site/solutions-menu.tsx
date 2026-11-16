@@ -36,13 +36,14 @@ export const PACKAGES: Record<string, {items: {href: string; name: string; price
   },
 };
 
-// slotLane: name, status, host and line from botpro's src/lib/lanes.ts and the header's product line; the three
-// reasons from src/lib/products.ts.
+// slotLane: name, host and line from botpro's src/lib/lanes.ts and the header's product line. The three reasons
+// and the status follow the product itself (botlaneio/slotlane), which is live and now priced per person, not
+// per page as botpro's src/lib/products.ts still says.
 export const SLOT = {
   href: '/products/slotlane',
   line: 'Booking pages on your own domain.',
-  features: ['Your booking page on your own domain', 'Google Calendar sync, with Meet or Zoom links', 'One flat price per page, never per seat'],
-  meta: 'Coming soon · slotlane.cloud',
+  features: ['Your booking page on your own domain', 'Google Calendar sync, with Meet or Zoom links', 'Team scheduling: round robin and collective'],
+  meta: '30 days free · slotlane.cloud',
 };
 
 /** The Solutions menu: one panel laid out as lanes side by side, each divided from the next by a dashed lane line. */
