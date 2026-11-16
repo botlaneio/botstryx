@@ -9,6 +9,8 @@ import {Cover} from '@/components/insights/cover';
 import {SiteFooter} from '@/components/site/site-footer';
 import {SiteHeader} from '@/components/site/site-header';
 import {POSTS, anchor, findPost, formatDate, postsByDate, readingMinutes} from '@/lib/insights';
+import {jsonLdScript, postJsonLd} from '@/lib/seo';
+import {postShareImage, SHARE_IMAGE} from '@/lib/site';
 
 type Props = {params: Promise<{slug: string}>};
 
@@ -16,7 +18,24 @@ export const generateStaticParams = () => POSTS.map((p) => ({slug: p.slug}));
 
 export async function generateMetadata({params}: Props): Promise<Metadata> {
   const post = findPost((await params).slug);
-  return post ? {title: `${post.title} · botLane`, description: post.dek} : {};
+  if (!post) return {};
+  const description = post.dek;
+  const image = postShareImage(post.slug);
+  return {
+    title: `${post.title} · botLane`,
+    description,
+    openGraph: {
+      type: 'article',
+      publishedTime: `${post.date}T00:00:00.000Z`,
+      title: post.title,
+      description,
+      url: `/blog/${post.slug}`,
+      siteName: 'botLane',
+      locale: 'en',
+      images: [{url: image, width: SHARE_IMAGE.width, height: SHARE_IMAGE.height, alt: post.title, type: SHARE_IMAGE.type}],
+    },
+    twitter: {card: 'summary_large_image', title: post.title, description, images: [image]},
+  };
 }
 
 /** One note from the journal. */
@@ -29,6 +48,7 @@ export default async function NotePage({params}: Props) {
 
   return (
     <div className="ins">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: jsonLdScript(postJsonLd(post))}} />
       <SiteHeader />
       <main className="wrap note">
         <header className="note-head">

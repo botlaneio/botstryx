@@ -1060,6 +1060,14 @@ body {
     letter-spacing: -0.047em;
     text-wrap: balance;
   }
+  .placeholder-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    justify-self: start;
+    gap: 10px;
+  }
 
   /* ================================================================== */
   /* Offer pages: Core, and the packages that follow it                  */
