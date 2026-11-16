@@ -477,6 +477,9 @@ body {
   .mega-item:hover, .mega-item:focus-visible {
     background: color-mix(in srgb, var(--color-text-primary) 6%, transparent);
   }
+  /* Websites and Web Apps: headings over their packages, so no hover. */
+  .mega-heading:hover { background: none; }
+  .mega-heading .title { margin: 0; }
   .mega-item:focus-visible, .mega-all:focus-visible { outline: 2px solid var(--color-text-primary); outline-offset: -2px; }
   .mega-item .title {
     font-size: 15.5px;
@@ -774,7 +777,6 @@ body {
     letter-spacing: -0.015em;
   }
   .mnav-pack .price { color: var(--color-text-secondary); font-size: 9.5px; }
-  .mnav-pack.all { display: inline-flex; align-items: center; gap: 4px; color: var(--color-text-secondary); font-size: 13px; font-weight: 400; }
   .mnav-pack[aria-current='page'] { color: var(--color-text-primary); }
   .mnav-item .title { font-size: 15.5px; font-weight: 550; line-height: 1.2; letter-spacing: -0.02em; }
   .mnav-item .price { color: var(--color-text-secondary); font-size: 10px; }
