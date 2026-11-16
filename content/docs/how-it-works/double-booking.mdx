@@ -1,10 +1,12 @@
 ---
 title: Double booking
-description: How slotLane keeps one start time for one booking, even when two guests click at once.
-status: draft
+description: One database transaction, so two people cannot take the same time.
+status: live
 ---
 
-{/* content/docs/syncc/concepts/how-double-booking-is-prevented.mdx */}
+{/* The transaction sentence is from src/components/offers/slotlane-page.tsx. The worked example agrees with it and comes from the earlier docs. */}
+
+The final check runs inside one database transaction, so two people can never take the same time, even when they click at once.
 
 ## The problem
 
@@ -12,17 +14,17 @@ Availability is checked when a guest opens your page and picks a time. Two guest
 
 ## How it works
 
-The final check does not happen in the page, or in application code. It runs inside a database transaction guarded by a unique index. A given start time can be held exactly once. If two guests race for it, the database admits one booking and rejects the other. Every time, even on a busy day.
+The final check does not happen in the page. It runs inside a database transaction guarded by a unique index. A given start time can be held exactly once. If two guests race for it, the database admits one booking and rejects the other.
 
 ## A worked example
 
 1. Asha and Dev both open your page and both see 10:30 on Monday.
 2. Both confirm within the same second.
 3. The database writes Asha's booking. The unique index rejects Dev's.
-4. Dev sees a friendly "just taken" message and picks another slot. No apology emails, and no manual cleanup.
+4. Dev sees a friendly "just taken" message and picks another slot.
 
 ## What it does not do
 
-It does not stop you from double-booking yourself by adding events straight into Google Calendar. slotLane checks those busy times before offering slots, so they stay protected.
+It does not stop you from adding an event straight into Google Calendar. slotLane checks Google Calendar for conflicts before offering times.
 
 See also [Google Calendar](/docs/guides/google-calendar) and [Limits](/docs/limits).

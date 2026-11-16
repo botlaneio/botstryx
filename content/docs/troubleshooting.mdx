@@ -1,25 +1,19 @@
 ---
 title: Troubleshooting
-description: Fixes for bookings that do not appear, missing emails, and a slot taken twice.
-status: draft
+description: When a booking is missing from Google Calendar, or two people seem to share a time.
+status: live
 ---
 
-{/* content/docs/syncc/troubleshooting.mdx */}
+{/* The calendar check agrees with src/components/offers/slotlane-page.tsx. The double-booking line uses that page's transaction wording. */}
 
-Symptoms are written the way you would type them into search. Each one gives the likely cause and the fix.
+## A booking is not in Google Calendar
 
-## I connected Google Calendar but bookings are not appearing
-
-Likely cause: the calendars slotLane checks for busy times are not the one it writes bookings to, or the Google connection was revoked.
-
-Fix: reconnect Google Calendar and confirm which calendar receives bookings.
+slotLane checks Google Calendar for conflicts and adds every booking to it. Reconnect Google Calendar and confirm the calendar that receives bookings.
 
 ## A guest says they never got the confirmation email
 
-Likely cause: on Self-host, confirmations go over your own SMTP, so check those settings first. On any plan, the email may be in spam.
-
-Fix: ask the guest to check spam, then review your SMTP configuration. The booking itself is safe. It lands in your dashboard either way.
+Both sides get the confirmation by email. Ask the guest to check spam. They can also reschedule or cancel from the link in that email, once it arrives.
 
 ## Two guests booked the same slot
 
-This should not be possible. The final check runs inside a database transaction with a unique index, and one person gets a "just taken" message. If you see a true double booking, treat it as a bug and [contact us](/contact).
+This should not be possible. The final check runs inside one database transaction, so two people can never take the same time, even when they click at once. If you see a true double booking, treat it as a bug and [contact us](/contact).

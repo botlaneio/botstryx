@@ -1,42 +1,47 @@
 ---
 title: FAQ
-description: Guests, calendars, meeting links, time zones, domains, teams and price.
-status: draft
+description: Trial, price, guests, timezones, teams, Calendly and your own domain.
+status: live
 ---
 
-{/* content/docs/syncc/faq.mdx. The price answer follows botpro src/lib/products.ts. */}
+{/* Answers from src/components/offers/slotlane-page.tsx. */}
 
-<details>
-<summary>Do my guests need an account?</summary>
-No. Guests pick a time and give their name and email. To reschedule or cancel they use the signed link in their confirmation email. No sign-up, and no password.
-</details>
+<Faq q="Do guests need an account?">
+No. Guests open your booking link, choose an available time and enter their details.
+</Faq>
 
-<details>
-<summary>Which calendars does slotLane work with?</summary>
-Google Calendar. slotLane checks busy times across the calendars you choose and writes each booking to one of them. Invites go out as .ics files, which open in Google, Outlook and Apple Calendar.
-</details>
+<Faq q="Which timezone will guests see?">
+Available times are shown in the guest's timezone. You set your availability in your own timezone. See [Time zones](/docs/how-it-works/time-zones).
+</Faq>
 
-<details>
-<summary>Does it create the meeting link for me?</summary>
-Yes. Pick Google Meet or Zoom on an event type and each booking gets its own link. It goes into the emails and the calendar invite, and shows next to the booking in your dashboard.
-</details>
+<Faq q="Can guests reschedule or cancel?">
+Yes. The confirmation email includes a link to manage the booking, with options to reschedule or cancel.
+</Faq>
 
-<details>
-<summary>How are time zones handled?</summary>
-Guests see times in their own time zone, detected automatically and easy to change. Your availability stays in yours. The maths is DST-safe. See [Time zones](/docs/how-it-works/time-zones).
-</details>
+<Faq q="What does it cost?">
+Try everything free for 30 days, no card needed. Then it’s free for one person, or $10 a month for each person on your team. Or $8 a month, billed yearly ($96 a person).
+</Faq>
 
-<details>
-<summary>Can I use my own domain?</summary>
-Yes, on Cloud and on Self-host. On Self-host, the included Caddy setup fetches and renews the HTTPS certificate. On Cloud, that part is done for you. See [Custom domain](/docs/guides/custom-domain).
-</details>
+<Faq q="What happens after the 30-day trial?">
+Nothing is deleted. You can stay on the free plan for one person, or subscribe at $10 a month for each person who can be booked ($8 billed yearly). Subscribing brings back your team, round robin, collective events, routing forms and paid bookings.
+</Faq>
 
-<details>
-<summary>Can my team use it?</summary>
-Not today. slotLane is built for one owner's calendar: one admin account and one set of availability. Teams and round-robin are not supported yet. See [Limits](/docs/limits).
-</details>
+<Faq q="Who counts as a person?">
+Anyone guests can book, you included. People you deactivate do not count, and you can change the number of seats at any time.
+</Faq>
 
-<details>
-<summary>What does it cost?</summary>
-One flat price per booking page, never per seat. Billed yearly, $7 a month. Month to month, $9 a month.
-</details>
+<Faq q="Can my team use it?">
+Yes. Add the people guests can book, each with their own hours, calendar and sign-in. Round robin shares bookings fairly across the team. Collective events need everyone free at once. See [Team scheduling](/docs/guides/team-scheduling).
+</Faq>
+
+<Faq q="Can I use my own domain?">
+Yes. Guests book at book.yourcompany.com. You prove the domain is yours with one DNS record, and the page is served over HTTPS. See [Custom domain](/docs/guides/custom-domain).
+</Faq>
+
+<Faq q="Does it create the meeting link?">
+A meeting type can be Google Meet, Zoom, a link or in person. Google Calendar bookings can include a Google Meet or Zoom link in the invite.
+</Faq>
+
+<Faq q="Can I move over from Calendly?">
+Yes. Paste a Calendly access token and slotLane imports your event types and weekly hours. You pick what to bring over before anything is written.
+</Faq>

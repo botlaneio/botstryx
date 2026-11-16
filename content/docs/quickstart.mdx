@@ -1,37 +1,23 @@
 ---
 title: Quickstart
-description: The steps from sign-up to a first booking, once slotLane is open.
-status: draft
+description: A little setup, then a booking page. 30 days free, no card needed.
+status: live
 ---
 
-{/* content/docs/syncc/quickstart.mdx */}
+{/* Steps from src/components/offers/slotlane-page.tsx (From sign-up to your first booking). */}
 
-A working booking page your guests can book you on, in about 10 minutes. These are the steps once slotLane is open.
+Set up your booking page in a few minutes. 30 days free, no card needed. slotLane is at [slotlane.cloud](https://slotlane.cloud).
 
-You need a Google account with the calendar bookings should be written to, and a slotLane account on Cloud, or a running Self-host installation.
+## Set your hours
 
-## Create your account
+Weekly hours with several ranges a day, days off and your timezone. Add buffers, minimum notice and how far ahead people can book.
 
-Sign up for slotLane Cloud, or install slotLane on your own server (Self-host).
+## Create a meeting type
 
-## Connect Google Calendar
+A title, a length, a location and any questions you want answered. Google Meet, Zoom, a link or in person.
 
-Connect your Google account, pick the calendars slotLane checks for busy times, and pick the one it writes bookings to. Calendar tokens are stored encrypted (AES-256-GCM).
+## Share the link
 
-## Set your availability
-
-Set your weekly hours. Several ranges per day are fine. Add a buffer between meetings, a minimum notice, and how far ahead guests can book.
-
-## Create an event type
-
-Give it a name, a length and a location. Pick Google Meet or Zoom and the meeting link is created for every booking.
-
-## Share your link
-
-Your booking page is live. Send the link to a guest, or point your own domain at it. On Cloud, custom domains are handled for you. On Self-host, the included Caddy setup fetches and renews the HTTPS certificate. See [Custom domain](/docs/guides/custom-domain).
-
-## Check it worked
-
-Open your booking page in a private window and book yourself. You should get an email with a calendar invite. The event should appear in your Google Calendar with the Meet or Zoom link. The booking should show in your slotLane dashboard.
+Guests see times in their own timezone, pick one, and get a confirmation with a calendar invite.
 
 See also [Booking page](/docs/guides/booking-page), [Google Calendar](/docs/guides/google-calendar) and [Limits](/docs/limits).

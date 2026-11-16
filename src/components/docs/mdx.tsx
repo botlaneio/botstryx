@@ -24,6 +24,16 @@ function DocsPre(props: ComponentProps<'pre'>) {
   return <div className="docs-code"><pre {...props} /></div>;
 }
 
+/** A question whose answer opens in place. The question is a prop so Markdown cannot wrap it in a paragraph. */
+export function Faq({q, children}: {q: string; children: React.ReactNode}) {
+  return (
+    <details>
+      <summary>{q}</summary>
+      <div>{children}</div>
+    </details>
+  );
+}
+
 /** A quiet note. Registered for MDX, used only when a page needs one. */
 export function Callout({title, children}: {title?: string; children: React.ReactNode}) {
   return (
@@ -42,5 +52,6 @@ export function getMdxComponents() {
     table: DocsTable,
     pre: DocsPre,
     Callout,
+    Faq,
   };
 }

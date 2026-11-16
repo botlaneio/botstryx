@@ -1,36 +1,19 @@
 ---
 title: Booking page
-description: Weekly hours, buffers, notice and event types on a slotLane booking page.
-status: draft
+description: Weekly hours, days off, buffers, notice, and a meeting type guests can book.
+status: live
 ---
 
-{/* content/docs/syncc/guides/booking-page.mdx */}
+{/* Hours and meeting types from src/components/offers/slotlane-page.tsx. */}
 
-Your booking page shows guests only the times you are actually free, after your buffers, notice and Google Calendar busy times.
+Your booking page shows the times you are free. Guests see those times in their own timezone.
 
-## Before you start
+## Hours
 
-- [Google Calendar connected](/docs/guides/google-calendar).
-- A rough idea of your weekly rhythm: when you take meetings, and when you never do.
+Weekly hours, with several ranges a day. Days off. Your timezone. Buffers, minimum notice, and how far ahead people can book.
 
-## Settings
+## Meeting types
 
-| Setting | What it controls |
-| --- | --- |
-| Weekly hours | The recurring times you can be booked, per day. Several ranges per day are supported, for example 09:00–12:00 and 14:00–17:00. |
-| Slot length | The size of the bookable steps guests see. |
-| Buffer | Protected time before and after each booking, so meetings do not run into each other. |
-| Minimum notice | How far ahead a guest must book. No surprise meetings in an hour. |
-| Booking window | How far into the future guests can book. |
-
-## Event types
-
-Create as many event types as you need: intro calls, demos, strategy sessions. Each has its own link, length, description and location. Google Meet or Zoom, with the link created for you.
-
-## Common mistakes
-
-- Forgetting the buffer. Back-to-back bookings with no gap is the top regret. Start with 10–15 minutes.
-- A booking window that is too short. If guests regularly book two or three weeks out, give them room.
-- Checking the wrong calendars. If you keep personal appointments on a second calendar, include it in the busy check, or those times will look free.
+A title, a length, a location and any questions you want answered. Google Meet, Zoom, a link or in person.
 
 See also [Google Calendar](/docs/guides/google-calendar), [Time zones](/docs/how-it-works/time-zones) and [Custom domain](/docs/guides/custom-domain).

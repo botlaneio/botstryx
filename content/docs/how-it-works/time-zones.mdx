@@ -1,14 +1,12 @@
 ---
 title: Time zones
-description: Guests see slots in their own time zone. Your availability stays in yours.
-status: draft
+description: Guests see times in their timezone. You set your availability in yours.
+status: live
 ---
 
-{/* content/docs/syncc/concepts/time-zones.mdx */}
+{/* The lead is from src/components/offers/slotlane-page.tsx. The daylight-saving note and the worked example agree with it. */}
 
-## The problem
-
-Half of scheduling pain is time zone maths. "10:30 your time" goes wrong the moment one side guesses, and it goes wrong twice a year around daylight-saving changes.
+Available times are shown in the guest's timezone. You set your availability in your own timezone.
 
 ## How it works
 
@@ -18,10 +16,6 @@ Half of scheduling pain is time zone maths. "10:30 your time" goes wrong the mom
 
 ## A worked example
 
-You are in Kolkata (UTC+5:30) and offer Mondays 14:00–17:00. A guest in New York (UTC-4 in October) sees those hours as 04:30–07:30 their time. Nobody does the maths, and nobody books a 2 a.m. call by mistake.
-
-## What it does not do
-
-It does not show the guest your time zone by default. They always see their own.
+You are in Kolkata (UTC+5:30) and offer Mondays 14:00–17:00. A guest in New York (UTC-4 in October) sees those hours as 04:30–07:30 their time.
 
 See also [Booking page](/docs/guides/booking-page) and [FAQ](/docs/faq).
