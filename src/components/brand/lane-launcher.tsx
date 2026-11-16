@@ -2,6 +2,7 @@
 
 import {Fragment, useEffect, useRef, useState} from 'react';
 import Link from 'next/link';
+import {usePathname} from 'next/navigation';
 
 import {ArrowUp} from '@/components/icons';
 import {LANE_GREETING, LANE_LIMITS, LANE_STARTERS} from '@/lib/lane';
@@ -72,6 +73,20 @@ export function LaneLauncher() {
     return () => window.removeEventListener('keydown', onKey);
   }, [open, mode]);
   useEffect(() => () => abort.current?.abort(), []);
+
+  // The homepage hero has its own prompt box, and its send button sits in the same corner as Lane. Lane steps aside
+  // while that box is on screen and comes back once it scrolls away. The layout outlives page changes, so look for
+  // the box again on each one; what was seen is kept with its page, so leaving it never leaves Lane hidden.
+  const pathname = usePathname();
+  const [asideOn, setAsideOn] = useState<string | null>(null);
+  useEffect(() => {
+    const prompt = document.getElementById('hm-brief');
+    if (!prompt || typeof IntersectionObserver === 'undefined') return;
+    const watch = new IntersectionObserver(([entry]) => setAsideOn(entry.isIntersecting ? pathname : null));
+    watch.observe(prompt);
+    return () => watch.disconnect();
+  }, [pathname]);
+  const aside = asideOn === pathname && !open;
 
   async function send(text: string) {
     const content = text.trim().slice(0, LANE_LIMITS.chars);
@@ -208,6 +223,7 @@ export function LaneLauncher() {
         type="button"
         className="lane"
         data-open={open}
+        data-aside={aside || undefined}
         aria-label={open ? 'Close chat with Lane' : 'Ask Lane'}
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}

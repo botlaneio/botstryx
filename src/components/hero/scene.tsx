@@ -12,6 +12,7 @@ import {SiteHeader} from '@/components/site/site-header';
 import {ArrowRight, ArrowUp, ArrowUpRight} from '@/components/icons';
 
 import {usePrompt} from './stage';
+import {TypewriterHeadline} from './typewriter-headline';
 
 // What Botlane builds. Names, links and price labels as botpro's Solutions menu gives them (src/lib/nav.ts,
 // with amounts from the price book in src/lib/pricing/plans.ts).
@@ -20,6 +21,17 @@ const BUILDS = [
   {name: 'Web Apps', price: 'Scoping $1,500', href: '/web-apps'},
   {name: 'Care', price: 'From $99/month', href: '/care'},
   {name: 'AI Assistant', price: '$2,500 one-time', href: '/custom-solutions/ai-assistant'},
+];
+
+// The headline: the first line stays, and the second types each of these in turn, looping. The first phrase is the
+// one screen readers, search engines and visitors who turn motion off get.
+const HEADLINE = 'We design and build';
+const PHRASES = [
+  'websites that convert.',
+  'web apps that scale.',
+  'booking systems that just work.',
+  'dashboards your team actually uses.',
+  'products that outlast the launch.',
 ];
 
 const NEEDS = [
@@ -51,21 +63,15 @@ function Hero() {
         </Link>
       </div>
 
-      <h1 className="display mt-[clamp(36px,7vh,88px)]">
-        <span className="line">
-          <span className="rise" style={delay(0)}>Design that <br className="md:hidden" />looks right.</span>
-        </span>
-        <span className="line">
-          <span className="rise" style={delay(1)}>Engineering that <br className="md:hidden" />stays right.</span>
-        </span>
-      </h1>
+      <TypewriterHeadline staticText={HEADLINE} phrases={PHRASES} className="mt-[clamp(36px,7vh,88px)]" />
 
       <div className="mt-[clamp(32px,6vh,72px)] grid gap-y-10 md:grid-cols-12 md:gap-x-6">
-        <div className="fade-up md:col-span-5" style={delay(1)}>
+        {/* Side by side, the buttons drop to the bottom of the column, level with the bottom of the chip row. */}
+        <div className="fade-up md:col-span-5 md:flex md:flex-col md:pb-[15px] lg:pb-[17px]" style={delay(1)}>
           <p className="lede">
             Custom design and engineering, <strong>from first idea to life after launch.</strong>
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-2.5">
+          <div className="mt-8 flex flex-wrap items-center gap-2.5 md:mt-auto md:pt-8">
             <Button label="Start a project" variant="primary" size="lg" href="/contact">
               <span className="inline-flex items-center gap-2.5">Start a project <ArrowRight /></span>
             </Button>
