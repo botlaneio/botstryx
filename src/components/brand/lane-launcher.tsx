@@ -4,7 +4,7 @@ import {Fragment, useEffect, useRef, useState} from 'react';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
 
-import {ArrowUp} from '@/components/icons';
+import {ArrowUp, Mic} from '@/components/icons';
 import {LANE_GREETING, LANE_LIMITS, LANE_STARTERS} from '@/lib/lane';
 import {LANE_OPEN} from '@/lib/lane-open';
 import {ConversationProvider} from '@elevenlabs/react';
@@ -16,6 +16,8 @@ import {BotMark} from './bot-mark';
 type Turn = {role: 'user' | 'assistant'; content: string; error?: boolean};
 
 const STORE = 'lane-chat';
+// Set once the visitor has opened the chat this visit, so the "Let's Talk" invitation stops showing.
+const MET = 'lane-met';
 
 /** Turns /paths in Lane's replies into links, and keeps line breaks. */
 function Rich({text}: {text: string}) {
@@ -74,19 +76,59 @@ export function LaneLauncher() {
   }, [open, mode]);
   useEffect(() => () => abort.current?.abort(), []);
 
-  // The homepage hero has its own prompt box, and its send button sits in the same corner as Lane. Lane steps aside
-  // while that box is on screen and comes back once it scrolls away. The layout outlives page changes, so look for
-  // the box again on each one; what was seen is kept with its page, so leaving it never leaves Lane hidden.
+  // The homepage hero has its own prompt box. Wherever Lane, or its "Let's Talk" invitation, would sit on top of it
+  // (on a phone, or a window narrow enough that the box reaches the corner), that part steps aside until the box
+  // scrolls away. The layout outlives page changes, so look for the box again on each one; what was seen is kept with
+  // its page, so leaving it never leaves Lane hidden.
   const pathname = usePathname();
-  const [asideOn, setAsideOn] = useState<string | null>(null);
+  // Whether the "Let's Talk" invitation (below) is done with: true until it is due, and once the chat has opened.
+  const [met, setMet] = useState(true);
+  const [hello, setHello] = useState(false);
+  const hi = useRef<HTMLButtonElement>(null);
+  const [cover, setCover] = useState<{on: string; disc: boolean; pill: boolean} | null>(null);
   useEffect(() => {
     const prompt = document.getElementById('hm-brief');
-    if (!prompt || typeof IntersectionObserver === 'undefined') return;
-    const watch = new IntersectionObserver(([entry]) => setAsideOn(entry.isIntersecting ? pathname : null));
-    watch.observe(prompt);
-    return () => watch.disconnect();
-  }, [pathname]);
-  const aside = asideOn === pathname && !open;
+    if (!prompt) return;
+    let frame = 0;
+    // Where each sits when shown: read from its fixed position, not its box, which moves while it is hidden.
+    const over = (el: HTMLElement | null, box: DOMRect) => {
+      if (!el) return false;
+      const style = getComputedStyle(el);
+      const right = innerWidth - parseFloat(style.right);
+      const bottom = innerHeight - parseFloat(style.bottom);
+      return box.left < right && box.right > right - el.offsetWidth && box.top < bottom && box.bottom > bottom - el.offsetHeight;
+    };
+    const check = () => {
+      frame = 0;
+      const box = prompt.getBoundingClientRect();
+      setCover({on: pathname, disc: over(launcher.current, box), pill: over(hi.current, box)});
+    };
+    const queue = () => { frame ||= requestAnimationFrame(check); };
+    queue();
+    addEventListener('scroll', queue, {passive: true});
+    addEventListener('resize', queue);
+    return () => {
+      cancelAnimationFrame(frame);
+      removeEventListener('scroll', queue);
+      removeEventListener('resize', queue);
+    };
+    // Again once the invitation is on the page, so its own place is measured too.
+  }, [pathname, met]);
+  const here = cover?.on === pathname ? cover : null;
+  const aside = !!here?.disc && !open;
+
+  // A moment after the page loads, Lane offers a voice call: "Let's Talk", with a mic. It opens the chat on Talk, and
+  // stops showing for the rest of the visit once the chat has been opened, however it was opened.
+  useEffect(() => {
+    try { if (sessionStorage.getItem(MET)) return; } catch {}
+    const timer = window.setTimeout(() => { setMet(false); setHello(true); }, 1200);
+    return () => window.clearTimeout(timer);
+  }, []);
+  useEffect(() => {
+    if (!open) return;
+    try { sessionStorage.setItem(MET, '1'); } catch {}
+  }, [open]);
+  const invite = hello && !met && !open && !aside && !here?.pill;
 
   async function send(text: string) {
     const content = text.trim().slice(0, LANE_LIMITS.chars);
@@ -149,6 +191,7 @@ export function LaneLauncher() {
   useEffect(() => {
     const onOpen = (e: Event) => {
       setOpen(true);
+      setMet(true);
       setMode('type');
       const ask = (e as CustomEvent<{ask?: string}>).detail?.ask;
       if (ask) sendLatest.current(ask);
@@ -218,6 +261,21 @@ export function LaneLauncher() {
         </section>
       )}
 
+      {!met && !open && (
+        <button
+          ref={hi}
+          type="button"
+          className="lane-hello"
+          data-show={invite || undefined}
+          tabIndex={invite ? 0 : -1}
+          aria-hidden={!invite}
+          onClick={() => { setMode('talk'); setOpen(true); setMet(true); }}
+        >
+          <Mic size={16} />
+          Let’s Talk
+        </button>
+      )}
+
       <button
         ref={launcher}
         type="button"
@@ -226,7 +284,7 @@ export function LaneLauncher() {
         data-aside={aside || undefined}
         aria-label={open ? 'Close chat with Lane' : 'Ask Lane'}
         aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => { setOpen((v) => !v); setMet(true); }}
       >
         <span className="lane-say" aria-hidden>Ask Lane</span>
         <span className="lane-disc">

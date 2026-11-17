@@ -79,7 +79,7 @@ function Hero() {
           </div>
         </div>
 
-        <div className="fade-up md:col-span-7 md:col-start-6 lg:col-span-6 lg:col-start-7" style={delay(2)}>
+        <div className="fade-up md:col-span-7 md:col-start-6 lg:col-span-6" style={delay(2)}>
           <Prompt />
         </div>
       </div>

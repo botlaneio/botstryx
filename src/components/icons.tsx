@@ -24,6 +24,10 @@ export const ArrowUpRight = ({size = 16, className}: P) => (
   <svg {...base(size)} className={className}><path d="M4.5 11.5l7-7M5.5 4.5h6v6" /></svg>
 );
 
+export const Mic = ({size = 16, className}: P) => (
+  <svg {...base(size)} className={className}><rect x="5.75" y="1.75" width="4.5" height="8" rx="2.25" /><path d="M3.25 7.5a4.75 4.75 0 009.5 0M8 12.25v2" /></svg>
+);
+
 export const Sun = ({size = 16, className}: P) => (
   <svg {...base(size)} className={className}>
     <circle cx="8" cy="8" r="2.75" />
