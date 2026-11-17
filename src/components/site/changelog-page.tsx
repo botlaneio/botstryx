@@ -19,6 +19,7 @@ const DAYS: Day[] = [
       {tag: 'New', title: 'Knowledge base, privacy policy and terms', body: 'The questions people ask before they hire us, gathered by topic, and plain-language terms and privacy pages.', href: '/help'},
       {tag: 'New', title: 'slotLane documentation', body: 'How slotLane works: share a link, guests pick a time, and the booking lands in Google Calendar.', href: '/docs'},
       {tag: 'Improved', title: 'Intro calls in two time zones', body: 'Book a 20-minute intro call on a weekday morning, US Central time, or around midday in India.'},
+      {tag: 'New', title: 'Talk to Lane', body: 'Lane now offers a voice call a moment after a page opens. Tap Let’s Talk to speak with it instead of typing.'},
       {tag: 'Improved', title: 'A new homepage headline', body: 'The headline now types out what we build, one phrase at a time, and the chat button steps aside while you write in the brief box.', href: '/'},
       {tag: 'Improved', title: 'A simpler Solutions menu', body: 'Websites and Web Apps now head their packages in the menu, so each package is one click away.'},
     ],
