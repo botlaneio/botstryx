@@ -167,6 +167,9 @@ body {
     background: var(--color-text-primary);
     color: var(--color-background-body);
     font-size: 10px;
+    /* One line at any width: the offer beside it wraps instead. */
+    flex: none;
+    white-space: nowrap;
   }
   .eyebrow svg { transition: transform 0.25s var(--bl-ease); }
   .eyebrow:hover svg { transform: translateX(3px); }
