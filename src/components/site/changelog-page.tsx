@@ -13,6 +13,12 @@ type Day = {date: string; entries: Entry[]};
 
 const DAYS: Day[] = [
   {
+    date: '2026-11-18',
+    entries: [
+      {tag: 'Improved', title: 'A homepage that builds itself', body: 'Each headline phrase now breaks into tiny cells that stream across and lock together as the next one, and the brief box and price rail are woven out of the dot grid as the page opens. Further down, the figures and the closing line assemble the same way, once, as you reach them.', href: '/'},
+    ],
+  },
+  {
     date: '2026-11-16',
     entries: [
       {tag: 'New', title: 'Websites, slotLane and Custom Solutions pages', body: 'The three packages side by side with every difference row by row, slotLane’s own page with its one per-person plan, and the AI Assistant with how a custom project runs.', href: '/websites'},

@@ -3,12 +3,13 @@ import {siGmail, siGooglecalendar, siGooglemeet, siHubspot, siNotion, siStripe, 
 
 import {BotMark} from '@/components/brand/bot-mark';
 import {DotField} from '@/components/hero/dot-field';
+import {NanoAssemble} from '@/components/hero/nano-assemble';
 import {ArrowRight, ArrowUpRight, Check} from '@/components/icons';
 import {Cover} from '@/components/insights/cover';
 import {postsByDate, summary} from '@/lib/insights';
 import {AFTER, APPS, FOUNDING, PER, WEBSITES, money} from '@/lib/pricing';
 
-import {CountUp, ScrollProgress} from './scroll-progress';
+import {ScrollProgress} from './scroll-progress';
 
 // Everything on the homepage below the first screen. The words are botpro's homepage (src/app/page.tsx,
 // src/lib/home-copy.ts, src/components/home/principle-keys.tsx); the figures come from the price book
@@ -286,10 +287,10 @@ function Numbers() {
   return (
     <section aria-label="In numbers" className="wrap hm-numbers">
       <dl>
-        {NUMBERS.map((n) => (
+        {NUMBERS.map((n, i) => (
           <div key={n.label} className="hm-in">
             <dt>{n.label}</dt>
-            <dd><CountUp value={n.value} />{n.suffix}</dd>
+            <dd><NanoAssemble delay={i * 160}>{n.value}{n.suffix}</NanoAssemble></dd>
           </div>
         ))}
       </dl>
@@ -335,7 +336,7 @@ function Close() {
           <Link href="/solutions" className="hm-offer">
             <span className="mono">Founding Ten</span>{pct}% off for our first {FOUNDING.places} clients <ArrowRight size={14} />
           </Link>
-          <h2 id="hm-close">Let’s make it <br />happen.</h2>
+          <h2 id="hm-close"><NanoAssemble>Let’s make it <br />happen.</NanoAssemble></h2>
           <p>Tell us what you have in mind. We’ll help you find the right place to start.</p>
           <div className="hm-close-go">
             <Link href="/contact" className="hm-go">Start a project <ArrowRight /></Link>

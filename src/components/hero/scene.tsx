@@ -12,7 +12,7 @@ import {SiteHeader} from '@/components/site/site-header';
 import {ArrowRight, ArrowUp, ArrowUpRight} from '@/components/icons';
 
 import {usePrompt} from './stage';
-import {TypewriterHeadline} from './typewriter-headline';
+import {NanoHeadline} from './nano-headline';
 
 // What Botlane builds. Names, links and price labels as botpro's Solutions menu gives them (src/lib/nav.ts,
 // with amounts from the price book in src/lib/pricing/plans.ts).
@@ -23,7 +23,7 @@ const BUILDS = [
   {name: 'AI Assistant', price: '$2,500 one-time', href: '/custom-solutions/ai-assistant'},
 ];
 
-// The headline: the first line stays, and the second types each of these in turn, looping. The first phrase is the
+// The headline: the first line stays, and the second transforms into each of these in turn, looping. The first phrase is the
 // one screen readers, search engines and visitors who turn motion off get.
 const HEADLINE = 'We design and build';
 const PHRASES = [
@@ -63,7 +63,7 @@ function Hero() {
         </Link>
       </div>
 
-      <TypewriterHeadline staticText={HEADLINE} phrases={PHRASES} className="mt-[clamp(36px,7vh,88px)]" />
+      <NanoHeadline staticText={HEADLINE} phrases={PHRASES} className="mt-[clamp(36px,7vh,88px)]" />
 
       <div className="mt-[clamp(32px,6vh,72px)] grid gap-y-10 md:grid-cols-12 md:gap-x-6">
         {/* Side by side, the buttons drop to the bottom of the column, level with the bottom of the chip row. */}
@@ -79,7 +79,7 @@ function Hero() {
           </div>
         </div>
 
-        <div className="fade-up md:col-span-7 md:col-start-6 lg:col-span-6" style={delay(2)}>
+        <div className="fade-up md:col-span-7 md:col-start-6 lg:col-span-6" style={delay(2)} data-nano-build>
           <Prompt />
         </div>
       </div>
@@ -88,7 +88,7 @@ function Hero() {
 
       <nav aria-label="What we build" className="rail fade-up" style={delay(3)}>
         {BUILDS.map((item, i) => (
-          <Link key={item.href} href={item.href} className="rail-item">
+          <Link key={item.href} href={item.href} className="rail-item" data-nano-build>
             <span className="idx mono">0{i + 1}</span>
             <ArrowUpRight className="arrow" />
             <span className="name">{item.name}</span>
