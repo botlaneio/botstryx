@@ -7,6 +7,8 @@ import {useConversation} from '@elevenlabs/react';
 import {fillBrief} from '@/lib/brief-fill';
 import {isNeed} from '@/lib/contact';
 
+import {setLaneVoiceMood} from './lane-eyes';
+
 // Talking to Lane: a voice call with the ElevenLabs agent botpro used ("Lane – botlane.io guide (orb)"), in its
 // custom voice. The agent is public but only accepts calls from botlane.io and www.botlane.io (its allowlist in
 // ElevenLabs), so voice works on the live site and not on localhost or workers.dev.
@@ -139,6 +141,12 @@ export function LaneVoice() {
   });
   const {status, isSpeaking, isMuted, setMuted, startSession, endSession, getInputVolume, getOutputVolume} = conversation;
   const live = status === 'connected';
+
+  // Lane's eyes in the chat header listen while the visitor talks and light up while Lane talks.
+  useEffect(() => {
+    setLaneVoiceMood(live ? (isSpeaking ? 'speak' : 'listen') : null);
+  }, [live, isSpeaking]);
+  useEffect(() => () => setLaneVoiceMood(null), []);
 
   // The orb breathes with whoever is talking.
   useEffect(() => {
