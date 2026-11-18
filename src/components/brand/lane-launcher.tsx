@@ -11,7 +11,7 @@ import {ConversationProvider} from '@elevenlabs/react';
 
 import {LaneVoice} from './lane-voice';
 
-import {BotMark} from './bot-mark';
+import {LaneEyes, onLaneVoiceMood, type LaneMood} from './lane-eyes';
 
 type Turn = {role: 'user' | 'assistant'; content: string; error?: boolean};
 
@@ -33,9 +33,9 @@ function Rich({text}: {text: string}) {
 }
 
 /**
- * Lane, in the bottom corner: a button that opens a chat with agentLane. Lane leans in from the corner of a
- * paper-coloured disc, tilts its head and blinks; pointing at it shows its name. The conversation lasts for the
- * visit (kept in this tab's session storage) and streams from /api/lane.
+ * Lane, in the bottom corner: a button that opens a chat with agentLane. Lane is a pair of living cell eyes
+ * (lane-eyes.tsx) that follow the pointer; pointing at it widens the eyes and shows its name. The conversation lasts
+ * for the visit (kept in this tab's session storage) and streams from /api/lane.
  */
 export function LaneLauncher() {
   const [open, setOpen] = useState(false);
@@ -202,12 +202,19 @@ export function LaneLauncher() {
 
   const empty = turns.length === 0;
 
+  // The eyes widen while the button is pointed at or focused. The ones in the chat header think while a reply is
+  // coming in, and listen or speak along with a voice call.
+  const [hot, setHot] = useState(false);
+  const [voice, setVoice] = useState<'listen' | 'speak' | null>(null);
+  useEffect(() => onLaneVoiceMood(setVoice), []);
+  const headMood: LaneMood = mode === 'talk' && voice ? voice : busy ? 'think' : 'idle';
+
   return (
     <ConversationProvider>
       {open && (
         <section className="lane-chat" role="dialog" aria-modal="false" aria-labelledby="lane-chat-title">
           <header className="lane-chat-head">
-            <BotMark size={30} mood={busy ? 'thinking' : 'idle'} />
+            <LaneEyes size={30} mood={headMood} className="lane-chat-eyes" />
             <div>
               <h2 id="lane-chat-title">agentLane</h2>
               <p>{busy ? 'Typing…' : 'Answers about botLane, day and night'}</p>
@@ -285,18 +292,14 @@ export function LaneLauncher() {
         aria-label={open ? 'Close chat with Lane' : 'Ask Lane'}
         aria-expanded={open}
         onClick={() => { setOpen((v) => !v); setMet(true); }}
+        onPointerEnter={(e) => { if (e.pointerType === 'mouse') setHot(true); }}
+        onPointerLeave={() => setHot(false)}
+        onFocus={(e) => { if (e.currentTarget.matches(':focus-visible')) setHot(true); }}
+        onBlur={() => setHot(false)}
       >
         <span className="lane-say" aria-hidden>Ask Lane</span>
         <span className="lane-disc">
-          <svg viewBox="0 0 64 64" aria-hidden>
-            <g className="lane-lean">
-              <g className="lane-bot">
-                <rect className="lane-head" x="12" y="16" width="46" height="36" rx="11" />
-                <rect className="lane-eye" x="21" y="29" width="8" height="8" rx="2" />
-                <rect className="lane-eye blue" x="33" y="29" width="8" height="8" rx="2" />
-              </g>
-            </g>
-          </svg>
+          <LaneEyes size={60} mood={hot && !open ? 'notice' : 'idle'} follow />
         </span>
       </button>
     </ConversationProvider>

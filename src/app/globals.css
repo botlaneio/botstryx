@@ -2760,11 +2760,11 @@ body {
     display: block;
     width: 60px;
     height: 60px;
-    overflow: hidden;
     border-radius: 50%;
-    background: var(--color-background-surface);
-    /* No outline: a lit top edge, a tight contact shadow and a soft drop lift it off the page. */
-    box-shadow: inset 0 1px 0 light-dark(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.1)), 0 1px 2px light-dark(rgba(16, 24, 40, 0.1), rgba(0, 0, 0, 0.5)), 0 14px 30px -10px light-dark(rgba(16, 24, 40, 0.32), rgba(0, 0, 0, 0.9));
+    background: #0a0b0e;
+    /* No outline: the eyes' disc is shaded like a sphere (lane-eyes.tsx), and a tight contact shadow and a soft
+       drop lift it off the page. */
+    box-shadow: 0 1px 2px light-dark(rgba(16, 24, 40, 0.18), rgba(0, 0, 0, 0.6)), 0 6px 14px -6px light-dark(rgba(16, 24, 40, 0.3), rgba(0, 0, 0, 0.8)), 0 20px 40px -18px light-dark(rgba(16, 24, 40, 0.42), rgba(0, 0, 0, 0.95));
     transition: box-shadow 0.3s var(--bl-ease), scale 0.3s var(--bl-ease), translate 0.3s var(--bl-ease);
   }
   .lane:active .lane-disc { scale: 0.96; }
@@ -2773,23 +2773,7 @@ body {
   .lane[data-aside] { opacity: 0; translate: 0 12px; visibility: hidden; pointer-events: none; transition: opacity 0.25s var(--bl-ease), translate 0.25s var(--bl-ease), visibility 0s 0.25s; }
   .lane:focus-visible { outline: none; }
   .lane:focus-visible .lane-disc { box-shadow: 0 0 0 2px var(--color-background-body), 0 0 0 4px var(--color-text-primary); }
-  /* Clipped on the drawing itself: Safari lets a moving layer escape its parent's rounded corners. */
-  .lane svg { display: block; width: 100%; height: 100%; border-radius: 50%; clip-path: circle(50%); }
-  .lane-head { fill: var(--color-text-primary); }
-  .lane-eye { fill: var(--color-background-surface); transform-box: fill-box; transform-origin: center; animation: lane-blink 4.6s infinite; }
-  .lane-eye.blue { fill: light-dark(#8098ff, #2f55f0); }
-
-  /* Up from the corner, with a tilt of the head; out again for a moment every so often. */
-  .lane-lean { transform-origin: 50px 50px; animation: lane-lean 14s var(--bl-ease) 0.9s infinite both; }
-  @keyframes lane-lean {
-    0%, 1% { transform: translate(40px, 40px); }
-    8%, 86% { transform: translate(8px, 10px) rotate(-14deg); }
-    93%, 100% { transform: translate(40px, 40px); }
-  }
-  @keyframes lane-blink { 0%, 93%, 100% { transform: none; } 96% { transform: scaleY(0.1); } }
-  /* Pointed at, Lane sits up straight in the middle. */
-  .lane-bot { transform-origin: 35px 34px; transition: transform 0.5s var(--bl-ease); }
-  .lane:focus-visible .lane-bot { transform: translate(-11px, -10px) rotate(14deg); }
+  .lane canvas { display: block; border-radius: 50%; }
 
   /* Its name, shown beside it when pointed at. */
   .lane-say {
@@ -2812,8 +2796,7 @@ body {
   /* Hover only where there is a real pointer. On a touch screen, Safari spends the first tap showing what a
      hover reveals and never sends the click, so there a tap goes straight through. */
   @media (hover: hover) and (pointer: fine) {
-    .lane:hover .lane-disc { box-shadow: inset 0 1px 0 light-dark(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.1)), 0 2px 4px light-dark(rgba(16, 24, 40, 0.12), rgba(0, 0, 0, 0.55)), 0 22px 40px -12px light-dark(rgba(16, 24, 40, 0.4), rgba(0, 0, 0, 0.95)); translate: 0 -2px; }
-    .lane:hover .lane-bot { transform: translate(-11px, -10px) rotate(14deg); }
+    .lane:hover .lane-disc { box-shadow: 0 2px 4px light-dark(rgba(16, 24, 40, 0.2), rgba(0, 0, 0, 0.65)), 0 10px 18px -8px light-dark(rgba(16, 24, 40, 0.32), rgba(0, 0, 0, 0.85)), 0 26px 46px -18px light-dark(rgba(16, 24, 40, 0.46), rgba(0, 0, 0, 0.95)); translate: 0 -2px; }
     .lane:hover .lane-say { opacity: 1; transform: none; }
   }
   /* The hidden label takes no taps. */
@@ -2864,9 +2847,7 @@ body {
   /* The small-screen menu covers the page; Lane steps aside while it is open. */
   html:has(.astryx-drawer[open]) :is(.lane, .lane-chat, .lane-hello) { display: none; }
   @media (prefers-reduced-motion: reduce) {
-    .lane-lean { animation: none; transform: translate(8px, 10px) rotate(-14deg); }
-    .lane-eye { animation: none; }
-    .lane, .lane-bot, .lane-say, .lane-disc, .lane-hello { transition: none; }
+    .lane, .lane-say, .lane-disc, .lane-hello { transition: none; }
   }
 }
 
@@ -2898,6 +2879,7 @@ body {
 
   .lane-chat-head { display: flex; align-items: center; gap: 12px; padding: 16px 14px 14px 18px; }
   .lane-chat-head > div { flex: 1; min-width: 0; }
+  .lane-chat-eyes { flex: none; display: block; border-radius: 50%; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 10px -4px rgba(0, 0, 0, 0.35); }
   .lane-chat-head h2 { margin: 0; font-size: 15.5px; font-weight: 600; letter-spacing: -0.02em; }
   .lane-chat-head p { margin: 2px 0 0; color: var(--color-text-secondary); font-size: 12.5px; }
   .lane-chat-new { padding: 6px 10px; border: 0; border-radius: 8px; background: color-mix(in srgb, var(--color-text-primary) 7%, transparent); color: var(--color-text-primary); font-size: 12.5px; font-weight: 550; cursor: pointer; }
@@ -2928,7 +2910,6 @@ body {
   .lane-chat-note { margin: 0; padding: 8px 16px 12px; color: var(--color-text-secondary); font-size: 11.5px; text-align: center; }
 
   /* Open, the launcher's bot looks up at the chat and stays still. */
-  .lane[data-open='true'] .lane-lean { animation: none; transform: translate(4px, 4px) rotate(0deg); }
   .lane[data-open='true'] .lane-say { display: none; }
 
   @media (max-width: 640px) {
