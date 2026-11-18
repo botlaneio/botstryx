@@ -15,6 +15,10 @@ import {LaneEyes, onLaneVoiceMood, type LaneMood} from './lane-eyes';
 
 type Turn = {role: 'user' | 'assistant'; content: string; error?: boolean};
 
+// Put the cursor in the message box only where there is a real keyboard. On a phone or tablet, focusing it pops the
+// on-screen keyboard up over the chat before the visitor has chosen to type, so there they tap the box themselves.
+const hasKeyboard = () => typeof window !== 'undefined' && matchMedia('(hover: hover) and (pointer: fine)').matches;
+
 const STORE = 'lane-chat';
 // Set once the visitor has opened the chat this visit, so the "Let's Talk" invitation stops showing.
 const MET = 'lane-met';
@@ -63,11 +67,11 @@ export function LaneLauncher() {
     try { sessionStorage.setItem(STORE, JSON.stringify(turns.filter((t) => !t.error))); } catch {}
   }, [turns]);
 
-  // Newest message in view, focus in the box on open, Escape to close.
+  // Newest message in view, focus in the box on open (with a real keyboard), Escape to close.
   useEffect(() => { log.current?.scrollTo({top: log.current.scrollHeight}); }, [turns, open]);
   useEffect(() => {
     if (!open) return;
-    if (mode === 'type') input.current?.focus();
+    if (mode === 'type' && hasKeyboard()) input.current?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { setOpen(false); launcher.current?.focus(); }
     };
@@ -224,7 +228,7 @@ export function LaneLauncher() {
               <button type="button" role="radio" aria-checked={mode === 'talk'} onClick={() => setMode('talk')}>Talk</button>
             </div>
             {!empty && mode === 'type' && (
-              <button type="button" className="lane-chat-new" onClick={() => { abort.current?.abort(); setTurns([]); input.current?.focus(); }}>
+              <button type="button" className="lane-chat-new" onClick={() => { abort.current?.abort(); setTurns([]); if (hasKeyboard()) input.current?.focus(); }}>
                 New chat
               </button>
             )}
