@@ -3,6 +3,7 @@
 import {createContext, useContext, useEffect, useMemo, useState} from 'react';
 
 import {DotField} from './dot-field';
+import {NanoLayer} from './nano-layer';
 import {Scene} from './scene';
 
 type PromptState = {
@@ -58,7 +59,9 @@ export function Stage() {
     <PromptContext value={prompt}>
       <div className="stage">
         <DotField />
-        <Scene />
+        <NanoLayer>
+          <Scene />
+        </NanoLayer>
       </div>
     </PromptContext>
   );
