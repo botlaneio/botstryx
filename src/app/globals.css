@@ -173,6 +173,13 @@ body {
   }
   .eyebrow svg { transition: transform 0.25s var(--bl-ease); }
   .eyebrow:hover svg { transform: translateX(3px); }
+  /* One line on every screen: on a phone the offer steps down in size and the gaps tighten, rather than wrap. */
+  .eyebrow { max-width: 100%; white-space: nowrap; }
+  @media (max-width: 480px) {
+    .eyebrow { gap: 7px; padding-right: 9px; font-size: min(13.5px, 3.35vw); letter-spacing: -0.015em; }
+    .eyebrow .mono { padding: 5px 6px; font-size: min(10px, 2.5vw); letter-spacing: 0.04em; }
+    .eyebrow svg { flex: none; width: 12px; height: 12px; }
+  }
 
   .display {
     margin: 0;
