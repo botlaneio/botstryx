@@ -211,6 +211,11 @@ body {
     pointer-events: none;
     color: var(--color-text-primary);
   }
+  /* Text that assembles itself once as it scrolls into view (nano-assemble.tsx): hidden only while it waits. */
+  .nano-assemble { position: relative; display: inline-block; }
+  .nano-assemble-canvas { position: absolute; pointer-events: none; color: inherit; }
+  .nano-text { transition: opacity 0.3s var(--bl-ease); }
+  .nano-assemble[data-nano='wait'] .nano-text { opacity: 0; transition: none; }
   /* Panels it weaves wait, hidden, for their cells to lock in, then come through the mesh. Only once the layer runs,
      so without script or with motion turned off they show as before. */
   .stage[data-nano='on'] .rail { animation: none; }

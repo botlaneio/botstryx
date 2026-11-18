@@ -15,7 +15,7 @@ const DAYS: Day[] = [
   {
     date: '2026-11-18',
     entries: [
-      {tag: 'Improved', title: 'A homepage that builds itself', body: 'Each headline phrase now breaks into tiny cells that stream across and lock together as the next one, and the brief box and price rail are woven out of the dot grid as the page opens.', href: '/'},
+      {tag: 'Improved', title: 'A homepage that builds itself', body: 'Each headline phrase now breaks into tiny cells that stream across and lock together as the next one, and the brief box and price rail are woven out of the dot grid as the page opens. Further down, the figures and the closing line assemble the same way, once, as you reach them.', href: '/'},
     ],
   },
   {

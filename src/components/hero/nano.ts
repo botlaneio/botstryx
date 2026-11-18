@@ -211,37 +211,65 @@ const GRID = 32;
 const rand = (a: number, b: number) => a + Math.random() * (b - a);
 
 /**
- * Samples a line of text as it is set on the page: every point on a grid of `step` px that falls inside a letter.
- * The text is drawn off screen in the element's own font, stretched to the width the page gives it.
+ * Samples text as it is set on the page: every point on a grid of `step` px that falls inside a letter. Each word is
+ * drawn off screen in the element's own font, where the page put it and stretched to the width the page gives it,
+ * so text over several lines (a <br>, or wrapping on a phone) comes out right too.
  */
 export function sampleText(el: HTMLElement, origin: DOMRect, step: number): Point[] {
-  const text = el.textContent ?? '';
-  if (!text) return [];
-  const range = document.createRange();
-  range.selectNodeContents(el);
-  const rect = range.getBoundingClientRect();
+  const box = el.getBoundingClientRect();
+  if (!box.width || !box.height) return [];
   const style = getComputedStyle(el);
   const scratch = document.createElement('canvas');
-  const w = Math.ceil(rect.width) + 4, h = Math.ceil(rect.height) + 4;
+  // Room round the box for descenders and overhanging letters.
+  const pad = Math.ceil(parseFloat(style.fontSize) * 0.3);
+  const w = Math.ceil(box.width) + pad * 2, h = Math.ceil(box.height) + pad * 2;
   scratch.width = w; scratch.height = h;
   const ctx = scratch.getContext('2d', {willReadFrequently: true})!;
   ctx.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
   if ('letterSpacing' in ctx) (ctx as CanvasRenderingContext2D & {letterSpacing: string}).letterSpacing = style.letterSpacing;
-  const m = ctx.measureText(text);
-  const stretch = m.width > 0 ? Math.min(1.15, Math.max(0.87, rect.width / m.width)) : 1;
-  ctx.setTransform(stretch, 0, 0, 1, 0, 0);
   ctx.fillStyle = '#000';
-  ctx.fillText(text, 0, m.fontBoundingBoxAscent || parseFloat(style.fontSize) * 0.92);
+  const range = document.createRange();
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    const text = node.textContent ?? '';
+    for (const word of text.matchAll(/\S+/g)) {
+      range.setStart(node, word.index);
+      range.setEnd(node, word.index + word[0].length);
+      const rect = range.getBoundingClientRect();
+      if (!rect.width) continue;
+      const m = ctx.measureText(word[0]);
+      const stretch = m.width > 0 ? Math.min(1.15, Math.max(0.87, rect.width / m.width)) : 1;
+      ctx.setTransform(stretch, 0, 0, 1, rect.left - box.left + pad, 0);
+      ctx.fillText(word[0], 0, rect.top - box.top + pad + (m.fontBoundingBoxAscent || parseFloat(style.fontSize) * 0.92));
+    }
+  }
   const data = ctx.getImageData(0, 0, w, h).data;
   const points: Point[] = [];
   for (let y = step / 2; y < h; y += step) {
     for (let x = step / 2; x < w; x += step) {
       if (data[(Math.floor(y) * w + Math.floor(x)) * 4 + 3] > 120) {
-        points.push({x: rect.left - origin.left + x, y: rect.top - origin.top + y});
+        points.push({x: box.left - origin.left - pad + x, y: box.top - origin.top - pad + y});
       }
     }
   }
   return points;
+}
+
+/** Text assembling out of nothing: cells rise from dots of the grid spread round it and lock in, left to right. */
+export function assembleCells(to: Point[], width: number, height: number, now: number) {
+  const left = Math.min(...to.map((p) => p.x)), right = Math.max(...to.map((p) => p.x));
+  const span = Math.max(1, right - left);
+  return to.map((t): Cell => {
+    const fx = Math.round((t.x + rand(-0.5, 0.5) * width * 0.6) / GRID - 0.5) * GRID + GRID / 2;
+    const fy = Math.round(rand(0, height) / GRID - 0.5) * GRID + GRID / 2;
+    return {
+      sx: fx, sy: fy, tx: t.x, ty: t.y,
+      cx: (fx + t.x) / 2 + rand(-60, 60), cy: (fy + t.y) / 2 + rand(-80, 80),
+      start: now + ((t.x - left) / span) * 560 + rand(0, 200),
+      dur: rand(700, 1100),
+      spin: rand(-1, 1) * Math.PI,
+    };
+  });
 }
 
 /** A phrase coming apart and locking into the next: cells leave in a sweep from left to right. */
