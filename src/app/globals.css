@@ -200,8 +200,8 @@ body {
   /* While the cells are drawn in its place, the real text steps aside at once. */
   .tw[data-morph] .tw-ghost[data-on] { visibility: hidden; opacity: 0; transition: none; }
 
-  /* The nanotech layer (nano-layer.tsx): one canvas over the whole first screen that draws the swarm. Its colours
-     are read from here, as the dot field's are: cells in `color`, charged cells in `caret-color`. */
+  /* The nanotech layer (nano-layer.tsx): one canvas over the whole first screen that draws the swarm. Cells at rest
+     take `color` from here; charged cells take their colour from the spectrum in nano.ts. */
   .nano-layer {
     position: absolute;
     inset: 0;
@@ -210,7 +210,6 @@ body {
     height: 100%;
     pointer-events: none;
     color: var(--color-text-primary);
-    caret-color: light-dark(#2f55f0, #8098ff);
   }
   /* Panels it weaves wait, hidden, for their cells to lock in, then come through the mesh. Only once the layer runs,
      so without script or with motion turned off they show as before. */

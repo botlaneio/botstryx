@@ -31,8 +31,23 @@ export type Job = {
   settled: boolean;
 };
 
-// Cells are drawn in a few shades between the ink and the accent, one path per shade, so a frame is a handful of fills.
+// Charged cells take a colour from a spectrum that runs across the screen and drifts over time, so a phrase in
+// transit reads as one moving gradient. Each cell is drawn in one of a few shades between the ink and its hue, one
+// path per shade, so a frame is a few dozen fills.
 const SHADES = 8;
+const SPECTRUM = ['#8b5cf6', '#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#f59e0b', '#f97316', '#ec4899', '#d946ef'];
+const HUES = 18;
+/** How long the gradient takes to drift once across the screen, in ms. */
+const DRIFT = 5000;
+
+const hex = (h: string): [number, number, number] => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)) as [number, number, number];
+// The spectrum sampled evenly round a loop, so its two ends meet without a seam.
+const RING = Array.from({length: HUES}, (_, i) => {
+  const at = (i / HUES) * SPECTRUM.length;
+  const a = hex(SPECTRUM[Math.floor(at)]), b = hex(SPECTRUM[(Math.floor(at) + 1) % SPECTRUM.length]);
+  const t = at - Math.floor(at);
+  return a.map((v, k) => Math.round(v + (b[k] - v) * t)) as [number, number, number];
+});
 
 const clamp01 = (t: number) => (t < 0 ? 0 : t > 1 ? 1 : t);
 const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
@@ -54,8 +69,7 @@ export class NanoEngine {
   private ratio = 1;
   private width = 0;
   private height = 0;
-  private shades: string[] = [];
-  private accent = 'rgb(47,85,240)';
+  private shades: string[][] = [];
 
   constructor(private canvas: HTMLCanvasElement) {
     this.ctx = canvas.getContext('2d')!;
@@ -77,17 +91,15 @@ export class NanoEngine {
     return this.canvas.getBoundingClientRect();
   }
 
-  /** The ink and the accent come from CSS (the canvas's color and caret-color), so they follow the theme. */
+  /** The ink comes from CSS (the canvas's color), so cells at rest follow the theme. */
   private readColors() {
-    const style = getComputedStyle(this.canvas);
-    const ink = channels(style.color);
-    const blue = channels(style.caretColor);
-    this.accent = `rgb(${blue.join(',')})`;
-    this.shades = Array.from({length: SHADES}, (_, i) => {
-      const t = i / (SHADES - 1);
-      const c = ink.map((v, k) => Math.round(v + (blue[k] - v) * t));
-      return `rgb(${c.join(',')})`;
-    });
+    const ink = channels(getComputedStyle(this.canvas).color);
+    this.shades = RING.map((hue) =>
+      Array.from({length: SHADES}, (_, i) => {
+        const t = i / (SHADES - 1);
+        return `rgb(${ink.map((v, k) => Math.round(v + (hue[k] - v) * t)).join(',')})`;
+      }),
+    );
   }
 
   run(job: Omit<Job, 'settleAt' | 'started' | 'settled'>) {
@@ -130,6 +142,7 @@ export class NanoEngine {
     const ctx = this.ctx;
     // One path per shade and strength, so cells that look alike are filled together.
     const paths = new Map<number, Path2D>();
+    const drift = now / DRIFT;
     const add = (key: number, x: number, y: number, s: number, a: number) => {
       let p = paths.get(key);
       if (!p) { p = new Path2D(); paths.set(key, p); }
@@ -173,16 +186,18 @@ export class NanoEngine {
       alpha *= fadeOut;
       if (alpha <= 0.01) continue;
       const shade = Math.round(lit * (SHADES - 1));
+      const hue = shade === 0 ? 0 : Math.floor(((x / this.width) * 0.8 + y / this.height * 0.2 - drift) * HUES) % HUES;
       const strength = Math.round(alpha * 10);
-      add(shade * 16 + strength, x, y, size, angle);
+      add(((hue < 0 ? hue + HUES : hue) * SHADES + shade) * 16 + strength, x, y, size, angle);
     }
 
     for (const [key, path] of paths) {
-      const shade = key >> 4;
+      const shade = (key >> 4) % SHADES;
+      const hue = Math.floor((key >> 4) / SHADES);
       ctx.globalAlpha = (key & 15) / 10;
-      ctx.fillStyle = this.shades[shade];
-      // The brightest cells glow, which is what makes the swarm read as energy rather than confetti.
-      if (shade >= SHADES - 3) { ctx.shadowColor = this.accent; ctx.shadowBlur = 8; }
+      ctx.fillStyle = this.shades[hue][shade];
+      // The brightest cells glow in their own colour, which is what makes the swarm read as energy rather than confetti.
+      if (shade >= SHADES - 3) { ctx.shadowColor = this.shades[hue][SHADES - 1]; ctx.shadowBlur = 8; }
       else ctx.shadowBlur = 0;
       ctx.fill(path);
     }
