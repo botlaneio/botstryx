@@ -656,15 +656,12 @@ body {
   .astryx-drawer {
     border-radius: 26px 0 0 26px;
     --card-1: color-mix(in srgb, var(--color-background-surface) 92%, var(--color-text-primary));
-    --card-2: color-mix(in srgb, var(--color-background-surface) 82%, var(--color-text-primary));
-    /* Two more cards show behind the menu's left edge, each shorter than the one in front and each with its
-       own soft shadow, so the three read as a stack. */
+    /* One more card shows behind the menu's left edge, a little shorter, with its own soft shadow, so the two
+       read as a stack. (A third, further back, came out square: a spread past the 26px radius loses the corners.) */
     box-shadow:
       -8px 0 18px -10px rgba(0, 0, 0, 0.28),
       -26px 0 0 -14px var(--card-1),
-      -32px 0 18px -18px rgba(0, 0, 0, 0.26),
-      -52px 0 0 -30px var(--card-2),
-      -60px 0 40px -30px rgba(0, 0, 0, 0.3);
+      -34px 0 30px -18px rgba(0, 0, 0, 0.3);
   }
   .astryx-drawer[open] { animation: stack 0.8s var(--bl-ease) both; }
   /* The cards behind start tucked under the menu, then fan out once it has arrived. */
@@ -673,9 +670,7 @@ body {
       box-shadow:
         -8px 0 18px -10px rgba(0, 0, 0, 0),
         -14px 0 0 -14px var(--card-1),
-        -18px 0 18px -18px rgba(0, 0, 0, 0),
-        -30px 0 0 -30px var(--card-2),
-        -30px 0 40px -30px rgba(0, 0, 0, 0);
+        -18px 0 30px -18px rgba(0, 0, 0, 0);
     }
   }
 
@@ -2493,6 +2488,9 @@ body {
     --hm-lift-sm: var(--hm-edge), 0 1px 2px light-dark(rgba(16, 24, 40, 0.08), rgba(0, 0, 0, 0.5)), 0 6px 14px -8px light-dark(rgba(16, 24, 40, 0.2), rgba(0, 0, 0, 0.8));
   }
   .hm { --apx-hot: light-dark(#2f55f0, #8098ff); background: var(--color-background-body); color: var(--color-text-primary); }
+  /* The numbers' particle canvas reaches past the screen's edge; clip it here so the page never scrolls sideways
+     (that extra width is what slid the page left behind the open menu). clip, not hidden, so sticky still works. */
+  .hm { overflow-x: clip; }
   .hm a:focus-visible { outline: 2px solid var(--color-text-primary); outline-offset: 3px; border-radius: 6px; }
   .hm .mono { margin: 0; }
   .hm i, .hm u, .hm s { font-style: normal; text-decoration: none; }
