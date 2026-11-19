@@ -1,7 +1,7 @@
 'use client';
 
 // The hero's orbit: what we build, as five small live screens circling the logo. The card at the front is the one
-// the headline names, so when the headline's phrase changes (nano-headline.tsx calls onTurn), the ring turns one
+// the headline names, so when the headline's phrase changes (typewriter-headline.tsx calls onTurn as each phrase starts to type), the ring turns one
 // card forward.
 //
 // The motion is two Theatre.js sequences from the homepage's project (src/components/theatre): "Orbit intro" opens

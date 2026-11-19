@@ -195,17 +195,29 @@ body {
   @media (min-width: 768px) {
     .display { font-size: clamp(3rem, 7.7vw, 8.2rem); text-wrap: nowrap; }
   }
-  /* The transforming headline (nano-headline.tsx). Sized to the box it sits in, from --tw-fit, the longest line's
+  /* The typed headline (typewriter-headline.tsx). Sized to the box it sits in, from --tw-fit, the longest line's
      width in ems, so every phrase stays on one line at any width: nothing wraps, so nothing below moves. */
   .tw-fit { container-type: inline-size; }
   .display.tw { font-size: min(7.7vw, 100cqi / var(--tw-fit), 8.2rem); text-wrap: nowrap; }
-  /* Every phrase sits in the same cell, so the line holds the room of the longest; only the current one shows. */
+  /* Every phrase sits unseen in the same cell as the typed one, so the line holds the room of the longest. */
   .tw-slot { display: grid; }
   .tw-slot > * { grid-area: 1 / 1; }
-  .tw-ghost { visibility: hidden; opacity: 0; }
-  .tw-ghost[data-on] { visibility: visible; opacity: 1; transition: opacity 0.5s ease-in-out; }
-  /* While the cells are drawn in its place, the real text fades out under them, as they fade in over it. */
-  .tw[data-morph] .tw-ghost[data-on] { opacity: 0; transition: opacity 0.26s ease-in-out; }
+  .tw-ghost { visibility: hidden; }
+  .tw-caret {
+    display: inline-block;
+    width: 0.06em;
+    height: 0.82em;
+    margin-left: 0.05em;
+    vertical-align: -0.06em;
+    border-radius: 1px;
+    background: currentColor;
+    animation: tw-blink 1s steps(1) infinite;
+  }
+  .tw-caret[data-typing] { animation: none; }
+  @keyframes tw-blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .tw-caret { display: none; }
+  }
 
   /* The nanotech layer (nano-layer.tsx): one canvas over the whole first screen that draws the swarm. Cells at rest
      take `color` from here; charged cells take their colour from the spectrum in nano.ts. */

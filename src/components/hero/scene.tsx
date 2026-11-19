@@ -12,7 +12,7 @@ import {SiteHeader} from '@/components/site/site-header';
 import {ArrowRight, ArrowUp, ArrowUpRight} from '@/components/icons';
 
 import {usePrompt} from './stage';
-import {NanoHeadline} from './nano-headline';
+import {TypewriterHeadline} from './typewriter-headline';
 import {HeroOrbit} from './orbit';
 
 // What Botlane builds. Names, links and price labels as botpro's Solutions menu gives them (src/lib/nav.ts,
@@ -67,7 +67,7 @@ function Hero() {
         </Link>
       </div>
 
-      <NanoHeadline staticText={HEADLINE} phrases={PHRASES} onTurn={setFront} className="mt-[clamp(36px,7vh,88px)]" />
+      <TypewriterHeadline staticText={HEADLINE} phrases={PHRASES} onTurn={setFront} className="mt-[clamp(36px,7vh,88px)]" />
 
       {/* Beside the words, what we build circles the logo; the card at the front is the one the headline names. */}
       <div className="hero-split mt-[clamp(28px,5vh,60px)]">
