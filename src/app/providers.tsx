@@ -10,14 +10,14 @@ import {themes, defaultThemeSlug} from '../astryx-themes';
 
 type Mode = 'system' | 'light' | 'dark';
 
-const ModeContext = createContext<{mode: Mode; toggle: () => void}>({mode: 'light', toggle: () => {}});
+const ModeContext = createContext<{mode: Mode; toggle: () => void}>({mode: 'dark', toggle: () => {}});
 
 export const useColorMode = () => useContext(ModeContext);
 
 export function Providers({children}: {children: React.ReactNode}) {
-  const [mode, setMode] = useState<Mode>('light');
+  const [mode, setMode] = useState<Mode>('dark');
 
-  // The page opens in the light theme whatever the device is set to; the toggle flips whatever is showing.
+  // The page opens in the dark theme whatever the device is set to; the toggle flips whatever is showing.
   const toggle = useCallback(() => {
     setMode((current) => {
       const showing = current === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : current;
