@@ -15,6 +15,8 @@ const DAYS: Day[] = [
   {
     date: '2026-11-19',
     entries: [
+      {tag: 'Improved', title: 'Lane in glass', body: 'Lane’s button in the corner is now frosted glass: the page shows through, blurred, behind its eyes.'},
+      {tag: 'New', title: 'What we build, in orbit', body: 'The homepage hero now has a ring of small live screens circling the logo: websites, web apps, slotLane, dashboards and Care. As each headline phrase types out, its card turns to the front. Under the hero, a new section shows a project come together as you scroll, from the brief to a live site.', href: '/'},
       {tag: 'Improved', title: 'Dark by default', body: 'The site now opens in dark mode. The sun and moon button in the header switches to light and back.'},
       {tag: 'Improved', title: 'Lane glows', body: 'Lane’s button in the corner has a soft blue glow, so it is easy to find on the dark page.'},
     ],

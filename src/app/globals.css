@@ -2773,9 +2773,15 @@ body {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: #0a0b0e;
-    /* No outline: the eyes' disc is shaded like a sphere (lane-eyes.tsx), and a tight contact shadow and a soft
-       drop lift it off the page. */
+    /* Frosted, smoked glass with no outline: the page behind is blurred and darkened enough for the eyes (lane-eyes.tsx,
+       drawn with `glass`) to read on any background, with a lit rim of light inside the top edge. A tight contact
+       shadow and a soft drop lift it off the page. */
+    background:
+      radial-gradient(120% 90% at 30% 12%, rgba(255, 255, 255, 0.16), transparent 55%),
+      radial-gradient(90% 70% at 50% 110%, light-dark(rgba(47, 85, 240, 0.22), rgba(128, 152, 255, 0.24)), transparent 70%),
+      light-dark(rgba(14, 16, 22, 0.6), rgba(28, 31, 40, 0.42));
+    -webkit-backdrop-filter: blur(14px) saturate(170%);
+    backdrop-filter: blur(14px) saturate(170%);
     box-shadow: 0 1px 2px light-dark(rgba(16, 24, 40, 0.18), rgba(0, 0, 0, 0.6)), 0 6px 14px -6px light-dark(rgba(16, 24, 40, 0.3), rgba(0, 0, 0, 0.8)), 0 20px 40px -18px light-dark(rgba(16, 24, 40, 0.42), rgba(0, 0, 0, 0.95));
     transition: box-shadow 0.3s var(--bl-ease), scale 0.3s var(--bl-ease), translate 0.3s var(--bl-ease);
   }
