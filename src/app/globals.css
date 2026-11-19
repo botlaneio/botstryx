@@ -17,8 +17,8 @@
 }
 
 :root {
-  /* Light by default; the theme toggle sets this on the html element when the visitor switches. */
-  color-scheme: light;
+  /* Dark by default; the theme toggle sets this on the html element when the visitor switches. */
+  color-scheme: dark;
   /* Botlane's signature: electric blue, used sparingly (the logo square, one small marker). */
   --bl-blue: #2f55f0;
   /* The second accent: slotLane's own colour (botpro's teal lane). It appears only where slotLane does. */
@@ -2768,6 +2768,25 @@ body {
     transition: box-shadow 0.3s var(--bl-ease), scale 0.3s var(--bl-ease), translate 0.3s var(--bl-ease);
   }
   .lane:active .lane-disc { scale: 0.96; }
+  /* A soft halo in the brand blue, so the dark disc stands out against the dark page. It breathes slowly; with
+     motion turned off it simply stays lit. */
+  .lane-disc { position: relative; }
+  .lane-disc::before {
+    content: '';
+    position: absolute;
+    inset: -7px;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, light-dark(rgba(47, 85, 240, 0.28), rgba(128, 152, 255, 0.55)) 55%, transparent);
+    box-shadow: 0 0 0 1px light-dark(rgba(47, 85, 240, 0.12), rgba(128, 152, 255, 0.28)) inset;
+    filter: blur(6px);
+    opacity: 0.85;
+    pointer-events: none;
+    animation: lane-glow 3.6s ease-in-out infinite;
+  }
+  @keyframes lane-glow { 50% { opacity: 0.45; scale: 0.94; } }
+  @media (prefers-reduced-motion: reduce) { .lane-disc::before { animation: none; } }
+  @media (hover: hover) and (pointer: fine) { .lane:hover .lane-disc::before { opacity: 1; animation-play-state: paused; } }
   /* Out of the way of the homepage hero's prompt box while it is on screen (lane-launcher.tsx). */
   .lane { transition: opacity 0.25s var(--bl-ease), translate 0.25s var(--bl-ease), visibility 0s; }
   .lane[data-aside] { opacity: 0; translate: 0 12px; visibility: hidden; pointer-events: none; transition: opacity 0.25s var(--bl-ease), translate 0.25s var(--bl-ease), visibility 0s 0.25s; }

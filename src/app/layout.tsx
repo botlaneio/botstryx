@@ -41,10 +41,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    {media: '(prefers-color-scheme: light)', color: '#f2f3f5'},
-    {media: '(prefers-color-scheme: dark)', color: '#0b0c0e'},
-  ],
+  // The page opens dark whatever the device is set to, so the browser's own bar matches it.
+  themeColor: '#0b0c0e',
 };
 
 export default function RootLayout({children}: Readonly<{children: React.ReactNode}>) {

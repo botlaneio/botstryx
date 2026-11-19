@@ -13,6 +13,13 @@ type Day = {date: string; entries: Entry[]};
 
 const DAYS: Day[] = [
   {
+    date: '2026-11-19',
+    entries: [
+      {tag: 'Improved', title: 'Dark by default', body: 'The site now opens in dark mode. The sun and moon button in the header switches to light and back.'},
+      {tag: 'Improved', title: 'Lane glows', body: 'Lane’s button in the corner has a soft blue glow, so it is easy to find on the dark page.'},
+    ],
+  },
+  {
     date: '2026-11-18',
     entries: [
       {tag: 'Improved', title: 'Lane has a new face', body: 'The chat button in the corner is now a pair of living eyes made of the same tiny cells. They follow your cursor, glance around and blink, widen when you point at them, and inside the chat they think while Lane writes and listen or light up on a voice call.'},
