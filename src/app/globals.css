@@ -3962,7 +3962,7 @@ body {
   .bs-live { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; padding: 3px 10px; border-radius: 99px; background: color-mix(in srgb, var(--bs-ok) 14%, transparent); color: var(--bs-ok); font-size: 0.7rem; font-weight: 500; opacity: var(--opacity, 1); transform: scale(var(--scale, 1)); }
   .bs-live i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 25%, transparent); }
 
-  .bs-page { position: relative; display: flex; flex: 1; flex-direction: column; gap: 10px; min-height: 0; padding: 12px; }
+  .bs-page { position: relative; display: flex; flex: 1; flex-direction: column; gap: 10px; min-height: 0; padding: 12px; overflow: hidden; }
   /* A block of the page: a dashed outline while it's a wireframe, solid as it's built (--fill, 0 to 1). */
   .bs-block { position: relative; border-radius: 8px; opacity: var(--opacity, 1); transform: translateY(calc(var(--y, 0) * 1px)); }
   .bs-block::before { content: ''; position: absolute; inset: 0; border: 1px dashed var(--bs-line); border-radius: inherit; opacity: calc(1 - var(--fill, 1)); }
@@ -3983,7 +3983,7 @@ body {
   .bs-title u + u { width: 42%; }
   .bs-title em { width: 18%; height: clamp(10px, 1.3vw, 16px); margin-top: 6px; border-radius: 99px; }
 
-  .bs-image { flex: 1; min-height: 0; }
+  .bs-image { flex: 1 1 0; min-height: 12px; }
   .bs-image s { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; background: transparent; }
   .bs-image s::after { content: ''; position: absolute; inset: 0; background: var(--bs-spectrum); opacity: calc(var(--fill, 1) * 0.85); }
 
@@ -4036,5 +4036,7 @@ body {
     .bs-page { gap: 6px; padding: 8px; }
     .bs-cards { gap: 6px; }
     .bs-card { padding: 6px; }
+    .bs-title { gap: 5px; padding: 3% 6px 2%; }
+    .bs-title em { margin-top: 2px; }
   }
 }

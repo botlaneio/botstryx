@@ -59,6 +59,22 @@ function wire(sheet: Sheet, root: HTMLElement, t: Types) {
       if (key === 'Captions') captions.forEach((c, i) => c.style.setProperty('--a', String(Math.max(0, 1 - Math.abs(v.at - i) * 1.8))));
     }));
   }
+  // The window's outline is drawn along its length (pathLength 1), which only holds when the SVG is drawn at its real
+  // size: a stretched viewBox with a non-scaling stroke draws it wrongly in Chrome. So the rect follows the window's size.
+  const frame = root.querySelector<HTMLElement>('.bs-window');
+  const svg = frame?.querySelector('svg');
+  const rect = svg?.querySelector('rect');
+  if (frame && svg && rect) {
+    const fit = () => {
+      const w = frame.offsetWidth, h = frame.offsetHeight;
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      rect.removeAttribute('vector-effect');
+      for (const [k, v] of Object.entries({x: 0.5, y: 0.5, width: w - 1, height: h - 1, rx: 14})) rect.setAttribute(k, String(v));
+    };
+    const ro = new ResizeObserver(fit);
+    ro.observe(frame);
+    off.push(() => ro.disconnect());
+  }
   return () => off.forEach((f) => f());
 }
 
