@@ -2,7 +2,7 @@
 
 import {useEffect, useRef} from 'react';
 
-import {NanoEngine, assembleCells, sampleText} from './nano';
+import {NanoEngine, assembleCells, cellStep, sampleText} from './nano';
 
 // Room round the text, in px, that the cells fly in from.
 const BLEED = 140;
@@ -34,7 +34,7 @@ export function NanoAssemble({children, delay = 0}: {children: React.ReactNode; 
         await document.fonts.ready;
         nano = new NanoEngine(canvas);
         const size = parseFloat(getComputedStyle(text).fontSize);
-        const step = Math.max(1.6, size / 30);
+        const step = cellStep(size);
         const origin = nano.origin();
         const to = sampleText(text, origin, step);
         if (!to.length) return show();
@@ -43,8 +43,8 @@ export function NanoAssemble({children, delay = 0}: {children: React.ReactNode; 
           size: step * 0.9,
           rest: 1,
           showStart: false,
-          hold: 90,
-          fade: 300,
+          hold: 60,
+          fade: 520,
           onSettle: show,
         });
       }, delay + 120);
