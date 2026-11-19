@@ -1,6 +1,6 @@
 'use client';
 
-import {memo, useRef} from 'react';
+import {memo, useRef, useState} from 'react';
 import Link from 'next/link';
 import {Button} from '@astryxdesign/core/Button';
 import {IconButton} from '@astryxdesign/core/IconButton';
@@ -12,7 +12,8 @@ import {SiteHeader} from '@/components/site/site-header';
 import {ArrowRight, ArrowUp, ArrowUpRight} from '@/components/icons';
 
 import {usePrompt} from './stage';
-import {NanoHeadline} from './nano-headline';
+import {TypewriterHeadline} from './typewriter-headline';
+import {HeroOrbit} from './orbit';
 
 // What Botlane builds. Names, links and price labels as botpro's Solutions menu gives them (src/lib/nav.ts,
 // with amounts from the price book in src/lib/pricing/plans.ts).
@@ -24,7 +25,8 @@ const BUILDS = [
 ];
 
 // The headline: the first line stays, and the second transforms into each of these in turn, looping. The first phrase is the
-// one screen readers, search engines and visitors who turn motion off get.
+// one screen readers, search engines and visitors who turn motion off get. The orbit (orbit.tsx) has one card for each,
+// in the same order.
 const HEADLINE = 'We design and build';
 const PHRASES = [
   'Websites that convert.',
@@ -53,6 +55,8 @@ export const Scene = memo(function Scene() {
 });
 
 function Hero() {
+  // Which phrase the headline is on, and so which card the orbit brings to the front.
+  const [front, setFront] = useState(0);
   return (
     <main className="wrap flex flex-1 flex-col">
       <div className="fade-up pt-[clamp(20px,6.5vh,84px)]">
@@ -63,15 +67,15 @@ function Hero() {
         </Link>
       </div>
 
-      <NanoHeadline staticText={HEADLINE} phrases={PHRASES} className="mt-[clamp(36px,7vh,88px)]" />
+      <TypewriterHeadline staticText={HEADLINE} phrases={PHRASES} onTurn={setFront} className="mt-[clamp(36px,7vh,88px)]" />
 
-      <div className="mt-[clamp(32px,6vh,72px)] grid gap-y-10 md:grid-cols-12 md:gap-x-6">
-        {/* Side by side, the buttons drop to the bottom of the column, level with the bottom of the chip row. */}
-        <div className="fade-up md:col-span-5 md:flex md:flex-col md:pb-[15px] lg:pb-[17px]" style={delay(1)}>
+      {/* Beside the words, what we build circles the logo; the card at the front is the one the headline names. */}
+      <div className="hero-split mt-[clamp(28px,5vh,60px)]">
+        <div className="hero-lede fade-up" style={delay(1)}>
           <p className="lede">
             Custom design and engineering, <strong>from first idea to life after launch.</strong>
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-2.5 md:mt-auto md:pt-8">
+          <div className="mt-7 flex flex-wrap items-center gap-2.5">
             <Button label="Start a project" variant="primary" size="lg" href="/contact">
               <span className="inline-flex items-center gap-2.5">Start a project <ArrowRight /></span>
             </Button>
@@ -79,7 +83,9 @@ function Hero() {
           </div>
         </div>
 
-        <div className="fade-up md:col-span-7 md:col-start-6 lg:col-span-6" style={delay(2)} data-nano-build>
+        <HeroOrbit front={front} />
+
+        <div className="hero-brief fade-up" style={delay(2)} data-nano-build>
           <Prompt />
         </div>
       </div>
