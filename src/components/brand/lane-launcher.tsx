@@ -15,6 +15,16 @@ import {LaneEyes, onLaneVoiceMood, type LaneMood} from './lane-eyes';
 
 type Turn = {role: 'user' | 'assistant'; content: string; error?: boolean};
 
+// Put the cursor in the message box only on a device without a touch screen. On a phone or tablet, focusing it pops
+// the on-screen keyboard up over the chat before the visitor has chosen to type, so there they tap the box themselves.
+// A media query can't tell: an iPad with a trackpad or keyboard attached reports a fine pointer that hovers, and
+// iPadOS Safari calls itself a Mac. Touch points give it away (an iPad reports five), and a tap that just happened
+// is touch whatever the device says about itself.
+let lastPointer = '';
+if (typeof window !== 'undefined') addEventListener('pointerdown', (e) => { lastPointer = e.pointerType; }, {capture: true, passive: true});
+const hasKeyboard = () =>
+  typeof window !== 'undefined' && navigator.maxTouchPoints === 0 && lastPointer !== 'touch' && lastPointer !== 'pen';
+
 const STORE = 'lane-chat';
 // Set once the visitor has opened the chat this visit, so the "Let's Talk" invitation stops showing.
 const MET = 'lane-met';
@@ -63,11 +73,11 @@ export function LaneLauncher() {
     try { sessionStorage.setItem(STORE, JSON.stringify(turns.filter((t) => !t.error))); } catch {}
   }, [turns]);
 
-  // Newest message in view, focus in the box on open, Escape to close.
+  // Newest message in view, focus in the box on open (not on touch screens), Escape to close.
   useEffect(() => { log.current?.scrollTo({top: log.current.scrollHeight}); }, [turns, open]);
   useEffect(() => {
     if (!open) return;
-    if (mode === 'type') input.current?.focus();
+    if (mode === 'type' && hasKeyboard()) input.current?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { setOpen(false); launcher.current?.focus(); }
     };
@@ -224,7 +234,7 @@ export function LaneLauncher() {
               <button type="button" role="radio" aria-checked={mode === 'talk'} onClick={() => setMode('talk')}>Talk</button>
             </div>
             {!empty && mode === 'type' && (
-              <button type="button" className="lane-chat-new" onClick={() => { abort.current?.abort(); setTurns([]); input.current?.focus(); }}>
+              <button type="button" className="lane-chat-new" onClick={() => { abort.current?.abort(); setTurns([]); if (hasKeyboard()) input.current?.focus(); }}>
                 New chat
               </button>
             )}
