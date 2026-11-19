@@ -2755,10 +2755,13 @@ body {
   /* ================================================================== */
   /* Lane, the assistant's button in the corner (lane-launcher.tsx)      */
   /* ================================================================== */
+  /* How far Lane sits in from the screen's corner (and the chat and "Let's Talk" with it). */
+  :root { --lane-edge: 28px; }
+  @media (max-width: 640px) { :root { --lane-edge: 20px; } }
   .lane {
     position: fixed;
-    right: max(16px, env(safe-area-inset-right));
-    bottom: max(16px, env(safe-area-inset-bottom));
+    right: max(var(--lane-edge), env(safe-area-inset-right));
+    bottom: max(var(--lane-edge), env(safe-area-inset-bottom));
     z-index: 40;
     display: flex;
     align-items: center;
@@ -2845,8 +2848,8 @@ body {
   /* "Let's Talk": the voice-call invitation that pops out beside Lane a moment after the page loads. */
   .lane-hello {
     position: fixed;
-    right: calc(max(16px, env(safe-area-inset-right)) + 70px);
-    bottom: calc(max(16px, env(safe-area-inset-bottom)) + 12px);
+    right: calc(max(var(--lane-edge), env(safe-area-inset-right)) + 70px);
+    bottom: calc(max(var(--lane-edge), env(safe-area-inset-bottom)) + 12px);
     z-index: 40;
     display: inline-flex;
     align-items: center;
@@ -2876,7 +2879,7 @@ body {
   .lane-hello svg { color: var(--bl-blue); }
   .lane-hello:focus-visible { outline: 2px solid var(--color-text-primary); outline-offset: 3px; }
   @media (hover: hover) and (pointer: fine) { .lane-hello:hover { translate: -2px 0; } }
-  @media (max-width: 640px) { .lane-hello { right: calc(max(16px, env(safe-area-inset-right)) + 62px); bottom: calc(max(16px, env(safe-area-inset-bottom)) + 9px); } }
+  @media (max-width: 640px) { .lane-hello { right: calc(max(var(--lane-edge), env(safe-area-inset-right)) + 62px); bottom: calc(max(var(--lane-edge), env(safe-area-inset-bottom)) + 9px); } }
   /* While the invitation shows, it stands in for the hover label in the same spot. */
   .lane-hello[data-show] ~ .lane .lane-say { display: none; }
 
@@ -2895,8 +2898,8 @@ body {
   .lane-chat {
     --lc-hot: light-dark(#2f55f0, #8098ff);
     position: fixed;
-    right: max(16px, env(safe-area-inset-right));
-    bottom: calc(max(16px, env(safe-area-inset-bottom)) + 76px);
+    right: max(var(--lane-edge), env(safe-area-inset-right));
+    bottom: calc(max(var(--lane-edge), env(safe-area-inset-bottom)) + 76px);
     z-index: 41;
     display: grid;
     grid-template-rows: auto minmax(0, 1fr) auto auto;
