@@ -62,7 +62,7 @@ function wire(sheet: Sheet, root: HTMLElement, t: Types) {
   }
   // The window's outline is drawn along its length (pathLength 1), which only holds when the SVG is drawn at its real
   // size: a stretched viewBox with a non-scaling stroke draws it wrongly in Chrome. So the rect follows the window's size.
-  const frame = root.querySelector<HTMLElement>('.bs-window');
+  const frame = root.querySelector<HTMLElement>('.btl-window');
   const svg = frame?.querySelector('svg');
   const rect = svg?.querySelector('rect');
   if (frame && svg && rect) {
@@ -124,13 +124,13 @@ export function BuildSequence() {
   }, []);
 
   return (
-    <section ref={ref} aria-labelledby="hm-live" className="bs">
-      <div className="bs-pin">
-        <div className="wrap bs-grid">
-          <div className="bs-side">
+    <section ref={ref} aria-labelledby="hm-live" className="btl">
+      <div className="btl-pin">
+        <div className="wrap btl-grid">
+          <div className="btl-side">
             <p className="mono hm-kicker"><i aria-hidden />From brief to live</p>
             <h2 id="hm-live">Watch it come together. <span>One page at a time.</span></h2>
-            <ol className="bs-steps" data-th="Captions">
+            <ol className="btl-steps" data-th="Captions">
               {STEPS.map((s, i) => (
                 <li key={s.title} data-step={i}>
                   <span className="mono">0{i + 1}</span>
@@ -143,38 +143,38 @@ export function BuildSequence() {
             </ol>
           </div>
 
-          <div className="bs-stage" aria-hidden>
-            <div className="bs-camera" data-th="Camera">
-              <div className="bs-window" data-th="Frame">
-                <svg className="bs-outline" preserveAspectRatio="none" viewBox="0 0 100 100">
+          <div className="btl-stage" aria-hidden>
+            <div className="btl-camera" data-th="Camera">
+              <div className="btl-window" data-th="Frame">
+                <svg className="btl-outline" preserveAspectRatio="none" viewBox="0 0 100 100">
                   <rect x="0.5" y="0.5" width="99" height="99" rx="3" pathLength="1" vectorEffect="non-scaling-stroke" />
                 </svg>
-                <div className="bs-bar">
+                <div className="btl-bar">
                   <i /><i /><i />
                   <span className="mono">yourclinic.com</span>
-                  <b className="bs-live mono" data-th="Live"><i />Live</b>
+                  <b className="btl-live mono" data-th="Live"><i />Live</b>
                 </div>
-                <div className="bs-page">
-                  <div className="bs-block bs-nav" data-th="Nav"><s /><u /><u /><u /><em /></div>
-                  <div className="bs-block bs-title" data-th="Title"><u /><u /><em /></div>
-                  <div className="bs-block bs-image" data-th="Image"><s /></div>
-                  <div className="bs-cards">
+                <div className="btl-page">
+                  <div className="btl-block btl-nav" data-th="Nav"><s /><u /><u /><u /><em /></div>
+                  <div className="btl-block btl-title" data-th="Title"><u /><u /><em /></div>
+                  <div className="btl-block btl-image" data-th="Image"><s /></div>
+                  <div className="btl-cards">
                     {(['Card 1', 'Card 2', 'Card 3'] as const).map((c, i) => (
-                      <div key={c} className="bs-block bs-card" data-th={c} style={{'--k': i} as React.CSSProperties}><s /><u /><u /></div>
+                      <div key={c} className="btl-block btl-card" data-th={c} style={{'--k': i} as React.CSSProperties}><s /><u /><u /></div>
                     ))}
                   </div>
                 </div>
               </div>
 
-              <div className="bs-phone" data-th="Phone">
-                <div className="bs-notch" />
-                <s className="bs-phone-img" />
+              <div className="btl-phone" data-th="Phone">
+                <div className="btl-notch" />
+                <s className="btl-phone-img" />
                 <u /><u /><em />
               </div>
 
-              <div className="bs-brief" data-th="Brief">
+              <div className="btl-brief" data-th="Brief">
                 <span className="mono">Your brief</span>
-                <p><span data-typed>{BRIEF}</span><i className="bs-caret" /></p>
+                <p><span data-typed>{BRIEF}</span><i className="btl-caret" /></p>
               </div>
             </div>
           </div>
