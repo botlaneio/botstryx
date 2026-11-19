@@ -3,15 +3,17 @@
 // "Brief to live": a site assembling itself as the page scrolls. A brief is typed, a browser window draws itself
 // round it, the page goes in as a wireframe, fills in, and goes live on a phone as well.
 //
-// The choreography is a Theatre.js sequence (keyframes in build-sequence.theatre.json, first drafted by
-// scripts/build-sequence-keys.mjs). Scrolling through the section moves the sequence's playhead. Theatre only hands
+// The choreography is a Theatre.js sequence, the "Brief to live" sheet of the homepage's project
+// (src/components/theatre). Scrolling through the section moves the sequence's playhead. Theatre only hands
 // over numbers: each object writes them as CSS variables on its element, and the CSS draws from those.
 //
 // Every variable's fallback in the CSS is the finished page, so without JavaScript, before Theatre has loaded, and
-// under reduced motion, the section shows the end state and does not pin. Theatre (about 32 KB gzipped) and the
-// keyframes (about 3 KB) load only when the section comes near the screen. The studio, the editor, loads only in `next dev`.
+// under reduced motion, the section shows the end state and does not pin. Theatre loads only when the section comes near
+// the screen (or when the hero has already loaded it).
 
 import {useEffect, useRef} from 'react';
+
+import {loadHomeProject, prefersReducedMotion, scrub, type Sheet} from '@/components/theatre/project';
 
 const BRIEF = 'A booking system for our clinic.';
 
@@ -25,7 +27,6 @@ const STEPS = [
 
 const BLOCKS = ['Nav', 'Title', 'Image', 'Card 1', 'Card 2', 'Card 3'] as const;
 
-type Sheet = import('@theatre/core').ISheet;
 type Types = typeof import('@theatre/core').types;
 
 /** The objects on the sheet and their props. Each prop's default is its value in the finished page. */
@@ -83,52 +84,24 @@ export function BuildSequence() {
 
   useEffect(() => {
     const root = ref.current;
-    if (!root || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!root || prefersReducedMotion()) return;
 
     let dead = false;
     let cleanup = () => {};
 
     const start = async () => {
-      // Only in `next dev`: the studio, Theatre's editor, opens over the page. The branch is dropped from production builds.
-      if (process.env.NODE_ENV === 'development') {
-        const studio = (await import('@theatre/studio')).default;
-        studio.initialize();
-      }
-      const [{getProject, types, val}, {default: state}] = await Promise.all([import('@theatre/core'), import('./build-sequence.theatre.json')]);
+      const {core, project} = await loadHomeProject();
       if (dead) return;
-
-      const project = getProject('botLane home', {state});
       const sheet = project.sheet('Brief to live');
-      const unwire = wire(sheet, root, types);
-      await project.ready;
-      if (dead) return unwire();
-
-      const length = val(sheet.sequence.pointer.length);
+      const unwire = wire(sheet, root, core.types);
+      const length = core.val(sheet.sequence.pointer.length);
       root.classList.add('is-live');
-
-      // The playhead follows the scroll with a little lag, so a flick of the wheel reads as one smooth camera move.
-      let target = 0, shown = -1, raf = 0;
-      const measure = () => {
+      const stop = scrub(sheet, () => {
         const r = root.getBoundingClientRect();
-        const travel = Math.max(1, r.height - window.innerHeight);
-        target = Math.min(1, Math.max(0, -r.top / travel)) * length;
-        if (!raf) raf = requestAnimationFrame(step);
-      };
-      const step = () => {
-        raf = 0;
-        shown = shown < 0 ? target : shown + (target - shown) * 0.14;
-        if (Math.abs(target - shown) < 0.002) shown = target;
-        sheet.sequence.position = shown;
-        if (shown !== target) raf = requestAnimationFrame(step);
-      };
-      measure();
-      window.addEventListener('scroll', measure, {passive: true});
-      window.addEventListener('resize', measure);
-
+        return Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - window.innerHeight))) * length;
+      });
       cleanup = () => {
-        cancelAnimationFrame(raf);
-        window.removeEventListener('scroll', measure);
-        window.removeEventListener('resize', measure);
+        stop();
         root.classList.remove('is-live');
         unwire();
       };

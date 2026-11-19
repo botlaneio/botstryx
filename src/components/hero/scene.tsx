@@ -56,7 +56,7 @@ function Hero() {
   return (
     <main className="wrap flex flex-1 flex-col">
       <div className="fade-up pt-[clamp(20px,6.5vh,84px)]">
-        <Link href="/solutions" className="eyebrow">
+        <Link href="/solutions" className="eyebrow" data-hx="Eyebrow">
           <span className="mono">Founding Ten</span>
           20% off for our first 10 clients
           <ArrowRight size={14} />
@@ -67,7 +67,7 @@ function Hero() {
 
       <div className="mt-[clamp(32px,6vh,72px)] grid gap-y-10 md:grid-cols-12 md:gap-x-6">
         {/* Side by side, the buttons drop to the bottom of the column, level with the bottom of the chip row. */}
-        <div className="fade-up md:col-span-5 md:flex md:flex-col md:pb-[15px] lg:pb-[17px]" style={delay(1)}>
+        <div className="fade-up md:col-span-5 md:flex md:flex-col md:pb-[15px] lg:pb-[17px]" style={delay(1)} data-hx="Lede">
           <p className="lede">
             Custom design and engineering, <strong>from first idea to life after launch.</strong>
           </p>
@@ -86,7 +86,7 @@ function Hero() {
 
       <div className="min-h-14 flex-1" />
 
-      <nav aria-label="What we build" className="rail fade-up" style={delay(3)}>
+      <nav aria-label="What we build" className="rail fade-up" style={delay(3)} data-hx="Rail">
         {BUILDS.map((item, i) => (
           <Link key={item.href} href={item.href} className="rail-item" data-nano-build>
             <span className="idx mono">0{i + 1}</span>
@@ -115,6 +115,7 @@ function Prompt() {
       action="/contact"
       method="get"
       className="prompt"
+      data-hx="Brief box"
       onKeyDown={(e) => {
         // Enter sends, as in any prompt box; Shift and Enter makes a new line.
         if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing && (e.target as HTMLElement).tagName === 'TEXTAREA') {
