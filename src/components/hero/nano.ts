@@ -211,6 +211,12 @@ const GRID = 32;
 const rand = (a: number, b: number) => a + Math.random() * (b - a);
 
 /**
+ * The grid text is sampled on, in px, for type of a given size: about 26 cells to the em, so even a phone's small
+ * headline keeps the bar of an e and the gap in an m. Never finer than a pixel and a bit, which keeps the count sane.
+ */
+export const cellStep = (fontSize: number) => Math.max(0.9, fontSize / 26);
+
+/**
  * Samples text as it is set on the page: every point on a grid of `step` px that falls inside a letter. Each word is
  * drawn off screen in the element's own font, where the page put it and stretched to the width the page gives it,
  * so text over several lines (a <br>, or wrapping on a phone) comes out right too.
@@ -228,20 +234,32 @@ export function sampleText(el: HTMLElement, origin: DOMRect, step: number): Poin
   ctx.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
   if ('letterSpacing' in ctx) (ctx as CanvasRenderingContext2D & {letterSpacing: string}).letterSpacing = style.letterSpacing;
   ctx.fillStyle = '#000';
+  // Every word and where the page set it.
   const range = document.createRange();
+  const words: {text: string; rect: DOMRect}[] = [];
   const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
   for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-    const text = node.textContent ?? '';
-    for (const word of text.matchAll(/\S+/g)) {
+    for (const word of (node.textContent ?? '').matchAll(/\S+/g)) {
       range.setStart(node, word.index);
       range.setEnd(node, word.index + word[0].length);
       const rect = range.getBoundingClientRect();
-      if (!rect.width) continue;
-      const m = ctx.measureText(word[0]);
-      const stretch = m.width > 0 ? Math.min(1.15, Math.max(0.87, rect.width / m.width)) : 1;
-      ctx.setTransform(stretch, 0, 0, 1, rect.left - box.left + pad, 0);
-      ctx.fillText(word[0], 0, rect.top - box.top + pad + (m.fontBoundingBoxAscent || parseFloat(style.fontSize) * 0.92));
+      if (rect.width) words.push({text: word[0], rect});
     }
+  }
+  if (!words.length) return [];
+  // Where the baseline sits in a word's box, measured on the page rather than taken from the font's metrics, which
+  // browsers report differently: a zero-size box set on the first line's baseline. Every line shares the font, so
+  // one measure serves them all.
+  const probe = document.createElement('span');
+  probe.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';
+  el.insertBefore(probe, el.firstChild);
+  const ascent = probe.getBoundingClientRect().bottom - words[0].rect.top;
+  probe.remove();
+  for (const {text, rect} of words) {
+    const m = ctx.measureText(text);
+    const stretch = m.width > 0 ? Math.min(1.15, Math.max(0.87, rect.width / m.width)) : 1;
+    ctx.setTransform(stretch, 0, 0, 1, rect.left - box.left + pad, 0);
+    ctx.fillText(text, 0, rect.top - box.top + pad + ascent);
   }
   const data = ctx.getImageData(0, 0, w, h).data;
   const points: Point[] = [];

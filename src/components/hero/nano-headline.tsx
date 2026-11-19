@@ -2,7 +2,7 @@
 
 import {useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore} from 'react';
 
-import {morphCells, sampleText} from './nano';
+import {cellStep, morphCells, sampleText} from './nano';
 import {useNano} from './nano-layer';
 
 type Props = {
@@ -56,8 +56,7 @@ export function NanoHeadline({staticText, phrases, className}: Props) {
       const ghosts = h1.querySelectorAll<HTMLElement>('.tw-ghost');
       const next = (at + 1) % phrases.length;
       const size = parseFloat(getComputedStyle(h1).fontSize);
-      // Finer cells on big screens keep the letters crisp; the count stays about the same at any size.
-      const step = Math.max(1.6, size / 30);
+      const step = cellStep(size);
       const origin = nano.origin();
       const from = sampleText(ghosts[at], origin, step);
       const to = sampleText(ghosts[next], origin, step);
