@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
   // Turn it back on only after checking `npm run preview` serves pages.
   cacheComponents: false,
   turbopack: {
+    // Theatre.js only ever runs in the browser (build-sequence.tsx loads it after the page has mounted), so the
+    // Worker gets an empty module in its place instead of carrying it. Keeps it inside the 3 MiB Workers limit.
+    resolveAlias: {
+      '@theatre/core': {browser: '@theatre/core/dist/index.js', default: './src/lib/stubs/empty.ts'},
+    },
     rules: {
       '*.css': {
         loaders: ['@tailwindcss/turbopack'],

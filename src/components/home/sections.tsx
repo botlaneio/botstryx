@@ -9,6 +9,7 @@ import {Cover} from '@/components/insights/cover';
 import {postsByDate, summary} from '@/lib/insights';
 import {AFTER, APPS, FOUNDING, PER, WEBSITES, money} from '@/lib/pricing';
 
+import {BuildSequence} from './build-sequence';
 import {ScrollProgress} from './scroll-progress';
 
 // Everything on the homepage below the first screen. The words are botpro's homepage (src/app/page.tsx,
@@ -352,6 +353,7 @@ function Close() {
 export function HomeSections() {
   return (
     <div className="hm">
+      <BuildSequence />
       <Principles />
       <Builds />
       <Tools />
