@@ -12,6 +12,8 @@ type Props = {
   phrases: readonly string[];
   /** Classes for the box around the headline, such as its margin. */
   className?: string;
+  /** Called with the next phrase's index the moment it starts to form, so something else can move in time with it. */
+  onTurn?: (next: number) => void;
 };
 
 // Milliseconds a phrase is held before it comes apart: the first one a little longer, so the page settles first.
@@ -38,7 +40,7 @@ function useTabVisible() {
  * line keeps the room of the longest one and nothing below it moves. Without script or with motion turned off, the
  * first phrase simply stays.
  */
-export function NanoHeadline({staticText, phrases, className}: Props) {
+export function NanoHeadline({staticText, phrases, className, onTurn}: Props) {
   const nano = useNano();
   const visible = useTabVisible();
   const [at, setAt] = useState(0);
@@ -70,12 +72,15 @@ export function NanoHeadline({staticText, phrases, className}: Props) {
         fadeIn: 260,
         fade: 520,
         // The real text steps aside the moment the cells are drawn in its place, and comes back once they settle.
-        onStart: () => h1.setAttribute('data-morph', ''),
+        onStart: () => {
+          h1.setAttribute('data-morph', '');
+          onTurn?.(next);
+        },
         onSettle: () => setAt(next),
       });
     }, first.current ? FIRST_HOLD : HOLD);
     return () => { live = false; window.clearTimeout(timer); };
-  }, [at, nano, visible, phrases]);
+  }, [at, nano, visible, phrases, onTurn]);
 
   // The new phrase is on the page now: show the real text again, under the cells as they fade.
   useLayoutEffect(() => {

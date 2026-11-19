@@ -56,25 +56,23 @@ for (const [name, inAt, fillAt] of BLOCKS) {
   };
 }
 
-// The hero's opening, played once on load (3.2s): three soft lights drift in behind the headline while a line of light
-// sweeps across the top of the screen.
-const HERO_INTRO = {
-  'Orb 1': {opacity: [[0, 0], [1.6, 1]], scale: [[0, 0.5], [2.4, 1]], x: [[0, 14], [2.6, 0]], y: [[0, -12], [2.6, 0]]},
-  'Orb 2': {opacity: [[0.4, 0], [2, 1]], scale: [[0.4, 0.5], [2.8, 1]], x: [[0.4, -16], [3, 0]], y: [[0.4, 10], [3, 0]]},
-  'Orb 3': {opacity: [[0.8, 0], [2.4, 1]], scale: [[0.8, 0.6], [3.2, 1]], x: [[0.8, 10], [3.2, 0]], y: [[0.8, 14], [3.2, 0]]},
-  Sweep: {x: [[0.3, -100], [1.9, 250]], opacity: [[0.3, 0], [0.6, 1], [1.6, 1], [1.9, 0]]},
+// The hero's orbit (src/components/hero/orbit.tsx). "Orbit intro" plays once on load: the ring opens out from the
+// logo, tips back to its resting tilt and the logo's glow comes up.
+const ORBIT_INTRO = {
+  Ring: {
+    radius: [[0, 0.12], [1.9, 1]],
+    scale: [[0, 0.72], [1.9, 1]],
+    tilt: [[0, -38], [2.3, -12]],
+    opacity: [[0, 0], [0.9, 1]],
+    spin: [[0, -0.9], [2.3, 0]],
+  },
+  Core: {glow: [[0.2, 0], [1.6, 1]], scale: [[0, 0.6], [1.4, 1]]},
 };
 
-// The hero's exit, played by scroll: 0 at the top of the page, 1 once the whole first screen has scrolled away. Each
-// layer leaves at its own speed, so the screen comes apart in depth, and the camera pushes into the light.
-const HERO_EXIT = {
-  Eyebrow: {y: [[0, 0], [0.5, -40]], fade: [[0, 1], [0.4, 0]], blur: [[0, 0], [0.4, 6]]},
-  Headline: {y: [[0, 0], [0.7, -90]], fade: [[0, 1], [0.6, 0]], blur: [[0.1, 0], [0.6, 8]]},
-  Lede: {y: [[0, 0], [0.8, -60]], fade: [[0.05, 1], [0.6, 0]], blur: [[0.1, 0], [0.6, 4]]},
-  'Brief box': {y: [[0, 0], [0.8, -30]], tilt: [[0, 0], [0.8, 18]], scale: [[0, 1], [0.8, 0.92]], fade: [[0.15, 1], [0.75, 0]]},
-  Rail: {y: [[0, 0], [0.6, 60]], fade: [[0, 1], [0.45, 0]]},
-  Lights: {scale: [[0, 1], [1, 1.6]], opacity: [[0, 1], [1, 0.25]], y: [[0, 0], [1, -12]]},
-  Dots: {fade: [[0, 1], [0.8, 0]]},
+// "Orbit turn" plays each time the headline moves on: the ring turns one card forward (progress 0 to 1), dips its
+// tilt a little as it goes, and the card arriving at the front lifts as it lands.
+const ORBIT_TURN = {
+  Turn: {progress: [[0, 0], [1.25, 1]], dip: [[0, 0], [0.55, 5], [1.25, 0]], lift: [[0.7, 0], [1.25, 1]]},
 };
 
 const r = (n) => Math.round(n * 1000) / 1000;
@@ -109,8 +107,8 @@ function sheet(objects, length) {
 
 const state = {
   sheetsById: {
-    'Hero intro': sheet(HERO_INTRO, 3.2),
-    'Hero exit': sheet(HERO_EXIT, 1),
+    'Orbit intro': sheet(ORBIT_INTRO, 2.3),
+    'Orbit turn': sheet(ORBIT_TURN, 1.25),
     'Brief to live': sheet(BRIEF_TO_LIVE, 10),
   },
   definitionVersion: '0.4.0',

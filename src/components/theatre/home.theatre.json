@@ -1,19 +1,19 @@
 {
   "sheetsById": {
-    "Hero intro": {
+    "Orbit intro": {
       "staticOverrides": {
         "byObject": {}
       },
       "sequence": {
         "subUnitsPerUnit": 30,
-        "length": 3.2,
+        "length": 2.3,
         "type": "PositionalSequence",
         "tracksByObject": {
-          "Orb 1": {
+          "Ring": {
             "trackData": {
               "t0000": {
                 "type": "BasicKeyframedTrack",
-                "__debugName": "Orb 1:[\"opacity\"]",
+                "__debugName": "Ring:[\"radius\"]",
                 "keyframes": [
                   {
                     "id": "k0001",
@@ -26,11 +26,11 @@
                       0
                     ],
                     "type": "bezier",
-                    "value": 0
+                    "value": 0.12
                   },
                   {
                     "id": "k0002",
-                    "position": 1.6,
+                    "position": 1.9,
                     "connectedRight": false,
                     "handles": [
                       0.25,
@@ -45,7 +45,7 @@
               },
               "t0003": {
                 "type": "BasicKeyframedTrack",
-                "__debugName": "Orb 1:[\"scale\"]",
+                "__debugName": "Ring:[\"scale\"]",
                 "keyframes": [
                   {
                     "id": "k0004",
@@ -58,11 +58,11 @@
                       0
                     ],
                     "type": "bezier",
-                    "value": 0.5
+                    "value": 0.72
                   },
                   {
                     "id": "k0005",
-                    "position": 2.4,
+                    "position": 1.9,
                     "connectedRight": false,
                     "handles": [
                       0.25,
@@ -77,7 +77,7 @@
               },
               "t0006": {
                 "type": "BasicKeyframedTrack",
-                "__debugName": "Orb 1:[\"x\"]",
+                "__debugName": "Ring:[\"tilt\"]",
                 "keyframes": [
                   {
                     "id": "k0007",
@@ -90,11 +90,11 @@
                       0
                     ],
                     "type": "bezier",
-                    "value": 14
+                    "value": -38
                   },
                   {
                     "id": "k0008",
-                    "position": 2.6,
+                    "position": 2.3,
                     "connectedRight": false,
                     "handles": [
                       0.25,
@@ -103,13 +103,13 @@
                       0
                     ],
                     "type": "bezier",
-                    "value": 0
+                    "value": -12
                   }
                 ]
               },
               "t0009": {
                 "type": "BasicKeyframedTrack",
-                "__debugName": "Orb 1:[\"y\"]",
+                "__debugName": "Ring:[\"opacity\"]",
                 "keyframes": [
                   {
                     "id": "k000a",
@@ -122,11 +122,43 @@
                       0
                     ],
                     "type": "bezier",
-                    "value": -12
+                    "value": 0
                   },
                   {
                     "id": "k000b",
-                    "position": 2.6,
+                    "position": 0.9,
+                    "connectedRight": false,
+                    "handles": [
+                      0.25,
+                      1,
+                      0.45,
+                      0
+                    ],
+                    "type": "bezier",
+                    "value": 1
+                  }
+                ]
+              },
+              "t000c": {
+                "type": "BasicKeyframedTrack",
+                "__debugName": "Ring:[\"spin\"]",
+                "keyframes": [
+                  {
+                    "id": "k000d",
+                    "position": 0,
+                    "connectedRight": true,
+                    "handles": [
+                      0.25,
+                      1,
+                      0.45,
+                      0
+                    ],
+                    "type": "bezier",
+                    "value": -0.9
+                  },
+                  {
+                    "id": "k000e",
+                    "position": 2.3,
                     "connectedRight": false,
                     "handles": [
                       0.25,
@@ -141,21 +173,22 @@
               }
             },
             "trackIdByPropPath": {
-              "[\"opacity\"]": "t0000",
+              "[\"radius\"]": "t0000",
               "[\"scale\"]": "t0003",
-              "[\"x\"]": "t0006",
-              "[\"y\"]": "t0009"
+              "[\"tilt\"]": "t0006",
+              "[\"opacity\"]": "t0009",
+              "[\"spin\"]": "t000c"
             }
           },
-          "Orb 2": {
+          "Core": {
             "trackData": {
-              "t000c": {
+              "t000f": {
                 "type": "BasicKeyframedTrack",
-                "__debugName": "Orb 2:[\"opacity\"]",
+                "__debugName": "Core:[\"glow\"]",
                 "keyframes": [
                   {
-                    "id": "k000d",
-                    "position": 0.4,
+                    "id": "k000g",
+                    "position": 0.2,
                     "connectedRight": true,
                     "handles": [
                       0.25,
@@ -167,40 +200,8 @@
                     "value": 0
                   },
                   {
-                    "id": "k000e",
-                    "position": 2,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 1
-                  }
-                ]
-              },
-              "t000f": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Orb 2:[\"scale\"]",
-                "keyframes": [
-                  {
-                    "id": "k000g",
-                    "position": 0.4,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0.5
-                  },
-                  {
                     "id": "k000h",
-                    "position": 2.8,
+                    "position": 1.6,
                     "connectedRight": false,
                     "handles": [
                       0.25,
@@ -215,11 +216,11 @@
               },
               "t000i": {
                 "type": "BasicKeyframedTrack",
-                "__debugName": "Orb 2:[\"x\"]",
+                "__debugName": "Core:[\"scale\"]",
                 "keyframes": [
                   {
                     "id": "k000j",
-                    "position": 0.4,
+                    "position": 0,
                     "connectedRight": true,
                     "handles": [
                       0.25,
@@ -228,11 +229,11 @@
                       0
                     ],
                     "type": "bezier",
-                    "value": -16
+                    "value": 0.6
                   },
                   {
                     "id": "k000k",
-                    "position": 3,
+                    "position": 1.4,
                     "connectedRight": false,
                     "handles": [
                       0.25,
@@ -241,59 +242,69 @@
                       0
                     ],
                     "type": "bezier",
-                    "value": 0
-                  }
-                ]
-              },
-              "t000l": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Orb 2:[\"y\"]",
-                "keyframes": [
-                  {
-                    "id": "k000m",
-                    "position": 0.4,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 10
-                  },
-                  {
-                    "id": "k000n",
-                    "position": 3,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
+                    "value": 1
                   }
                 ]
               }
             },
             "trackIdByPropPath": {
-              "[\"opacity\"]": "t000c",
-              "[\"scale\"]": "t000f",
-              "[\"x\"]": "t000i",
-              "[\"y\"]": "t000l"
+              "[\"glow\"]": "t000f",
+              "[\"scale\"]": "t000i"
             }
-          },
-          "Orb 3": {
+          }
+        }
+      }
+    },
+    "Orbit turn": {
+      "staticOverrides": {
+        "byObject": {}
+      },
+      "sequence": {
+        "subUnitsPerUnit": 30,
+        "length": 1.25,
+        "type": "PositionalSequence",
+        "tracksByObject": {
+          "Turn": {
             "trackData": {
+              "t000l": {
+                "type": "BasicKeyframedTrack",
+                "__debugName": "Turn:[\"progress\"]",
+                "keyframes": [
+                  {
+                    "id": "k000m",
+                    "position": 0,
+                    "connectedRight": true,
+                    "handles": [
+                      0.25,
+                      1,
+                      0.45,
+                      0
+                    ],
+                    "type": "bezier",
+                    "value": 0
+                  },
+                  {
+                    "id": "k000n",
+                    "position": 1.25,
+                    "connectedRight": false,
+                    "handles": [
+                      0.25,
+                      1,
+                      0.45,
+                      0
+                    ],
+                    "type": "bezier",
+                    "value": 1
+                  }
+                ]
+              },
               "t000o": {
                 "type": "BasicKeyframedTrack",
-                "__debugName": "Orb 3:[\"opacity\"]",
+                "__debugName": "Turn:[\"dip\"]",
                 "keyframes": [
                   {
                     "id": "k000p",
-                    "position": 0.8,
+                    "position": 0,
                     "connectedRight": true,
                     "handles": [
                       0.25,
@@ -306,26 +317,7 @@
                   },
                   {
                     "id": "k000q",
-                    "position": 2.4,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 1
-                  }
-                ]
-              },
-              "t000r": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Orb 3:[\"scale\"]",
-                "keyframes": [
-                  {
-                    "id": "k000s",
-                    "position": 0.8,
+                    "position": 0.55,
                     "connectedRight": true,
                     "handles": [
                       0.25,
@@ -334,333 +326,31 @@
                       0
                     ],
                     "type": "bezier",
-                    "value": 0.6
+                    "value": 5
                   },
+                  {
+                    "id": "k000r",
+                    "position": 1.25,
+                    "connectedRight": false,
+                    "handles": [
+                      0.25,
+                      1,
+                      0.45,
+                      0
+                    ],
+                    "type": "bezier",
+                    "value": 0
+                  }
+                ]
+              },
+              "t000s": {
+                "type": "BasicKeyframedTrack",
+                "__debugName": "Turn:[\"lift\"]",
+                "keyframes": [
                   {
                     "id": "k000t",
-                    "position": 3.2,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 1
-                  }
-                ]
-              },
-              "t000u": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Orb 3:[\"x\"]",
-                "keyframes": [
-                  {
-                    "id": "k000v",
-                    "position": 0.8,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 10
-                  },
-                  {
-                    "id": "k000w",
-                    "position": 3.2,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  }
-                ]
-              },
-              "t000x": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Orb 3:[\"y\"]",
-                "keyframes": [
-                  {
-                    "id": "k000y",
-                    "position": 0.8,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 14
-                  },
-                  {
-                    "id": "k000z",
-                    "position": 3.2,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  }
-                ]
-              }
-            },
-            "trackIdByPropPath": {
-              "[\"opacity\"]": "t000o",
-              "[\"scale\"]": "t000r",
-              "[\"x\"]": "t000u",
-              "[\"y\"]": "t000x"
-            }
-          },
-          "Sweep": {
-            "trackData": {
-              "t0010": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Sweep:[\"x\"]",
-                "keyframes": [
-                  {
-                    "id": "k0011",
-                    "position": 0.3,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": -100
-                  },
-                  {
-                    "id": "k0012",
-                    "position": 1.9,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 250
-                  }
-                ]
-              },
-              "t0013": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Sweep:[\"opacity\"]",
-                "keyframes": [
-                  {
-                    "id": "k0014",
-                    "position": 0.3,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  },
-                  {
-                    "id": "k0015",
-                    "position": 0.6,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 1
-                  },
-                  {
-                    "id": "k0016",
-                    "position": 1.6,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 1
-                  },
-                  {
-                    "id": "k0017",
-                    "position": 1.9,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  }
-                ]
-              }
-            },
-            "trackIdByPropPath": {
-              "[\"x\"]": "t0010",
-              "[\"opacity\"]": "t0013"
-            }
-          }
-        }
-      }
-    },
-    "Hero exit": {
-      "staticOverrides": {
-        "byObject": {}
-      },
-      "sequence": {
-        "subUnitsPerUnit": 30,
-        "length": 1,
-        "type": "PositionalSequence",
-        "tracksByObject": {
-          "Eyebrow": {
-            "trackData": {
-              "t0018": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Eyebrow:[\"y\"]",
-                "keyframes": [
-                  {
-                    "id": "k0019",
-                    "position": 0,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  },
-                  {
-                    "id": "k001a",
-                    "position": 0.5,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": -40
-                  }
-                ]
-              },
-              "t001b": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Eyebrow:[\"fade\"]",
-                "keyframes": [
-                  {
-                    "id": "k001c",
-                    "position": 0,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 1
-                  },
-                  {
-                    "id": "k001d",
-                    "position": 0.4,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  }
-                ]
-              },
-              "t001e": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Eyebrow:[\"blur\"]",
-                "keyframes": [
-                  {
-                    "id": "k001f",
-                    "position": 0,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  },
-                  {
-                    "id": "k001g",
-                    "position": 0.4,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 6
-                  }
-                ]
-              }
-            },
-            "trackIdByPropPath": {
-              "[\"y\"]": "t0018",
-              "[\"fade\"]": "t001b",
-              "[\"blur\"]": "t001e"
-            }
-          },
-          "Headline": {
-            "trackData": {
-              "t001h": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Headline:[\"y\"]",
-                "keyframes": [
-                  {
-                    "id": "k001i",
-                    "position": 0,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  },
-                  {
-                    "id": "k001j",
                     "position": 0.7,
-                    "connectedRight": false,
+                    "connectedRight": true,
                     "handles": [
                       0.25,
                       1,
@@ -668,18 +358,12 @@
                       0
                     ],
                     "type": "bezier",
-                    "value": -90
-                  }
-                ]
-              },
-              "t001k": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Headline:[\"fade\"]",
-                "keyframes": [
+                    "value": 0
+                  },
                   {
-                    "id": "k001l",
-                    "position": 0,
-                    "connectedRight": true,
+                    "id": "k000u",
+                    "position": 1.25,
+                    "connectedRight": false,
                     "handles": [
                       0.25,
                       1,
@@ -688,518 +372,14 @@
                     ],
                     "type": "bezier",
                     "value": 1
-                  },
-                  {
-                    "id": "k001m",
-                    "position": 0.6,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  }
-                ]
-              },
-              "t001n": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Headline:[\"blur\"]",
-                "keyframes": [
-                  {
-                    "id": "k001o",
-                    "position": 0.1,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  },
-                  {
-                    "id": "k001p",
-                    "position": 0.6,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 8
                   }
                 ]
               }
             },
             "trackIdByPropPath": {
-              "[\"y\"]": "t001h",
-              "[\"fade\"]": "t001k",
-              "[\"blur\"]": "t001n"
-            }
-          },
-          "Lede": {
-            "trackData": {
-              "t001q": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Lede:[\"y\"]",
-                "keyframes": [
-                  {
-                    "id": "k001r",
-                    "position": 0,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  },
-                  {
-                    "id": "k001s",
-                    "position": 0.8,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": -60
-                  }
-                ]
-              },
-              "t001t": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Lede:[\"fade\"]",
-                "keyframes": [
-                  {
-                    "id": "k001u",
-                    "position": 0.05,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 1
-                  },
-                  {
-                    "id": "k001v",
-                    "position": 0.6,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  }
-                ]
-              },
-              "t001w": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Lede:[\"blur\"]",
-                "keyframes": [
-                  {
-                    "id": "k001x",
-                    "position": 0.1,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  },
-                  {
-                    "id": "k001y",
-                    "position": 0.6,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 4
-                  }
-                ]
-              }
-            },
-            "trackIdByPropPath": {
-              "[\"y\"]": "t001q",
-              "[\"fade\"]": "t001t",
-              "[\"blur\"]": "t001w"
-            }
-          },
-          "Brief box": {
-            "trackData": {
-              "t001z": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Brief box:[\"y\"]",
-                "keyframes": [
-                  {
-                    "id": "k0020",
-                    "position": 0,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  },
-                  {
-                    "id": "k0021",
-                    "position": 0.8,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": -30
-                  }
-                ]
-              },
-              "t0022": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Brief box:[\"tilt\"]",
-                "keyframes": [
-                  {
-                    "id": "k0023",
-                    "position": 0,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  },
-                  {
-                    "id": "k0024",
-                    "position": 0.8,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 18
-                  }
-                ]
-              },
-              "t0025": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Brief box:[\"scale\"]",
-                "keyframes": [
-                  {
-                    "id": "k0026",
-                    "position": 0,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 1
-                  },
-                  {
-                    "id": "k0027",
-                    "position": 0.8,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0.92
-                  }
-                ]
-              },
-              "t0028": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Brief box:[\"fade\"]",
-                "keyframes": [
-                  {
-                    "id": "k0029",
-                    "position": 0.15,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 1
-                  },
-                  {
-                    "id": "k002a",
-                    "position": 0.75,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  }
-                ]
-              }
-            },
-            "trackIdByPropPath": {
-              "[\"y\"]": "t001z",
-              "[\"tilt\"]": "t0022",
-              "[\"scale\"]": "t0025",
-              "[\"fade\"]": "t0028"
-            }
-          },
-          "Rail": {
-            "trackData": {
-              "t002b": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Rail:[\"y\"]",
-                "keyframes": [
-                  {
-                    "id": "k002c",
-                    "position": 0,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  },
-                  {
-                    "id": "k002d",
-                    "position": 0.6,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 60
-                  }
-                ]
-              },
-              "t002e": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Rail:[\"fade\"]",
-                "keyframes": [
-                  {
-                    "id": "k002f",
-                    "position": 0,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 1
-                  },
-                  {
-                    "id": "k002g",
-                    "position": 0.45,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  }
-                ]
-              }
-            },
-            "trackIdByPropPath": {
-              "[\"y\"]": "t002b",
-              "[\"fade\"]": "t002e"
-            }
-          },
-          "Lights": {
-            "trackData": {
-              "t002h": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Lights:[\"scale\"]",
-                "keyframes": [
-                  {
-                    "id": "k002i",
-                    "position": 0,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 1
-                  },
-                  {
-                    "id": "k002j",
-                    "position": 1,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 1.6
-                  }
-                ]
-              },
-              "t002k": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Lights:[\"opacity\"]",
-                "keyframes": [
-                  {
-                    "id": "k002l",
-                    "position": 0,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 1
-                  },
-                  {
-                    "id": "k002m",
-                    "position": 1,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0.25
-                  }
-                ]
-              },
-              "t002n": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Lights:[\"y\"]",
-                "keyframes": [
-                  {
-                    "id": "k002o",
-                    "position": 0,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  },
-                  {
-                    "id": "k002p",
-                    "position": 1,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": -12
-                  }
-                ]
-              }
-            },
-            "trackIdByPropPath": {
-              "[\"scale\"]": "t002h",
-              "[\"opacity\"]": "t002k",
-              "[\"y\"]": "t002n"
-            }
-          },
-          "Dots": {
-            "trackData": {
-              "t002q": {
-                "type": "BasicKeyframedTrack",
-                "__debugName": "Dots:[\"fade\"]",
-                "keyframes": [
-                  {
-                    "id": "k002r",
-                    "position": 0,
-                    "connectedRight": true,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 1
-                  },
-                  {
-                    "id": "k002s",
-                    "position": 0.8,
-                    "connectedRight": false,
-                    "handles": [
-                      0.25,
-                      1,
-                      0.45,
-                      0
-                    ],
-                    "type": "bezier",
-                    "value": 0
-                  }
-                ]
-              }
-            },
-            "trackIdByPropPath": {
-              "[\"fade\"]": "t002q"
+              "[\"progress\"]": "t000l",
+              "[\"dip\"]": "t000o",
+              "[\"lift\"]": "t000s"
             }
           }
         }
@@ -1216,12 +396,12 @@
         "tracksByObject": {
           "Camera": {
             "trackData": {
-              "t002t": {
+              "t000v": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Camera:[\"zoom\"]",
                 "keyframes": [
                   {
-                    "id": "k002u",
+                    "id": "k000w",
                     "position": 0,
                     "connectedRight": true,
                     "handles": [
@@ -1234,7 +414,7 @@
                     "value": 1.16
                   },
                   {
-                    "id": "k002v",
+                    "id": "k000x",
                     "position": 5.6,
                     "connectedRight": false,
                     "handles": [
@@ -1248,12 +428,12 @@
                   }
                 ]
               },
-              "t002w": {
+              "t000y": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Camera:[\"tilt\"]",
                 "keyframes": [
                   {
-                    "id": "k002x",
+                    "id": "k000z",
                     "position": 0,
                     "connectedRight": true,
                     "handles": [
@@ -1266,7 +446,7 @@
                     "value": 24
                   },
                   {
-                    "id": "k002y",
+                    "id": "k0010",
                     "position": 5.6,
                     "connectedRight": false,
                     "handles": [
@@ -1280,12 +460,12 @@
                   }
                 ]
               },
-              "t002z": {
+              "t0011": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Camera:[\"turn\"]",
                 "keyframes": [
                   {
-                    "id": "k0030",
+                    "id": "k0012",
                     "position": 0,
                     "connectedRight": true,
                     "handles": [
@@ -1298,7 +478,7 @@
                     "value": -16
                   },
                   {
-                    "id": "k0031",
+                    "id": "k0013",
                     "position": 5.6,
                     "connectedRight": false,
                     "handles": [
@@ -1312,12 +492,12 @@
                   }
                 ]
               },
-              "t0032": {
+              "t0014": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Camera:[\"x\"]",
                 "keyframes": [
                   {
-                    "id": "k0033",
+                    "id": "k0015",
                     "position": 0,
                     "connectedRight": true,
                     "handles": [
@@ -1330,7 +510,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k0034",
+                    "id": "k0016",
                     "position": 7.2,
                     "connectedRight": true,
                     "handles": [
@@ -1343,7 +523,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k0035",
+                    "id": "k0017",
                     "position": 8.6,
                     "connectedRight": false,
                     "handles": [
@@ -1357,12 +537,12 @@
                   }
                 ]
               },
-              "t0036": {
+              "t0018": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Camera:[\"y\"]",
                 "keyframes": [
                   {
-                    "id": "k0037",
+                    "id": "k0019",
                     "position": 0,
                     "connectedRight": true,
                     "handles": [
@@ -1375,7 +555,7 @@
                     "value": 26
                   },
                   {
-                    "id": "k0038",
+                    "id": "k001a",
                     "position": 5.6,
                     "connectedRight": false,
                     "handles": [
@@ -1391,21 +571,21 @@
               }
             },
             "trackIdByPropPath": {
-              "[\"zoom\"]": "t002t",
-              "[\"tilt\"]": "t002w",
-              "[\"turn\"]": "t002z",
-              "[\"x\"]": "t0032",
-              "[\"y\"]": "t0036"
+              "[\"zoom\"]": "t000v",
+              "[\"tilt\"]": "t000y",
+              "[\"turn\"]": "t0011",
+              "[\"x\"]": "t0014",
+              "[\"y\"]": "t0018"
             }
           },
           "Brief": {
             "trackData": {
-              "t0039": {
+              "t001b": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Brief:[\"opacity\"]",
                 "keyframes": [
                   {
-                    "id": "k003a",
+                    "id": "k001c",
                     "position": 0,
                     "connectedRight": true,
                     "handles": [
@@ -1418,7 +598,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k003b",
+                    "id": "k001d",
                     "position": 0.6,
                     "connectedRight": true,
                     "handles": [
@@ -1431,7 +611,7 @@
                     "value": 1
                   },
                   {
-                    "id": "k003c",
+                    "id": "k001e",
                     "position": 2.7,
                     "connectedRight": true,
                     "handles": [
@@ -1444,7 +624,7 @@
                     "value": 1
                   },
                   {
-                    "id": "k003d",
+                    "id": "k001f",
                     "position": 3.4,
                     "connectedRight": false,
                     "handles": [
@@ -1458,12 +638,12 @@
                   }
                 ]
               },
-              "t003e": {
+              "t001g": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Brief:[\"y\"]",
                 "keyframes": [
                   {
-                    "id": "k003f",
+                    "id": "k001h",
                     "position": 0,
                     "connectedRight": true,
                     "handles": [
@@ -1476,7 +656,7 @@
                     "value": 22
                   },
                   {
-                    "id": "k003g",
+                    "id": "k001i",
                     "position": 0.6,
                     "connectedRight": true,
                     "handles": [
@@ -1489,7 +669,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k003h",
+                    "id": "k001j",
                     "position": 2.7,
                     "connectedRight": true,
                     "handles": [
@@ -1502,7 +682,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k003i",
+                    "id": "k001k",
                     "position": 3.4,
                     "connectedRight": false,
                     "handles": [
@@ -1516,12 +696,12 @@
                   }
                 ]
               },
-              "t003j": {
+              "t001l": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Brief:[\"scale\"]",
                 "keyframes": [
                   {
-                    "id": "k003k",
+                    "id": "k001m",
                     "position": 0,
                     "connectedRight": true,
                     "handles": [
@@ -1534,7 +714,7 @@
                     "value": 1
                   },
                   {
-                    "id": "k003l",
+                    "id": "k001n",
                     "position": 2.7,
                     "connectedRight": true,
                     "handles": [
@@ -1547,7 +727,7 @@
                     "value": 1
                   },
                   {
-                    "id": "k003m",
+                    "id": "k001o",
                     "position": 3.4,
                     "connectedRight": false,
                     "handles": [
@@ -1561,12 +741,12 @@
                   }
                 ]
               },
-              "t003n": {
+              "t001p": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Brief:[\"typed\"]",
                 "keyframes": [
                   {
-                    "id": "k003o",
+                    "id": "k001q",
                     "position": 0.5,
                     "connectedRight": true,
                     "handles": [
@@ -1579,7 +759,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k003p",
+                    "id": "k001r",
                     "position": 2.3,
                     "connectedRight": false,
                     "handles": [
@@ -1595,20 +775,20 @@
               }
             },
             "trackIdByPropPath": {
-              "[\"opacity\"]": "t0039",
-              "[\"y\"]": "t003e",
-              "[\"scale\"]": "t003j",
-              "[\"typed\"]": "t003n"
+              "[\"opacity\"]": "t001b",
+              "[\"y\"]": "t001g",
+              "[\"scale\"]": "t001l",
+              "[\"typed\"]": "t001p"
             }
           },
           "Frame": {
             "trackData": {
-              "t003q": {
+              "t001s": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Frame:[\"opacity\"]",
                 "keyframes": [
                   {
-                    "id": "k003r",
+                    "id": "k001t",
                     "position": 2.4,
                     "connectedRight": true,
                     "handles": [
@@ -1621,7 +801,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k003s",
+                    "id": "k001u",
                     "position": 3.1,
                     "connectedRight": false,
                     "handles": [
@@ -1635,12 +815,12 @@
                   }
                 ]
               },
-              "t003t": {
+              "t001v": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Frame:[\"draw\"]",
                 "keyframes": [
                   {
-                    "id": "k003u",
+                    "id": "k001w",
                     "position": 2.4,
                     "connectedRight": true,
                     "handles": [
@@ -1653,7 +833,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k003v",
+                    "id": "k001x",
                     "position": 4.2,
                     "connectedRight": false,
                     "handles": [
@@ -1667,12 +847,12 @@
                   }
                 ]
               },
-              "t003w": {
+              "t001y": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Frame:[\"lift\"]",
                 "keyframes": [
                   {
-                    "id": "k003x",
+                    "id": "k001z",
                     "position": 5,
                     "connectedRight": true,
                     "handles": [
@@ -1685,7 +865,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k003y",
+                    "id": "k0020",
                     "position": 7.4,
                     "connectedRight": false,
                     "handles": [
@@ -1701,19 +881,19 @@
               }
             },
             "trackIdByPropPath": {
-              "[\"opacity\"]": "t003q",
-              "[\"draw\"]": "t003t",
-              "[\"lift\"]": "t003w"
+              "[\"opacity\"]": "t001s",
+              "[\"draw\"]": "t001v",
+              "[\"lift\"]": "t001y"
             }
           },
           "Captions": {
             "trackData": {
-              "t003z": {
+              "t0021": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Captions:[\"at\"]",
                 "keyframes": [
                   {
-                    "id": "k0040",
+                    "id": "k0022",
                     "position": 0,
                     "connectedRight": true,
                     "handles": [
@@ -1726,7 +906,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k0041",
+                    "id": "k0023",
                     "position": 2.6,
                     "connectedRight": true,
                     "handles": [
@@ -1739,7 +919,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k0042",
+                    "id": "k0024",
                     "position": 3.3,
                     "connectedRight": true,
                     "handles": [
@@ -1752,7 +932,7 @@
                     "value": 1
                   },
                   {
-                    "id": "k0043",
+                    "id": "k0025",
                     "position": 5.2,
                     "connectedRight": true,
                     "handles": [
@@ -1765,7 +945,7 @@
                     "value": 1
                   },
                   {
-                    "id": "k0044",
+                    "id": "k0026",
                     "position": 5.9,
                     "connectedRight": true,
                     "handles": [
@@ -1778,7 +958,7 @@
                     "value": 2
                   },
                   {
-                    "id": "k0045",
+                    "id": "k0027",
                     "position": 7.6,
                     "connectedRight": true,
                     "handles": [
@@ -1791,7 +971,7 @@
                     "value": 2
                   },
                   {
-                    "id": "k0046",
+                    "id": "k0028",
                     "position": 8.3,
                     "connectedRight": false,
                     "handles": [
@@ -1807,17 +987,17 @@
               }
             },
             "trackIdByPropPath": {
-              "[\"at\"]": "t003z"
+              "[\"at\"]": "t0021"
             }
           },
           "Live": {
             "trackData": {
-              "t0047": {
+              "t0029": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Live:[\"opacity\"]",
                 "keyframes": [
                   {
-                    "id": "k0048",
+                    "id": "k002a",
                     "position": 8.4,
                     "connectedRight": true,
                     "handles": [
@@ -1830,7 +1010,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k0049",
+                    "id": "k002b",
                     "position": 9.2,
                     "connectedRight": false,
                     "handles": [
@@ -1844,12 +1024,12 @@
                   }
                 ]
               },
-              "t004a": {
+              "t002c": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Live:[\"scale\"]",
                 "keyframes": [
                   {
-                    "id": "k004b",
+                    "id": "k002d",
                     "position": 8.4,
                     "connectedRight": true,
                     "handles": [
@@ -1862,7 +1042,7 @@
                     "value": 0.8
                   },
                   {
-                    "id": "k004c",
+                    "id": "k002e",
                     "position": 9.2,
                     "connectedRight": false,
                     "handles": [
@@ -1878,18 +1058,18 @@
               }
             },
             "trackIdByPropPath": {
-              "[\"opacity\"]": "t0047",
-              "[\"scale\"]": "t004a"
+              "[\"opacity\"]": "t0029",
+              "[\"scale\"]": "t002c"
             }
           },
           "Phone": {
             "trackData": {
-              "t004d": {
+              "t002f": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Phone:[\"opacity\"]",
                 "keyframes": [
                   {
-                    "id": "k004e",
+                    "id": "k002g",
                     "position": 7.4,
                     "connectedRight": true,
                     "handles": [
@@ -1902,7 +1082,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k004f",
+                    "id": "k002h",
                     "position": 8.4,
                     "connectedRight": false,
                     "handles": [
@@ -1916,12 +1096,12 @@
                   }
                 ]
               },
-              "t004g": {
+              "t002i": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Phone:[\"x\"]",
                 "keyframes": [
                   {
-                    "id": "k004h",
+                    "id": "k002j",
                     "position": 7.4,
                     "connectedRight": true,
                     "handles": [
@@ -1934,7 +1114,7 @@
                     "value": 140
                   },
                   {
-                    "id": "k004i",
+                    "id": "k002k",
                     "position": 8.6,
                     "connectedRight": false,
                     "handles": [
@@ -1948,12 +1128,12 @@
                   }
                 ]
               },
-              "t004j": {
+              "t002l": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Phone:[\"rotate\"]",
                 "keyframes": [
                   {
-                    "id": "k004k",
+                    "id": "k002m",
                     "position": 7.4,
                     "connectedRight": true,
                     "handles": [
@@ -1966,7 +1146,7 @@
                     "value": 9
                   },
                   {
-                    "id": "k004l",
+                    "id": "k002n",
                     "position": 8.6,
                     "connectedRight": false,
                     "handles": [
@@ -1982,19 +1162,19 @@
               }
             },
             "trackIdByPropPath": {
-              "[\"opacity\"]": "t004d",
-              "[\"x\"]": "t004g",
-              "[\"rotate\"]": "t004j"
+              "[\"opacity\"]": "t002f",
+              "[\"x\"]": "t002i",
+              "[\"rotate\"]": "t002l"
             }
           },
           "Nav": {
             "trackData": {
-              "t004m": {
+              "t002o": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Nav:[\"opacity\"]",
                 "keyframes": [
                   {
-                    "id": "k004n",
+                    "id": "k002p",
                     "position": 3.4,
                     "connectedRight": true,
                     "handles": [
@@ -2007,7 +1187,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k004o",
+                    "id": "k002q",
                     "position": 4,
                     "connectedRight": false,
                     "handles": [
@@ -2021,12 +1201,12 @@
                   }
                 ]
               },
-              "t004p": {
+              "t002r": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Nav:[\"y\"]",
                 "keyframes": [
                   {
-                    "id": "k004q",
+                    "id": "k002s",
                     "position": 3.4,
                     "connectedRight": true,
                     "handles": [
@@ -2039,7 +1219,7 @@
                     "value": 26
                   },
                   {
-                    "id": "k004r",
+                    "id": "k002t",
                     "position": 4.1,
                     "connectedRight": false,
                     "handles": [
@@ -2053,12 +1233,12 @@
                   }
                 ]
               },
-              "t004s": {
+              "t002u": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Nav:[\"fill\"]",
                 "keyframes": [
                   {
-                    "id": "k004t",
+                    "id": "k002v",
                     "position": 5.6,
                     "connectedRight": true,
                     "handles": [
@@ -2071,7 +1251,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k004u",
+                    "id": "k002w",
                     "position": 6.4,
                     "connectedRight": false,
                     "handles": [
@@ -2087,19 +1267,19 @@
               }
             },
             "trackIdByPropPath": {
-              "[\"opacity\"]": "t004m",
-              "[\"y\"]": "t004p",
-              "[\"fill\"]": "t004s"
+              "[\"opacity\"]": "t002o",
+              "[\"y\"]": "t002r",
+              "[\"fill\"]": "t002u"
             }
           },
           "Title": {
             "trackData": {
-              "t004v": {
+              "t002x": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Title:[\"opacity\"]",
                 "keyframes": [
                   {
-                    "id": "k004w",
+                    "id": "k002y",
                     "position": 3.6,
                     "connectedRight": true,
                     "handles": [
@@ -2112,7 +1292,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k004x",
+                    "id": "k002z",
                     "position": 4.2,
                     "connectedRight": false,
                     "handles": [
@@ -2126,12 +1306,12 @@
                   }
                 ]
               },
-              "t004y": {
+              "t0030": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Title:[\"y\"]",
                 "keyframes": [
                   {
-                    "id": "k004z",
+                    "id": "k0031",
                     "position": 3.6,
                     "connectedRight": true,
                     "handles": [
@@ -2144,7 +1324,7 @@
                     "value": 26
                   },
                   {
-                    "id": "k0050",
+                    "id": "k0032",
                     "position": 4.3,
                     "connectedRight": false,
                     "handles": [
@@ -2158,12 +1338,12 @@
                   }
                 ]
               },
-              "t0051": {
+              "t0033": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Title:[\"fill\"]",
                 "keyframes": [
                   {
-                    "id": "k0052",
+                    "id": "k0034",
                     "position": 5.9,
                     "connectedRight": true,
                     "handles": [
@@ -2176,7 +1356,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k0053",
+                    "id": "k0035",
                     "position": 6.7,
                     "connectedRight": false,
                     "handles": [
@@ -2192,19 +1372,19 @@
               }
             },
             "trackIdByPropPath": {
-              "[\"opacity\"]": "t004v",
-              "[\"y\"]": "t004y",
-              "[\"fill\"]": "t0051"
+              "[\"opacity\"]": "t002x",
+              "[\"y\"]": "t0030",
+              "[\"fill\"]": "t0033"
             }
           },
           "Image": {
             "trackData": {
-              "t0054": {
+              "t0036": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Image:[\"opacity\"]",
                 "keyframes": [
                   {
-                    "id": "k0055",
+                    "id": "k0037",
                     "position": 3.8,
                     "connectedRight": true,
                     "handles": [
@@ -2217,7 +1397,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k0056",
+                    "id": "k0038",
                     "position": 4.4,
                     "connectedRight": false,
                     "handles": [
@@ -2231,12 +1411,12 @@
                   }
                 ]
               },
-              "t0057": {
+              "t0039": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Image:[\"y\"]",
                 "keyframes": [
                   {
-                    "id": "k0058",
+                    "id": "k003a",
                     "position": 3.8,
                     "connectedRight": true,
                     "handles": [
@@ -2249,7 +1429,7 @@
                     "value": 26
                   },
                   {
-                    "id": "k0059",
+                    "id": "k003b",
                     "position": 4.5,
                     "connectedRight": false,
                     "handles": [
@@ -2263,12 +1443,12 @@
                   }
                 ]
               },
-              "t005a": {
+              "t003c": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Image:[\"fill\"]",
                 "keyframes": [
                   {
-                    "id": "k005b",
+                    "id": "k003d",
                     "position": 6.2,
                     "connectedRight": true,
                     "handles": [
@@ -2281,7 +1461,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k005c",
+                    "id": "k003e",
                     "position": 7,
                     "connectedRight": false,
                     "handles": [
@@ -2297,19 +1477,19 @@
               }
             },
             "trackIdByPropPath": {
-              "[\"opacity\"]": "t0054",
-              "[\"y\"]": "t0057",
-              "[\"fill\"]": "t005a"
+              "[\"opacity\"]": "t0036",
+              "[\"y\"]": "t0039",
+              "[\"fill\"]": "t003c"
             }
           },
           "Card 1": {
             "trackData": {
-              "t005d": {
+              "t003f": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Card 1:[\"opacity\"]",
                 "keyframes": [
                   {
-                    "id": "k005e",
+                    "id": "k003g",
                     "position": 4,
                     "connectedRight": true,
                     "handles": [
@@ -2322,7 +1502,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k005f",
+                    "id": "k003h",
                     "position": 4.6,
                     "connectedRight": false,
                     "handles": [
@@ -2336,12 +1516,12 @@
                   }
                 ]
               },
-              "t005g": {
+              "t003i": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Card 1:[\"y\"]",
                 "keyframes": [
                   {
-                    "id": "k005h",
+                    "id": "k003j",
                     "position": 4,
                     "connectedRight": true,
                     "handles": [
@@ -2354,7 +1534,7 @@
                     "value": 26
                   },
                   {
-                    "id": "k005i",
+                    "id": "k003k",
                     "position": 4.7,
                     "connectedRight": false,
                     "handles": [
@@ -2368,12 +1548,12 @@
                   }
                 ]
               },
-              "t005j": {
+              "t003l": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Card 1:[\"fill\"]",
                 "keyframes": [
                   {
-                    "id": "k005k",
+                    "id": "k003m",
                     "position": 6.5,
                     "connectedRight": true,
                     "handles": [
@@ -2386,7 +1566,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k005l",
+                    "id": "k003n",
                     "position": 7.3,
                     "connectedRight": false,
                     "handles": [
@@ -2402,19 +1582,19 @@
               }
             },
             "trackIdByPropPath": {
-              "[\"opacity\"]": "t005d",
-              "[\"y\"]": "t005g",
-              "[\"fill\"]": "t005j"
+              "[\"opacity\"]": "t003f",
+              "[\"y\"]": "t003i",
+              "[\"fill\"]": "t003l"
             }
           },
           "Card 2": {
             "trackData": {
-              "t005m": {
+              "t003o": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Card 2:[\"opacity\"]",
                 "keyframes": [
                   {
-                    "id": "k005n",
+                    "id": "k003p",
                     "position": 4.15,
                     "connectedRight": true,
                     "handles": [
@@ -2427,7 +1607,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k005o",
+                    "id": "k003q",
                     "position": 4.75,
                     "connectedRight": false,
                     "handles": [
@@ -2441,12 +1621,12 @@
                   }
                 ]
               },
-              "t005p": {
+              "t003r": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Card 2:[\"y\"]",
                 "keyframes": [
                   {
-                    "id": "k005q",
+                    "id": "k003s",
                     "position": 4.15,
                     "connectedRight": true,
                     "handles": [
@@ -2459,7 +1639,7 @@
                     "value": 26
                   },
                   {
-                    "id": "k005r",
+                    "id": "k003t",
                     "position": 4.85,
                     "connectedRight": false,
                     "handles": [
@@ -2473,12 +1653,12 @@
                   }
                 ]
               },
-              "t005s": {
+              "t003u": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Card 2:[\"fill\"]",
                 "keyframes": [
                   {
-                    "id": "k005t",
+                    "id": "k003v",
                     "position": 6.7,
                     "connectedRight": true,
                     "handles": [
@@ -2491,7 +1671,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k005u",
+                    "id": "k003w",
                     "position": 7.5,
                     "connectedRight": false,
                     "handles": [
@@ -2507,19 +1687,19 @@
               }
             },
             "trackIdByPropPath": {
-              "[\"opacity\"]": "t005m",
-              "[\"y\"]": "t005p",
-              "[\"fill\"]": "t005s"
+              "[\"opacity\"]": "t003o",
+              "[\"y\"]": "t003r",
+              "[\"fill\"]": "t003u"
             }
           },
           "Card 3": {
             "trackData": {
-              "t005v": {
+              "t003x": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Card 3:[\"opacity\"]",
                 "keyframes": [
                   {
-                    "id": "k005w",
+                    "id": "k003y",
                     "position": 4.3,
                     "connectedRight": true,
                     "handles": [
@@ -2532,7 +1712,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k005x",
+                    "id": "k003z",
                     "position": 4.9,
                     "connectedRight": false,
                     "handles": [
@@ -2546,12 +1726,12 @@
                   }
                 ]
               },
-              "t005y": {
+              "t0040": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Card 3:[\"y\"]",
                 "keyframes": [
                   {
-                    "id": "k005z",
+                    "id": "k0041",
                     "position": 4.3,
                     "connectedRight": true,
                     "handles": [
@@ -2564,7 +1744,7 @@
                     "value": 26
                   },
                   {
-                    "id": "k0060",
+                    "id": "k0042",
                     "position": 5,
                     "connectedRight": false,
                     "handles": [
@@ -2578,12 +1758,12 @@
                   }
                 ]
               },
-              "t0061": {
+              "t0043": {
                 "type": "BasicKeyframedTrack",
                 "__debugName": "Card 3:[\"fill\"]",
                 "keyframes": [
                   {
-                    "id": "k0062",
+                    "id": "k0044",
                     "position": 6.9,
                     "connectedRight": true,
                     "handles": [
@@ -2596,7 +1776,7 @@
                     "value": 0
                   },
                   {
-                    "id": "k0063",
+                    "id": "k0045",
                     "position": 7.7,
                     "connectedRight": false,
                     "handles": [
@@ -2612,9 +1792,9 @@
               }
             },
             "trackIdByPropPath": {
-              "[\"opacity\"]": "t005v",
-              "[\"y\"]": "t005y",
-              "[\"fill\"]": "t0061"
+              "[\"opacity\"]": "t003x",
+              "[\"y\"]": "t0040",
+              "[\"fill\"]": "t0043"
             }
           }
         }
