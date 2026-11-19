@@ -8,7 +8,12 @@ import {LANE_LIMITS, LANE_SYSTEM} from '@/lib/lane';
 // time; the reply streams back a few words at a time. The key is GEMINI_API_KEY: .env.local on a computer, a
 // Worker secret on Cloudflare (`npx wrangler secret put GEMINI_API_KEY`). Without it the endpoint says Lane is offline and points to the contact page.
 
-const MODEL = 'gemini-3.8-flash';
+// Google's stable Flash models, best first. When one is overloaded (Gemini answers 503 "high demand") or
+// rate-limited, Lane asks the next, before anything has reached the visitor.
+const MODELS = ['gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite'];
+// How long a model has to start answering before Lane gives up on it and tries the next.
+const FIRST_WORD_MS = 20_000;
+const BUSY = 'Lane is busy right now. Try again in a moment, or send us a brief at /contact.';
 const OFFLINE = 'Lane is offline right now. Send us a brief at /contact and we’ll reply ourselves.';
 
 // Made on first use, so a missing key turns into the offline message rather than a crash when the route loads.
@@ -73,45 +78,64 @@ export async function POST(request: Request) {
   if (!key) return fail(503, OFFLINE);
   ai ??= new GoogleGenAI({apiKey: key});
 
-  const abort = new AbortController();
+  // Aborted when the visitor closes the chat or leaves; each model attempt also has its own first-word timer.
+  const visitor = new AbortController();
   const encoder = new TextEncoder();
   const body = new ReadableStream<Uint8Array>({
     async start(controller) {
-      try {
-        const stream = await ai!.models.generateContentStream({
-          model: MODEL,
-          contents,
-          config: {
-            systemInstruction: LANE_SYSTEM,
-            maxOutputTokens: 2048,
-            // Chat answers about a fixed set of facts: little thinking keeps replies quick.
-            thinkingConfig: {thinkingLevel: ThinkingLevel.LOW},
-            abortSignal: abort.signal,
-          },
-        });
-        let blocked = false;
-        for await (const chunk of stream) {
-          if (chunk.text) controller.enqueue(encoder.encode(chunk.text));
-          const finish = chunk.candidates?.[0]?.finishReason;
-          if (chunk.promptFeedback?.blockReason || finish === FinishReason.SAFETY || finish === FinishReason.PROHIBITED_CONTENT) blocked = true;
+      let status = 0;
+      for (const [i, model] of MODELS.entries()) {
+        const attempt = new AbortController();
+        const stop = () => attempt.abort();
+        visitor.signal.addEventListener('abort', stop);
+        const timer = setTimeout(stop, FIRST_WORD_MS);
+        let started = false;
+        try {
+          const stream = await ai!.models.generateContentStream({
+            model,
+            contents,
+            config: {
+              systemInstruction: LANE_SYSTEM,
+              maxOutputTokens: 2048,
+              // Chat answers about a fixed set of facts: little thinking keeps replies quick. Set on the first
+              // model only; the backups run with their own defaults.
+              ...(i === 0 ? {thinkingConfig: {thinkingLevel: ThinkingLevel.LOW}} : {}),
+              abortSignal: attempt.signal,
+            },
+          });
+          let blocked = false;
+          for await (const chunk of stream) {
+            if (!started) { started = true; clearTimeout(timer); }
+            if (chunk.text) controller.enqueue(encoder.encode(chunk.text));
+            const finish = chunk.candidates?.[0]?.finishReason;
+            if (chunk.promptFeedback?.blockReason || finish === FinishReason.SAFETY || finish === FinishReason.PROHIBITED_CONTENT) blocked = true;
+          }
+          if (blocked) controller.enqueue(encoder.encode('\n\nI can’t help with that one. For anything about your project, send us a brief at /contact.'));
+          controller.close();
+          return;
+        } catch (error) {
+          if (visitor.signal.aborted) return;
+          status = error instanceof ApiError ? error.status : attempt.signal.aborted ? 504 : 0;
+          console.error('[lane]', model, error instanceof ApiError ? `${error.status} ${error.message}` : attempt.signal.aborted ? 'no answer in time' : error);
+          // Once words have reached the visitor, a new model can't take over mid-reply.
+          if (started) break;
+          // Overloaded, rate-limited, failing or silent: try the next model. Anything else won't improve by switching.
+          if (![429, 500, 503, 504].includes(status)) break;
+        } finally {
+          clearTimeout(timer);
+          visitor.signal.removeEventListener('abort', stop);
         }
-        if (blocked) controller.enqueue(encoder.encode('\n\nI can’t help with that one. For anything about your project, send us a brief at /contact.'));
-        controller.close();
-      } catch (error) {
-        if (abort.signal.aborted) return;
-        // The status line is already sent, so the error travels as a marked line the chat window recognises.
-        const status = error instanceof ApiError ? error.status : 0;
-        console.error('[lane]', error instanceof ApiError ? `${error.status} ${error.message}` : error);
-        const message =
-          status === 429 ? 'Lane is busy. Try again in a moment.'
-          : status === 400 || status === 401 || status === 403 || status === 0 ? OFFLINE
-          : 'Something went wrong. Try again, or send us a brief at /contact.';
-        controller.enqueue(encoder.encode(`\u0000${message}`));
-        controller.close();
       }
+      // The status line is already sent, so the error travels as a marked line the chat window recognises.
+      const message =
+        [429, 500, 503, 504].includes(status) ? BUSY
+        : status === 400 || status === 401 || status === 403 || status === 0 ? OFFLINE
+        : 'Something went wrong. Try again, or send us a brief at /contact.';
+      controller.enqueue(encoder.encode(`\u0000${message}`));
+      controller.close();
     },
     cancel() {
-      abort.abort();
+      visitor.abort();
     },
   });
 
