@@ -23,10 +23,13 @@ export type Job = {
   showStart: boolean;
   /** ms after the last cell locks before the job hands over and fades. */
   hold: number;
+  /** ms the job's cells take to fade in over what they replace, and to fade out once it hands over. */
+  fadeIn?: number;
   fade: number;
   onStart?: () => void;
   onSettle?: () => void;
   settleAt: number;
+  startedAt: number;
   started: boolean;
   settled: boolean;
 };
@@ -50,12 +53,8 @@ const RING = Array.from({length: HUES}, (_, i) => {
 });
 
 const clamp01 = (t: number) => (t < 0 ? 0 : t > 1 ? 1 : t);
-const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-// Arrives a touch past the mark and settles back, so each cell reads as locking into place.
-const easeOutBack = (t: number) => {
-  const c = 1.4;
-  return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2);
-};
+// Starts and lands with no speed at all and no overshoot, so the swarm glides rather than snaps.
+const smoother = (t: number) => t * t * t * (t * (t * 6 - 15) + 10);
 
 const channels = (css: string): [number, number, number] => {
   const n = css.match(/[\d.]+/g)?.map(Number) ?? [0, 0, 0];
@@ -102,9 +101,9 @@ export class NanoEngine {
     );
   }
 
-  run(job: Omit<Job, 'settleAt' | 'started' | 'settled'>) {
+  run(job: Omit<Job, 'settleAt' | 'startedAt' | 'started' | 'settled'>) {
     const last = job.cells.reduce((m, c) => Math.max(m, c.start + c.dur), performance.now());
-    this.jobs.push({...job, settleAt: last + job.hold, started: false, settled: false});
+    this.jobs.push({...job, settleAt: last + job.hold, startedAt: 0, started: false, settled: false});
     this.readColors();
     if (!this.raf) this.raf = requestAnimationFrame(this.frame);
   }
@@ -126,11 +125,13 @@ export class NanoEngine {
     ctx.setTransform(this.ratio, 0, 0, this.ratio, 0, 0);
 
     for (const job of this.jobs) {
-      if (!job.started) { job.started = true; job.onStart?.(); }
+      if (!job.started) { job.started = true; job.startedAt = now; job.onStart?.(); }
       if (!job.settled && now >= job.settleAt) { job.settled = true; job.onSettle?.(); }
-      const fadeOut = job.settled ? 1 - clamp01((now - job.settleAt) / job.fade) : 1;
+      // Cross-fades both ways: in over what the cells replace, out under what takes over from them.
+      const fadeIn = job.fadeIn ? smoother(clamp01((now - job.startedAt) / job.fadeIn)) : 1;
+      const fadeOut = job.settled ? 1 - smoother(clamp01((now - job.settleAt) / job.fade)) : 1;
       if (fadeOut <= 0) continue;
-      this.draw(job, now, fadeOut);
+      this.draw(job, now, fadeIn * fadeOut);
     }
     this.jobs = this.jobs.filter((j) => !j.settled || now - j.settleAt < j.fade);
 
@@ -163,24 +164,24 @@ export class NanoEngine {
         if (!job.showStart) continue;
         // Waiting to leave: it charges up in the last moments before it goes.
         x = c.sx; y = c.sy;
-        lit = clamp01(1 + (now - c.start) / 160);
+        lit = smoother(clamp01(1 + (now - c.start) / 280));
         alpha = job.rest + (1 - job.rest) * lit;
       } else if (t < 1) {
-        const e = easeOutBack(easeInOut(t) * 0.92 + t * 0.08);
+        const e = smoother(t);
         const u = 1 - e;
         x = u * u * c.sx + 2 * u * e * c.cx + e * e * c.tx;
         y = u * u * c.sy + 2 * u * e * c.cy + e * e * c.ty;
         const arc = Math.sin(Math.PI * Math.min(t, 1));
-        size = job.size * (1 - 0.3 * arc);
+        size = job.size * (1 - 0.2 * arc);
         angle = c.spin * arc;
         lit = 0.55 + 0.45 * arc;
-        alpha = job.showStart ? 1 : clamp01(t * 4);
+        alpha = job.showStart ? 1 : smoother(clamp01(t * 3));
       } else {
-        // Locked in: a short flash, then it rests.
+        // Landed: the colour cools off gently, with only a breath of swell, rather than a hard flash.
         x = c.tx; y = c.ty;
         const since = now - (c.start + c.dur);
-        lit = Math.max(0, 1 - since / 320);
-        size = job.size * (1 + 0.35 * lit);
+        lit = 0.75 * (1 - smoother(clamp01(since / 520)));
+        size = job.size * (1 + 0.08 * lit);
         alpha = job.rest + (1 - job.rest) * lit;
       }
       alpha *= fadeOut;
@@ -285,7 +286,7 @@ export function assembleCells(to: Point[], width: number, height: number, now: n
       cx: (fx + t.x) / 2 + rand(-60, 60), cy: (fy + t.y) / 2 + rand(-80, 80),
       start: now + ((t.x - left) / span) * 560 + rand(0, 200),
       dur: rand(700, 1100),
-      spin: rand(-1, 1) * Math.PI,
+      spin: rand(-0.45, 0.45) * Math.PI,
     };
   });
 }
@@ -308,9 +309,9 @@ export function morphCells(from: Point[], to: Point[], fontSize: number, now: nu
       sx: s.x, sy: s.y, tx: t.x, ty: t.y,
       cx: (s.x + t.x) / 2 + rand(-0.12, 0.12) * span,
       cy: (s.y + t.y) / 2 + lift,
-      start: now + sweep * 620 + rand(0, 160),
-      dur: rand(620, 980),
-      spin: rand(-1, 1) * Math.PI,
+      start: now + 220 + sweep * 700 + rand(0, 180),
+      dur: rand(780, 1150),
+      spin: rand(-0.45, 0.45) * Math.PI,
     });
   }
   return cells;
@@ -335,7 +336,7 @@ export function buildCells(box: DOMRect, origin: DOMRect, step: number, now: num
         cx: (fx + tx) / 2 + rand(-40, 40), cy: Math.max(fy, ty) + rand(10, 60),
         start: now + order * 520 + rand(0, 120),
         dur: rand(520, 820),
-        spin: rand(-1, 1) * Math.PI,
+        spin: rand(-0.45, 0.45) * Math.PI,
       });
     }
   }

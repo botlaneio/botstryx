@@ -43,8 +43,8 @@ export function NanoAssemble({children, delay = 0}: {children: React.ReactNode; 
           size: step * 0.9,
           rest: 1,
           showStart: false,
-          hold: 90,
-          fade: 300,
+          hold: 60,
+          fade: 520,
           onSettle: show,
         });
       }, delay + 120);

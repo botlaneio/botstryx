@@ -66,8 +66,9 @@ export function NanoHeadline({staticText, phrases, className}: Props) {
         size: step * 0.9,
         rest: 1,
         showStart: true,
-        hold: 90,
-        fade: 260,
+        hold: 60,
+        fadeIn: 260,
+        fade: 520,
         // The real text steps aside the moment the cells are drawn in its place, and comes back once they settle.
         onStart: () => h1.setAttribute('data-morph', ''),
         onSettle: () => setAt(next),
