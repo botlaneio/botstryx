@@ -21,8 +21,8 @@ const PLUS = plan('care-plus');
 const RATE = plan('extra-work').amount;
 
 const FACTS: [string, string][] = [
-  [regionalMoney(CARE.id, CARE.amount), `${CARE.name}, a month`],
-  [regionalMoney(PLUS.id, PLUS.amount), `${PLUS.name}, a month`],
+  [money(CARE.amount), `${CARE.name}, a month`],
+  [money(PLUS.amount), `${PLUS.name}, a month`],
   ['1–3 hours', 'Of edits each month'],
 ];
 
