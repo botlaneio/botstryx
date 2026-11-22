@@ -10,10 +10,15 @@ import {SiteHeader} from '@/components/site/site-header';
 import {FOUNDING, money} from '@/lib/pricing';
 import {formatRegionalMoney, regionForHostname, type Region} from '@/lib/regional-pricing';
 
-export const metadata: Metadata = {
-  title: 'Pricing · botLane',
-  description: 'Websites and web apps, designed and built end to end, and the care after launch. Clear, fixed prices in US dollars.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
+  return {
+    title: 'Pricing · botLane',
+    description: region === 'in'
+      ? 'Websites and web apps for India, with clear, fixed prices in Indian rupees. GST additional where applicable.'
+      : 'Websites and web apps, designed and built end to end, and the care after launch. Clear, fixed prices in US dollars.',
+  };
+}
 
 // The words are botpro's: its Solutions page (src/app/solutions/page.tsx), which the menus call Pricing, the
 // questions beside it (src/components/services/services-faq.tsx, src/components/pricing/pricing-faq.tsx) and
@@ -43,8 +48,6 @@ const QUESTIONS: [string, string][] = [
   ['What happens after launch?', 'The site is yours. If you’d like us to look after it, Care covers hosting, updates, monitoring, backups and an hour of small edits a month. Care Plus adds more hours, faster replies, a monthly report and a quarterly design review.'],
   ['What is the AI Assistant trained on?', 'Your website and your business: your services, prices, policies and common questions. It answers visitors and hands the conversation to you when a person is needed.'],
 ];
-
-const JUMPS = [['Websites', `From ${money(2500)}`, '#websites'], ['Web Apps', `Scoping ${money(1500)}`, '#web-apps'], ['After launch', `From ${money(99)}/month`, '#after-launch']];
 
 export default async function PricingPage() {
   const requestHeaders = await headers();
