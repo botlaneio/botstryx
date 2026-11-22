@@ -5,29 +5,32 @@ import Link from 'next/link';
 
 import {ArrowRight, ArrowUpRight, Check} from '@/components/icons';
 import {AFTER, APPS, FOUNDING, PER, WEBSITES, money, type Plan} from '@/lib/pricing';
+import {formatRegionalMoney, regionalAmount, type Region} from '@/lib/regional-pricing';
 
 const pct = Math.round(FOUNDING.discount * 100);
 
 /** A plan's price. With the Founding Ten switched on, a plan it covers shows the reduced price and the full one struck through. */
-function Price({plan, founding}: {plan: Plan; founding: boolean}) {
-  const off = founding && plan.founding;
+function Price({plan, founding, region}: {plan: Plan; founding: boolean; region: Region}) {
+  const off = region === 'us' && founding && plan.founding;
+  const displayMoney = (amount: number) => region === 'us' ? money(amount) : formatRegionalMoney(amount, region);
+  const amount = regionalAmount(plan.id, plan.amount, region);
   return (
     <p className="pr-price" data-off={off}>
       {plan.from && <span className="pr-from">From</span>}
-      <b>{money(off ? plan.amount * (1 - FOUNDING.discount) : plan.amount)}</b>
-      {off && <s aria-label={`was ${money(plan.amount)}`}>{money(plan.amount)}</s>}
+      <b>{displayMoney(off ? amount * (1 - FOUNDING.discount) : amount)}</b>
+      {off && <s aria-label={`was ${displayMoney(amount)}`}>{displayMoney(amount)}</s>}
       <span className="mono">{PER[plan.per]}</span>
     </p>
   );
 }
 
 /** One plan as a column. Its rows line up with the plans beside it. */
-function PlanCard({plan, founding, step}: {plan: Plan; founding: boolean; step?: number}) {
+function PlanCard({plan, founding, region, step}: {plan: Plan; founding: boolean; region: Region; step?: number}) {
   return (
     <article className="pr-plan" data-spot={plan.spotlight}>
       <header>
         <h3>{step !== undefined && <span className="mono">Stage 0{step + 1}</span>}{plan.name}</h3>
-        <Price plan={plan} founding={founding} />
+        <Price plan={plan} founding={founding} region={region} />
       </header>
       <p className="pr-best">{plan.bestFor}</p>
       <dl className="pr-specs">
@@ -45,12 +48,12 @@ function PlanCard({plan, founding, step}: {plan: Plan; founding: boolean; step?:
 }
 
 /** Every price on one page: websites, web apps by stage, and what comes after launch. */
-export function PriceBook() {
+export function PriceBook({region = 'us'}: {region?: Region}) {
   const [founding, setFounding] = useState(false);
 
   return (
     <>
-      <div className="wrap"><div className="pr-offer">
+      {region === 'us' && <div className="wrap"><div className="pr-offer">
         <div>
           <p className="mono"><i aria-hidden />Founding Ten</p>
           <p>{pct}% off website and app builds for our first {FOUNDING.places} clients, until {FOUNDING.ends} or until the places are taken.</p>
@@ -59,7 +62,7 @@ export function PriceBook() {
           <span className="pr-track" aria-hidden><i /></span>
           Show Founding Ten prices
         </button>
-      </div></div>
+      </div></div>}
 
       <section aria-labelledby="pr-websites" className="wrap pr-block" id="websites">
         <header className="pr-head">
@@ -68,7 +71,7 @@ export function PriceBook() {
           <p>Core, Ascend and Apex. Custom design, no templates. Website prices are one-time.</p>
         </header>
         <div className="pr-plans">
-          {WEBSITES.map((p) => <PlanCard key={p.id} plan={p} founding={founding} />)}
+          {WEBSITES.map((p) => <PlanCard key={p.id} plan={p} founding={founding} region={region} />)}
         </div>
       </section>
 
@@ -79,7 +82,7 @@ export function PriceBook() {
           <p>Apps are priced by stage: plan, prove, then build. Fixed price per stage.</p>
         </header>
         <div className="pr-plans pr-stages">
-          {APPS.map((p, i) => <PlanCard key={p.id} plan={p} founding={founding} step={i} />)}
+          {APPS.map((p, i) => <PlanCard key={p.id} plan={p} founding={founding} region={region} step={i} />)}
         </div>
       </section>
 
@@ -100,7 +103,7 @@ export function PriceBook() {
                 {p.includes?.map((x) => <li key={x}><Check size={14} />{x}</li>)}
               </ul>
               <div className="pr-row-price">
-                <Price plan={p} founding={false} />
+                <Price plan={p} founding={false} region={region} />
                 <Link href={p.href} className="pr-link">{p.id === 'extra-work' ? 'Ask us' : `See ${p.name}`} <ArrowUpRight size={14} /></Link>
               </div>
             </li>
