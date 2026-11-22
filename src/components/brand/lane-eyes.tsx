@@ -62,7 +62,7 @@ type State = {
   cells: {ph: number; sx: number; sy: number; d: number; j: number}[];
 };
 
-function draw(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, S: number, st: State, t: number, dt: number, follow: boolean) {
+function draw(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, S: number, st: State, t: number, dt: number, follow: boolean, glass: boolean) {
   const R = S / 2, c = S / 2, {m, cells} = st;
   for (const k of MOODS) m[k] += ((st.mood === k ? 1 : 0) - m[k]) * Math.min(1, dt * 5);
 
@@ -97,11 +97,14 @@ function draw(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, S: numbe
   ctx.beginPath();
   ctx.arc(c, c, R, 0, Math.PI * 2);
   ctx.clip();
-  const bg = ctx.createRadialGradient(S * 0.38, S * 0.28, 0, c, c, R);
-  bg.addColorStop(0, '#1e2129');
-  bg.addColorStop(1, '#0a0b0e');
-  ctx.fillStyle = bg;
-  ctx.fillRect(0, 0, S, S);
+  // On glass (the launcher), the disc itself is the frosted page behind it, so nothing solid is painted here.
+  if (!glass) {
+    const bg = ctx.createRadialGradient(S * 0.38, S * 0.28, 0, c, c, R);
+    bg.addColorStop(0, '#1e2129');
+    bg.addColorStop(1, '#0a0b0e');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, S, S);
+  }
 
   const born = clamp((t - st.born) / 1.6);
   const widen = 1 + 0.16 * m.notice;
@@ -152,20 +155,21 @@ function draw(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, S: numbe
 
   // Shading that rounds the disc into a sphere, lit from the top left.
   const shade = ctx.createRadialGradient(c - R * 0.25, c - R * 0.35, R * 0.2, c, c, R * 1.05);
+  // Glass is rounded more lightly, so the frosted page still shows to the edge.
   shade.addColorStop(0, 'rgba(0,0,0,0)');
-  shade.addColorStop(0.65, 'rgba(0,0,0,0.08)');
-  shade.addColorStop(1, 'rgba(0,0,0,0.55)');
+  shade.addColorStop(0.65, glass ? 'rgba(0,0,0,0.04)' : 'rgba(0,0,0,0.08)');
+  shade.addColorStop(1, glass ? 'rgba(0,0,0,0.26)' : 'rgba(0,0,0,0.55)');
   ctx.fillStyle = shade;
   ctx.fillRect(0, 0, S, S);
   const sheen = ctx.createRadialGradient(c - R * 0.3, c - R * 0.55, 0, c - R * 0.3, c - R * 0.55, R * 0.75);
-  sheen.addColorStop(0, 'rgba(255,255,255,0.13)');
+  sheen.addColorStop(0, glass ? 'rgba(255,255,255,0.24)' : 'rgba(255,255,255,0.13)');
   sheen.addColorStop(1, 'rgba(255,255,255,0)');
   ctx.fillStyle = sheen;
   ctx.fillRect(0, 0, S, S);
   ctx.restore();
 }
 
-export function LaneEyes({size, mood = 'idle', follow = false, className}: {size: number; mood?: LaneMood; follow?: boolean; className?: string}) {
+export function LaneEyes({size, mood = 'idle', follow = false, glass = false, className}: {size: number; mood?: LaneMood; follow?: boolean; glass?: boolean; className?: string}) {
   const ref = useRef<HTMLCanvasElement>(null);
   const state = useRef<State | null>(null);
   const redraw = useRef<() => void>(() => {});
@@ -205,13 +209,13 @@ export function LaneEyes({size, mood = 'idle', follow = false, className}: {size
       st.born = -99;
       for (const k of MOODS) st.m[k] = st.mood === k ? 1 : 0;
       st.look = [0, 0];
-      draw(ctx, canvas, size, st, 2, 0, false);
+      draw(ctx, canvas, size, st, 2, 0, false, glass);
     };
     const tick = () => {
       frame = 0;
       const t = now(), dt = Math.min(0.05, t - last);
       last = t;
-      if (seen && !document.hidden) draw(ctx, canvas, size, st, t, dt, follow);
+      if (seen && !document.hidden) draw(ctx, canvas, size, st, t, dt, follow, glass);
       frame = requestAnimationFrame(tick);
     };
     const start = () => {
@@ -232,7 +236,7 @@ export function LaneEyes({size, mood = 'idle', follow = false, className}: {size
     };
     // The mood is read from state on each frame, so a mood change doesn't restart the drawing.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [size, follow]);
+  }, [size, follow, glass]);
 
   return <canvas ref={ref} className={className} style={{width: size, height: size}} aria-hidden />;
 }

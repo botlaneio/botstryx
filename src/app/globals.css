@@ -2753,10 +2753,13 @@ body {
   /* ================================================================== */
   /* Lane, the assistant's button in the corner (lane-launcher.tsx)      */
   /* ================================================================== */
+  /* How far Lane sits in from the screen's corner (and the chat and "Let's Talk" with it). */
+  :root { --lane-edge: 28px; }
+  @media (max-width: 640px) { :root { --lane-edge: 20px; } }
   .lane {
     position: fixed;
-    right: max(16px, env(safe-area-inset-right));
-    bottom: max(16px, env(safe-area-inset-bottom));
+    right: max(var(--lane-edge), env(safe-area-inset-right));
+    bottom: max(var(--lane-edge), env(safe-area-inset-bottom));
     z-index: 40;
     display: flex;
     align-items: center;
@@ -2771,9 +2774,15 @@ body {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: #0a0b0e;
-    /* No outline: the eyes' disc is shaded like a sphere (lane-eyes.tsx), and a tight contact shadow and a soft
-       drop lift it off the page. */
+    /* Frosted, smoked glass with no outline: the page behind is blurred and darkened enough for the eyes (lane-eyes.tsx,
+       drawn with `glass`) to read on any background, with a lit rim of light inside the top edge. A tight contact
+       shadow and a soft drop lift it off the page. */
+    background:
+      radial-gradient(120% 90% at 30% 12%, rgba(255, 255, 255, 0.16), transparent 55%),
+      radial-gradient(90% 70% at 50% 110%, light-dark(rgba(47, 85, 240, 0.22), rgba(128, 152, 255, 0.24)), transparent 70%),
+      light-dark(rgba(14, 16, 22, 0.6), rgba(28, 31, 40, 0.42));
+    -webkit-backdrop-filter: blur(14px) saturate(170%);
+    backdrop-filter: blur(14px) saturate(170%);
     box-shadow: 0 1px 2px light-dark(rgba(16, 24, 40, 0.18), rgba(0, 0, 0, 0.6)), 0 6px 14px -6px light-dark(rgba(16, 24, 40, 0.3), rgba(0, 0, 0, 0.8)), 0 20px 40px -18px light-dark(rgba(16, 24, 40, 0.42), rgba(0, 0, 0, 0.95));
     transition: box-shadow 0.3s var(--bl-ease), scale 0.3s var(--bl-ease), translate 0.3s var(--bl-ease);
   }
@@ -2837,8 +2846,8 @@ body {
   /* "Let's Talk": the voice-call invitation that pops out beside Lane a moment after the page loads. */
   .lane-hello {
     position: fixed;
-    right: calc(max(16px, env(safe-area-inset-right)) + 70px);
-    bottom: calc(max(16px, env(safe-area-inset-bottom)) + 12px);
+    right: calc(max(var(--lane-edge), env(safe-area-inset-right)) + 70px);
+    bottom: calc(max(var(--lane-edge), env(safe-area-inset-bottom)) + 12px);
     z-index: 40;
     display: inline-flex;
     align-items: center;
@@ -2868,7 +2877,7 @@ body {
   .lane-hello svg { color: var(--bl-blue); }
   .lane-hello:focus-visible { outline: 2px solid var(--color-text-primary); outline-offset: 3px; }
   @media (hover: hover) and (pointer: fine) { .lane-hello:hover { translate: -2px 0; } }
-  @media (max-width: 640px) { .lane-hello { right: calc(max(16px, env(safe-area-inset-right)) + 62px); bottom: calc(max(16px, env(safe-area-inset-bottom)) + 9px); } }
+  @media (max-width: 640px) { .lane-hello { right: calc(max(var(--lane-edge), env(safe-area-inset-right)) + 62px); bottom: calc(max(var(--lane-edge), env(safe-area-inset-bottom)) + 9px); } }
   /* While the invitation shows, it stands in for the hover label in the same spot. */
   .lane-hello[data-show] ~ .lane .lane-say { display: none; }
 
@@ -2887,8 +2896,8 @@ body {
   .lane-chat {
     --lc-hot: light-dark(#2f55f0, #8098ff);
     position: fixed;
-    right: max(16px, env(safe-area-inset-right));
-    bottom: calc(max(16px, env(safe-area-inset-bottom)) + 76px);
+    right: max(var(--lane-edge), env(safe-area-inset-right));
+    bottom: calc(max(var(--lane-edge), env(safe-area-inset-bottom)) + 76px);
     z-index: 41;
     display: grid;
     grid-template-rows: auto minmax(0, 1fr) auto auto;

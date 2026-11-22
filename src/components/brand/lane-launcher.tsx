@@ -309,7 +309,7 @@ export function LaneLauncher() {
       >
         <span className="lane-say" aria-hidden>Ask Lane</span>
         <span className="lane-disc">
-          <LaneEyes size={60} mood={hot && !open ? 'notice' : 'idle'} follow />
+          <LaneEyes size={60} mood={hot && !open ? 'notice' : 'idle'} follow glass />
         </span>
       </button>
     </ConversationProvider>
