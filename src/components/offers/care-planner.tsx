@@ -3,6 +3,7 @@
 import {useId, useState} from 'react';
 
 import {AFTER, money} from '@/lib/pricing';
+import {regionalAmount, formatRegionalMoney, type Region} from '@/lib/regional-pricing';
 
 // Which Care plan costs less for the hours of changes a site needs in a month. Every figure comes from the price
 // book: each plan's monthly price and included hours, and the hourly rate for work beyond them.
@@ -16,12 +17,17 @@ const cost = (p: typeof CARE, h: number) => p.price + Math.max(0, h - p.hours) *
 const hrs = (h: number) => `${h % 1 ? h.toFixed(1) : h} ${h === 1 ? 'hour' : 'hours'}`;
 
 /** A slider for the hours of edits a month, and the plan it points to, with the sum shown. */
-export function CarePlanner() {
+export function CarePlanner({region = 'us'}: {region?: Region}) {
+  const regional = (id: string, amount: number) => regionalAmount(id, amount, region);
+  const display = (amount: number) => region === 'in' ? formatRegionalMoney(amount, region) : money(amount);
+  const carePlan = {...CARE, price: regional('care', CARE.price)};
+  const plusPlan = {...PLUS, price: regional('care-plus', PLUS.price)};
+  const rate = regional('extra-work', RATE);
   const [hours, setHours] = useState(1);
   const id = useId();
-  const care = cost(CARE, hours);
-  const plus = cost(PLUS, hours);
-  const pick = care <= plus ? CARE : PLUS;
+  const care = carePlan.price + Math.max(0, hours - carePlan.hours) * rate;
+  const plus = plusPlan.price + Math.max(0, hours - plusPlan.hours) * rate;
+  const pick = care <= plus ? carePlan : plusPlan;
   const extra = Math.max(0, hours - pick.hours);
   const saving = Math.abs(care - plus);
 
@@ -45,20 +51,20 @@ export function CarePlanner() {
         </div>
       </div>
 
-      <div className="care-verdict" data-plan={pick === PLUS ? 'plus' : 'care'}>
+      <div className="care-verdict" data-plan={pick.name === PLUS.name ? 'plus' : 'care'}>
         <p className="mono">The plan for you</p>
         <h3 key={pick.name}>{pick.name}</h3>
         <p className="care-verdict-sum">
-          <strong>{money(cost(pick, hours))}</strong> a month
+          <strong>{display(pick.price + extra * rate)}</strong> a month
         </p>
         <ul className="care-verdict-lines">
-          <li><span>{pick.name}, {hrs(pick.hours)} included</span><span>{money(pick.price)}</span></li>
-          {extra > 0 && <li><span>{hrs(extra)} more at {money(RATE)} an hour</span><span>{money(extra * RATE)}</span></li>}
+          <li><span>{pick.name}, {hrs(pick.hours)} included</span><span>{display(pick.price)}</span></li>
+          {extra > 0 && <li><span>{hrs(extra)} more at {display(rate)} an hour</span><span>{display(extra * rate)}</span></li>}
         </ul>
         <p className="care-verdict-note">
           {saving === 0
             ? `Both plans cost the same here; ${PLUS.name} adds priority support, reports and a design review.`
-            : `${money(saving)} a month less than ${pick === CARE ? PLUS.name : CARE.name} for the same hours.`}
+            : `${display(saving)} a month less than ${pick.name === CARE.name ? PLUS.name : CARE.name} for the same hours.`}
         </p>
       </div>
     </div>

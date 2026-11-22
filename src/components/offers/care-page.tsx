@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import {headers} from 'next/headers';
+import {regionForHostname, regionalAmount, formatRegionalMoney} from '@/lib/regional-pricing';
 import {Button} from '@astryxdesign/core/Button';
 
 import {ArrowDown, ArrowRight, ArrowUpRight, Check} from '@/components/icons';
@@ -19,8 +21,8 @@ const PLUS = plan('care-plus');
 const RATE = plan('extra-work').amount;
 
 const FACTS: [string, string][] = [
-  [money(CARE.amount), `${CARE.name}, a month`],
-  [money(PLUS.amount), `${PLUS.name}, a month`],
+  [regionalMoney(CARE.id, CARE.amount), `${CARE.name}, a month`],
+  [regionalMoney(PLUS.id, PLUS.amount), `${PLUS.name}, a month`],
   ['1–3 hours', 'Of edits each month'],
 ];
 
@@ -51,13 +53,17 @@ const ASKED: [string, string][] = [
 ];
 
 /** The Care page: what looking after a live site covers, which plan fits, and what it costs. */
-export function CarePage() {
+export async function CarePage() {
+  const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
+  const regionalMoney = (id: string, amount: number) => region === 'in' ? formatRegionalMoney(regionalAmount(id, amount, region), region) : money(amount);
+  const facts: [string, string][] = [[regionalMoney(CARE.id, CARE.amount), `${CARE.name}, a month`], [regionalMoney(PLUS.id, PLUS.amount), `${PLUS.name}, a month`], FACTS[2]];
+  const asked = region === 'in' ? ASKED.filter(([q]) => !q.includes('Founding Ten')).map(([q,a]) => q.startsWith('What if I need more') ? [q, `Changes beyond your plan’s hours are billed at ${regionalMoney('extra-work', RATE)} an hour. The planner above compares the costs.`] : [q,a]) : ASKED;
   return (
     <div className="apx care">
       <div className="apx-open care-open">
         <SiteHeader />
         <main className="wrap apx-hero care-hero">
-          <p className="mono apx-tag fade-up">After launch<span aria-hidden>/</span>Care<i aria-hidden />From {money(CARE.amount)} a month</p>
+          <p className="mono apx-tag fade-up">After launch<span aria-hidden>/</span>Care<i aria-hidden />From {regionalMoney(CARE.id, CARE.amount)} a month</p>
 
           <div className="care-hero-grid">
             <h1 className="apx-title care-title">
@@ -80,7 +86,7 @@ export function CarePage() {
               </div>
             </div>
             <dl className="apx-facts">
-              {FACTS.map(([value, label]) => <div key={label}><dd>{value}</dd><dt className="mono">{label}</dt></div>)}
+              {facts.map(([value, label]) => <div key={label}><dd>{value}</dd><dt className="mono">{label}</dt></div>)}
             </dl>
           </div>
         </main>
@@ -111,7 +117,7 @@ export function CarePage() {
           <p className="mono">Find your plan</p>
           <h2 id="planner-title">Choose by the hours you’ll need.</h2>
         </header>
-        <CarePlanner />
+        <CarePlanner region={region} />
       </section>
 
       <section aria-labelledby="compare-title" className="wrap apx-block">
@@ -122,8 +128,8 @@ export function CarePage() {
         <div className="care-compare" role="table" aria-label={`${CARE.name} and ${PLUS.name} compared`}>
           <div className="care-row care-row-head" role="row">
             <span role="columnheader"><span className="sr-only">What’s included</span></span>
-            <PlanHead name={CARE.name} price={CARE.amount} line={CARE.bestFor} />
-            <PlanHead name={PLUS.name} price={PLUS.amount} line={PLUS.bestFor} spotlight />
+            <PlanHead name={CARE.name} price={regionalMoney(CARE.id, CARE.amount)} line={CARE.bestFor} />
+            <PlanHead name={PLUS.name} price={regionalMoney(PLUS.id, PLUS.amount)} line={PLUS.bestFor} spotlight />
           </div>
           {COMPARE.map(([label, a, b]) => (
             <div key={label} className="care-row" role="row">
@@ -146,15 +152,15 @@ export function CarePage() {
           <h2 id="asked-title">Four straight answers.</h2>
         </header>
         <dl className="apx-asked">
-          {ASKED.map(([q, a]) => <div key={q}><dt>{q}</dt><dd>{a}</dd></div>)}
+          {asked.map(([q, a]) => <div key={q}><dt>{q}</dt><dd>{a}</dd></div>)}
         </dl>
       </section>
 
       <section aria-labelledby="price-title" className="wrap apx-close">
         <p className="mono">{CARE.name} · A month</p>
-        <h2 id="price-title">{money(CARE.amount)}</h2>
+        <h2 id="price-title">{regionalMoney(CARE.id, CARE.amount)}</h2>
         <div className="apx-close-row">
-          <p>{PLUS.name} is {money(PLUS.amount)} a month. Tell us about the site you’d like us to look after.</p>
+          <p>{PLUS.name} is {regionalMoney(PLUS.id, PLUS.amount)} a month. Tell us about the site you’d like us to look after.</p>
           <div className="apx-close-go">
             <Button label="Start Care" variant="primary" size="lg" href={CONTACT}>
               <span className="inline-flex items-center gap-2.5">Start Care <ArrowUpRight /></span>
@@ -205,12 +211,12 @@ function Dot() {
   return <span className="care-dot" aria-hidden />;
 }
 
-function PlanHead({name, price, line, spotlight}: {name: string; price: number; line: string; spotlight?: boolean}) {
+function PlanHead({name, price, line, spotlight}: {name: string; price: string; line: string; spotlight?: boolean}) {
   return (
     <span role="columnheader" className="care-plan" data-spotlight={spotlight || undefined}>
       {spotlight && <span className="mono care-plan-flag">More hours and reporting</span>}
       <strong>{name}</strong>
-      <span className="care-plan-price">{money(price)}<small> a month</small></span>
+      <span className="care-plan-price">{price}<small> a month</small></span>
       <span className="care-plan-line">{line}</span>
     </span>
   );
