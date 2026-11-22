@@ -13,7 +13,6 @@ const PLUS = {name: plan('care-plus').name, price: plan('care-plus').amount, hou
 const RATE = plan('extra-work').amount;
 const MAX = 8;
 
-const cost = (p: typeof CARE, h: number) => p.price + Math.max(0, h - p.hours) * RATE;
 const hrs = (h: number) => `${h % 1 ? h.toFixed(1) : h} ${h === 1 ? 'hour' : 'hours'}`;
 
 /** A slider for the hours of edits a month, and the plan it points to, with the sum shown. */
