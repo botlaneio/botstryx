@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import {headers} from 'next/headers';
+import {regionForHostname, regionalAmount, formatRegionalMoney} from '@/lib/regional-pricing';
 import {Button} from '@astryxdesign/core/Button';
 
 import {ArrowDown, ArrowRight, ArrowUpRight, Check} from '@/components/icons';
@@ -49,13 +51,15 @@ const ROWS: [string, [string, Cell, Cell, Cell][]][] = [
 const spec = (id: string, key: string) => WEBSITES.find((p) => p.id === id)?.specs?.find(([k]) => k === key)?.[1] ?? '';
 
 /** The Websites hub: the three packages side by side, every difference row by row, and where to go next. */
-export function WebsitesPage() {
+export async function WebsitesPage() {
+  const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
+  const regionalMoney = (id: string, amount: number) => region === 'in' ? formatRegionalMoney(regionalAmount(id, amount, region), region) : money(amount);
   return (
     <div className="apx hub">
       <div className="apx-open">
         <SiteHeader />
         <main className="wrap apx-hero">
-          <p className="mono apx-tag fade-up">Solutions<span aria-hidden>/</span>Websites<i aria-hidden />From {money(WEBSITES[0].amount)}</p>
+          <p className="mono apx-tag fade-up">Solutions<span aria-hidden>/</span>Websites<i aria-hidden />From {regionalMoney(WEBSITES[0].id, WEBSITES[0].amount)}</p>
 
           <h1 className="apx-title hub-title">
             <span className="line"><span className="rise" style={{'--i': 0} as React.CSSProperties}>Three ways</span></span>
@@ -75,7 +79,7 @@ export function WebsitesPage() {
               </div>
             </div>
             <dl className="apx-facts">
-              {WEBSITES.map((p) => <div key={p.id}><dd>{money(p.amount)}</dd><dt className="mono">{p.name}</dt></div>)}
+              {WEBSITES.map((p) => <div key={p.id}><dd>{regionalMoney(p.id, p.amount)}</dd><dt className="mono">{p.name}</dt></div>)}
             </dl>
           </div>
         </main>
@@ -94,7 +98,7 @@ export function WebsitesPage() {
                 <p className="mono ws-fit"><span className="num-badge">0{i + 1}</span>{w.fit}</p>
                 <h3><Link href={p.href}>{p.name}</Link></h3>
                 <p className="ws-tagline">{w.tagline}</p>
-                <p className="ws-price"><b>{money(p.amount)}</b> <span className="mono">one-time</span></p>
+                <p className="ws-price"><b>{regionalMoney(p.id, p.amount)}</b> <span className="mono">one-time</span></p>
                 <p className="mono ws-meta">{spec(p.id, 'Pages')} pages · {spec(p.id, 'Timeline')}</p>
                 <ul>
                   {(p.includes ?? []).slice(0, 4).map((x) => <li key={x}><Check size={15} />{x}</li>)}
@@ -125,7 +129,7 @@ export function WebsitesPage() {
                 {WEBSITES.map((p) => (
                   <th key={p.id} scope="col">
                     <Link href={p.href}>{p.name}</Link>
-                    <span className="mono">{money(p.amount)}</span>
+                    <span className="mono">{regionalMoney(p.id, p.amount)}</span>
                   </th>
                 ))}
               </tr>
@@ -161,7 +165,7 @@ export function WebsitesPage() {
           <Link href="/care" className="hub-card">
             <p className="mono">After launch</p>
             <p className="hub-card-title">Care keeps it fast, safe and current.</p>
-            <p>Hosting, security updates, backups and small edits, handled every month. Optional, and separate from the build. From {money(CARE.amount)} a month.</p>
+            <p>Hosting, security updates, backups and small edits, handled every month. Optional, and separate from the build. From {regionalMoney(CARE.id, CARE.amount)} a month.</p>
             <span className="apx-more">About Care <ArrowRight size={14} /></span>
           </Link>
         </div>
