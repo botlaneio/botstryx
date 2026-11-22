@@ -1,3 +1,4 @@
+// Rebuild marker: refresh the PR #40 preview after reconnecting GitHub.
 // Cloudflare branch previews use the same OpenNext build configuration.
 import {defineCloudflareConfig} from '@opennextjs/cloudflare';
 
