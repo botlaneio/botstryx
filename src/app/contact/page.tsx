@@ -1,3 +1,5 @@
+import {headers} from 'next/headers';
+import {regionForHostname} from '@/lib/regional-pricing';
 import {Suspense} from 'react';
 import type {Metadata} from 'next';
 
@@ -31,7 +33,8 @@ async function Brief({searchParams}: {searchParams: Query}) {
   return <BriefForm initial={{brief: one(q.brief).slice(0, 4000), need: isNeed(need) ? need : ''}} />;
 }
 
-export default function ContactPage({searchParams}: {searchParams: Query}) {
+export default async function ContactPage({searchParams}: {searchParams: Query}) {
+  const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
   return (
     <div className="ct">
       <SiteHeader />
@@ -43,6 +46,7 @@ export default function ContactPage({searchParams}: {searchParams: Query}) {
             <span className="line"><span className="rise" style={{'--i': 1} as React.CSSProperties}>project.</span></span>
           </h1>
           <p className="ct-lede fade-up">Tell us about your project. We read every brief ourselves and reply with honest advice.</p>
+          {region === 'in' && <p className="ct-lede fade-up">India projects are quoted in INR, with GST additional where applicable. Payments are arranged only after an agreed proposal and invoice. Razorpay online checkout is not yet enabled.</p>}
 
           <section aria-labelledby="next-title" className="ct-next fade-up" style={{'--i': 1} as React.CSSProperties}>
             <h2 id="next-title" className="mono">What happens next</h2>
