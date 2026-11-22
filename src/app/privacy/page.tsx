@@ -1,10 +1,12 @@
+import {headers} from 'next/headers';
+import {regionForHostname} from '@/lib/regional-pricing';
 import type {Metadata} from 'next';
 import Link from 'next/link';
 
 import {LegalPage, type LegalSection} from '@/components/site/legal-page';
 import {COMPANY, COMPANY_FORM, CONTACT_EMAIL} from '@/lib/site';
 
-export const metadata: Metadata = {
+const usMetadata: Metadata = {
   title: 'Privacy policy · botLane',
   description: 'What botlane.io collects, why, who handles it for us, and how to have it changed or deleted.',
 };
@@ -141,14 +143,32 @@ const sections: LegalSection[] = [
   },
 ];
 
-export default function PrivacyPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
+  return region === 'in' ? {...usMetadata, description: 'Draft privacy policy for botlane.in operated under the Vedanta Ventures name, pending legal review.'} : usMetadata;
+}
+
+const indiaSections: LegalSection[] = [
+  {id: 'operator', title: 'Who handles your information', body: <p>botlane.in is operated under the Vedanta Ventures name as botLane India. The business's precise legal constitution, registered address and designated privacy contact must be verified before publication. Privacy enquiries can be sent to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>},
+  {id: 'data', title: 'Information we collect', body: <p>When you contact us or request a quote, we may receive your name, email, business details and the information you submit. Site infrastructure may process IP addresses, device and request information for security and operation. If you use our AI text or voice features, messages, audio or transcripts may be processed by service providers.</p>},
+  {id: 'purpose', title: 'Why we process it', body: <p>We use information to respond to enquiries, prepare proposals, provide requested services, operate and secure the website, and meet applicable legal obligations. We do not describe a marketing use here unless a separate notice and appropriate choice are provided.</p>},
+  {id: 'providers', title: 'Service providers and transfers', body: <p>Hosting, communications, AI and scheduling providers may process information on our behalf, potentially outside India. The actual provider list, processing locations and transfer safeguards must be confirmed against the production deployment before publication.</p>},
+  {id: 'retention', title: 'Retention and security', body: <p>Information is retained only as needed for the purposes described, contractual records and applicable law. We use reasonable technical and organisational safeguards, but no online service can guarantee absolute security. Specific retention periods require operational verification.</p>},
+  {id: 'choices', title: 'Your requests and grievances', body: <p>You may contact us to ask about your information, request corrections or deletion, or raise a privacy grievance, subject to applicable law and verification of your identity. Applicable statutory rights and complaint channels will be reflected in the final policy following legal review.</p>},
+  {id: 'cookies', title: 'Cookies and local storage', body: <p>The website may use browser storage to preserve an in-session assistant conversation or a partially completed enquiry. Cookie and analytics disclosures must be checked against the actual India production site before publication.</p>},
+  {id: 'children', title: 'Children', body: <p>Our services are intended for businesses, not children. Please do not submit information about children through our contact or AI features.</p>},
+  {id: 'updates', title: 'Policy updates', body: <p>We may revise this policy as our services or legal obligations change. This India version is a draft pending legal and operational review. See our <Link href="/terms">terms of use</Link>.</p>},
+];
+
+export default async function PrivacyPage() {
+  const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
   return (
     <LegalPage
       kicker="Privacy"
       title="Privacy policy"
-      updated="2026-11-16"
-      summary={<p>The short version: we only collect what you send us, we use it to reply and to do the work, and we don’t sell it or track you.</p>}
-      sections={sections}
+      updated={region === 'in' ? "2026-11-22" : "2026-11-16"}
+      summary={region === 'in' ? <p>Draft India privacy policy pending legal review and verification of actual data processing.</p> : <p>The short version: we only collect what you send us, we use it to reply and to do the work, and we don’t sell it or track you.</p>}
+      sections={region === 'in' ? indiaSections : sections}
     />
   );
 }
