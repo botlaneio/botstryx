@@ -27,11 +27,11 @@ const FACTS: [string, string][] = [
 const PROMISES: [string, string][] = [
   ['A fixed quote before the build', 'The scoping sprint ends with requirements, wireframes, a technical plan and one price for the build. You decide with all of it in front of you.'],
   ['Priced stage by stage', 'Start with the sprint, build a first version to test with real people, then go on to the full product. Each stage is agreed before it starts.'],
-  ['The sprint counts towards the build', `The ${price(SPRINT.id, SPRINT.amount)} sprint fee is credited towards your build if you go ahead, so planning first doesn’t cost you extra.`],
+  ['The sprint counts towards the build', `The ${money(SPRINT.amount)} sprint fee is credited towards your build if you go ahead, so planning first doesn’t cost you extra.`],
 ];
 
 const ASKED: [string, string][] = [
-  ['How is a web app priced?', `App builds are priced after scoping. A scoping sprint is ${price(SPRINT.id, SPRINT.amount)} one-time, ${lower(MVP.name)} is ${money(MVP.amount)}, and a full product build starts at ${money(FULL.amount)}.`],
+  ['How is a web app priced?', `App builds are priced after scoping. A scoping sprint is ${money(SPRINT.amount)} one-time, ${lower(MVP.name)} is ${money(MVP.amount)}, and a full product build starts at ${money(FULL.amount)}.`],
   ['Does the scoping sprint cost extra if we go ahead?', `No. The sprint fee of ${money(SPRINT.amount)} is credited towards your build if you go ahead.`],
   ['Which stage should we start with?', `The scoping sprint is for ${lower(SPRINT.bestFor)} ${MVP.name} is for ${lower(MVP.bestFor)} A ${lower(FULL.name)} is for ${lower(FULL.bestFor)}`],
   ['What is the Founding Ten?', `We’re a new company, so our first ${FOUNDING.places} clients get ${pct}% off website and app builds. The offer ends on ${FOUNDING.ends}, or sooner if all ten places are taken.`],
@@ -42,8 +42,8 @@ export async function WebAppsPage() {
   const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
   const price = (id: string, amount: number) => region === 'in' ? formatRegionalMoney(regionalAmount(id, amount, region), region) : money(amount);
   const facts: [string, string][] = APPS.map(p => [`${price(p.id, p.amount)}${p.from ? '+' : ''}`, p.name]);
-  const promises = promises.map(([title, body]) => [title, title === 'The sprint counts towards the build' ? `The ${price(SPRINT.id, SPRINT.amount)} sprint fee is credited towards your build if you go ahead.` : body] as [string,string]);
-  const asked = region === 'in' ? ASKED.filter(([q]) => !q.includes('Founding Ten')).map(([q,a]) => [q, q.startsWith('How is a web app priced') ? `A scoping sprint is ${price(SPRINT.id, SPRINT.amount)}, a prototype is ${price(MVP.id, MVP.amount)}, and full product builds start at ${money(FULL.amount)}.` : q.startsWith('Does the scoping') ? `No. The ${price(SPRINT.id, SPRINT.amount)} sprint fee is credited towards the build.` : a] as [string,string]) : ASKED;
+  const promises = PROMISES.map(([title, body]) => [title, title === 'The sprint counts towards the build' ? `The ${price(SPRINT.id, SPRINT.amount)} sprint fee is credited towards your build if you go ahead.` : body] as [string,string]);
+  const asked = region === 'in' ? ASKED.filter(([q]) => !q.includes('Founding Ten')).map(([q,a]) => [q, q.startsWith('How is a web app priced') ? `A scoping sprint is ${price(SPRINT.id, SPRINT.amount)}, a prototype is ${price(MVP.id, MVP.amount)}, and full product builds start at ${price(FULL.id, FULL.amount)}.` : q.startsWith('Does the scoping') ? `No. The ${price(SPRINT.id, SPRINT.amount)} sprint fee is credited towards the build.` : a] as [string,string]) : ASKED;
   return (
     <div className="apx wa">
       <div className="apx-open wa-open">
