@@ -1,4 +1,5 @@
 import type {Metadata} from 'next';
+import {headers} from 'next/headers';
 import Link from 'next/link';
 import {Button} from '@astryxdesign/core/Button';
 
@@ -7,6 +8,7 @@ import {PriceBook} from '@/components/pricing/price-book';
 import {SiteFooter} from '@/components/site/site-footer';
 import {SiteHeader} from '@/components/site/site-header';
 import {FOUNDING, money} from '@/lib/pricing';
+import {formatRegionalMoney, regionForHostname, type Region} from '@/lib/regional-pricing';
 
 export const metadata: Metadata = {
   title: 'Pricing · botLane',
@@ -44,7 +46,18 @@ const QUESTIONS: [string, string][] = [
 
 const JUMPS = [['Websites', `From ${money(2500)}`, '#websites'], ['Web Apps', `Scoping ${money(1500)}`, '#web-apps'], ['After launch', `From ${money(99)}/month`, '#after-launch']];
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const requestHeaders = await headers();
+  const region: Region = regionForHostname(requestHeaders.get('host')?.split(':')[0] ?? 'botlane.io');
+  const inIndia = region === 'in';
+  const price = (us: number, indian: number) => inIndia ? formatRegionalMoney(indian, region) : money(us);
+  const jumps = [['Websites', `From ${price(2500, 39900)}`, '#websites'], ['Web Apps', `Scoping ${price(1500, 24900)}`, '#web-apps'], ['After launch', `From ${price(99, 2999)}/month`, '#after-launch']];
+  const questions = inIndia ? QUESTIONS.filter(([question]) => !question.includes('Founding Ten')).map(([question, answer]) => {
+    if (question.startsWith('You’re new.')) return [question, 'We are new, and we won’t pretend otherwise. We show you our own software and agree a fixed scope and price before starting.'];
+    if (question.startsWith('How is a web app priced?')) return [question, `App builds are priced after scoping. A scoping sprint is ${price(1500, 24900)} one-time, and a full build starts at ${price(18000, 699900)}.`];
+    if (question.startsWith('Does the scoping sprint')) return [question, `No. The sprint fee of ${price(1500, 24900)} is credited towards your build if you go ahead.`];
+    return [question, answer];
+  }) : QUESTIONS;
   return (
     <div className="pr">
       <SiteHeader />
@@ -59,8 +72,8 @@ export default function PricingPage() {
 
             {/* The price list at a glance: one row a lane, each jumping to its section. */}
             <nav aria-label="Price list" className="pr-index">
-              <p className="mono">Clear, fixed prices in US dollars</p>
-              {JUMPS.map(([name, price, href]) => (
+              <p className="mono">Clear, fixed prices in {inIndia ? 'Indian rupees' : 'US dollars'}</p>
+              {jumps.map(([name, price, href]) => (
                 <a key={href} href={href}>
                   <b>{name}</b>
                   <span className="mono">{price}</span>
@@ -75,7 +88,8 @@ export default function PricingPage() {
           </dl>
         </div>
 
-        <PriceBook />
+        <PriceBook region={region} />
+        {inIndia && <p className="wrap mono">GST additional where applicable.</p>}
 
         <section aria-labelledby="pr-process" className="wrap pr-block">
           <header className="pr-head">
@@ -100,7 +114,7 @@ export default function PricingPage() {
             <p>Open a question for the straight answer. Anything else, ask us in your brief.</p>
           </header>
           <div className="faq">
-            {QUESTIONS.map(([q, a]) => (
+            {questions.map(([q, a]) => (
               <details key={q}>
                 <summary>{q}<i aria-hidden /></summary>
                 <p>{a}</p>
