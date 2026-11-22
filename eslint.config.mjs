@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated Fumadocs source files (may contain @ts-nocheck):
+    ".source/**",
     // Written by `astryx theme build`:
     "src/themes/**/*.d.ts",
     "src/themes/**/*.js",
