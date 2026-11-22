@@ -4,6 +4,7 @@ import {useEffect, useRef, useState} from 'react';
 
 import {Check} from '@/components/icons';
 import {APPS, money} from '@/lib/pricing';
+import {regionalAmount, formatRegionalMoney, type Region} from '@/lib/regional-pricing';
 
 // The centrepiece of the Web Apps page: one example app, built in front of you in the three stages it's sold in.
 // Scrolling through the track moves it from a clickable wireframe (the scoping sprint), to a working first
@@ -19,6 +20,9 @@ const STAGES = APPS.map((p) => ({
   terms: p.terms,
 }));
 const N = STAGES.length;
+function getStages(region: Region) {
+  return STAGES.map(s => ({...s, price: `${APPS.find(p => p.id === s.id)?.from ? 'From ' : ''}${region === 'in' ? formatRegionalMoney(regionalAmount(s.id, APPS.find(p => p.id === s.id)!.amount, region), region) : money(APPS.find(p => p.id === s.id)!.amount)}`}));
+}
 
 /** Which stage the reader has scrolled to, and how far through the whole track they are. */
 function useStage() {
@@ -57,15 +61,16 @@ function useStage() {
 }
 
 /** The three stages on one pinned screen: the list on the left, the app being built on the right. */
-export function BuildStage() {
+export function BuildStage({region = 'us'}: {region?: Region}) {
   const {track, stage, go} = useStage();
+  const stages = getStages(region);
 
   return (
     <div ref={track} className="bs" data-stage={stage + 1}>
       <div className="bs-pin">
         <div className="wrap bs-grid">
           <ol className="bs-list">
-            {STAGES.map((s, i) => (
+            {stages.map((s, i) => (
               <li key={s.id} data-on={i === stage || undefined} data-done={i < stage || undefined}>
                 <button type="button" className="bs-head" onClick={() => go(i)} aria-current={i === stage ? 'step' : undefined}>
                   <span className="mono num-badge">0{i + 1}</span>
@@ -93,10 +98,11 @@ export function BuildStage() {
 }
 
 /** For narrow screens and reduced motion: the three stages one after another, each with its own drawing. */
-export function BuildStageStack() {
+export function BuildStageStack({region = 'us'}: {region?: Region}) {
+  const stages = getStages(region);
   return (
     <ol className="bs-stack">
-      {STAGES.map((s, i) => (
+      {stages.map((s, i) => (
         <li key={s.id} className="bs" data-stage={i + 1}>
           <div className="bs-stack-head">
             <span className="mono num-badge">0{i + 1}</span>
