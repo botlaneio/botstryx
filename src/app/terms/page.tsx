@@ -1,3 +1,5 @@
+import {headers} from 'next/headers';
+import {regionForHostname} from '@/lib/regional-pricing';
 import type {Metadata} from 'next';
 import Link from 'next/link';
 
@@ -5,7 +7,7 @@ import {LegalPage, type LegalSection} from '@/components/site/legal-page';
 import {FOUNDING} from '@/lib/pricing';
 import {COMPANY, COMPANY_FORM, CONTACT_EMAIL} from '@/lib/site';
 
-export const metadata: Metadata = {
+const usMetadata: Metadata = {
   title: 'Terms of use · botLane',
   description: 'The terms for using botlane.io: what its prices and offers mean, what Lane is, and what’s ours.',
 };
@@ -111,14 +113,32 @@ const sections: LegalSection[] = [
   },
 ];
 
-export default function TermsPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
+  return region === 'in' ? {...usMetadata, description: 'Draft website terms for botlane.in operated under the Vedanta Ventures name, pending legal review.'} : usMetadata;
+}
+
+const indiaSections: LegalSection[] = [
+  {id: 'operator', title: 'Website operator', body: <p>botlane.in is operated under the Vedanta Ventures name as botLane India. The precise legal constitution, registered address, GST registration details and official contact particulars must be confirmed before publication. For enquiries, contact <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>},
+  {id: 'scope', title: 'Website terms and project agreements', body: <p>These terms govern use of the website. A service enquiry does not create a contract. Each project requires a separate written proposal, scope, payment schedule and agreement accepted by both parties. The signed project agreement controls if its terms differ.</p>},
+  {id: 'quotes', title: 'Prices, taxes and payment', body: <p>Prices displayed on botlane.in are in Indian rupees (INR), are indicative and may change before acceptance. GST is additional where applicable, subject to the final invoice and applicable law. Any third-party costs and payment milestones will be identified in the written proposal. Do not make a payment unless you have received an agreed invoice and verified payment instructions through an official contact channel.</p>},
+  {id: 'services', title: 'Delivery and changes', body: <p>Deliverables, timelines, revisions, acceptance, support, cancellation and any refund arrangements are governed by the project agreement. Website descriptions do not guarantee a particular business result or delivery date.</p>},
+  {id: 'use', title: 'Acceptable use and intellectual property', body: <p>Do not misuse the website, attempt unauthorized access, send unlawful content or interfere with its operation. Site content and trademarks belong to their respective owners. Ownership and licensing of commissioned work are determined by the signed project agreement.</p>},
+  {id: 'third-party', title: 'External services and AI', body: <p>The website may link to third-party services and offer an AI assistant. AI responses may be inaccurate and do not constitute binding quotations or professional advice. Do not submit sensitive information through the assistant. Third-party services may have their own terms and privacy policies.</p>},
+  {id: 'liability', title: 'Availability and liability', body: <p>We aim to keep the website accurate and available but cannot guarantee uninterrupted operation. Liability is limited only to the extent permitted by applicable law; statutory consumer and other non-excludable rights are unaffected.</p>},
+  {id: 'law', title: 'Applicable law and disputes', body: <p>Indian law applies to these website terms, subject to any mandatory protections and jurisdictional rules. The appropriate dispute-resolution process and court jurisdiction should be confirmed by legal counsel before publication.</p>},
+  {id: 'changes', title: 'Changes and contact', body: <p>These terms may be updated. Questions can be sent to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. This India version is a draft pending legal and accounting review.</p>},
+];
+
+export default async function TermsPage() {
+  const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
   return (
     <LegalPage
       kicker="Terms"
       title="Terms of use"
-      updated="2026-11-16"
-      summary={<p>The terms for using botlane.io. Any project we do together runs on its own written scope and agreement, signed before work starts.</p>}
-      sections={sections}
+      updated={region === 'in' ? "2026-11-22" : "2026-11-16"}
+      summary={region === 'in' ? <p>Draft terms for botlane.in, pending review by your lawyer and accountant. Projects require a separate written agreement.</p> : <p>The terms for using botlane.io. Any project we do together runs on its own written scope and agreement, signed before work starts.</p>}
+      sections={region === 'in' ? indiaSections : sections}
     />
   );
 }

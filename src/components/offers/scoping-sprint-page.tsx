@@ -1,3 +1,5 @@
+import {headers} from 'next/headers';
+import {regionForHostname, regionalAmount, formatRegionalMoney} from '@/lib/regional-pricing';
 import Link from 'next/link';
 import {Button} from '@astryxdesign/core/Button';
 
@@ -40,13 +42,17 @@ const ASKED: [string, string][] = [
 ];
 
 /** The scoping sprint: the plan, the wireframes and the price, before anything is built. */
-export function ScopingSprintPage() {
+export async function ScopingSprintPage() {
+  const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
+  const display = (id: string, amount: number) => region === 'in' ? formatRegionalMoney(regionalAmount(id, amount, region), region) : money(amount);
+  const facts = region === 'in' ? FACTS.map(([v,l], i) => i === 0 ? [display(SPRINT.id, SPRINT.amount), l] as [string,string] : [v,l] as [string,string]).filter(([,l]) => !l.includes('Founding Ten')) : FACTS;
+  const asked = region === 'in' ? ASKED.filter(([q]) => !q.includes('Founding Ten')).map(([q,a]) => [q, a.replaceAll(money(SPRINT.amount), display(SPRINT.id, SPRINT.amount)).replaceAll(money(MVP.amount), display(MVP.id, MVP.amount)).replaceAll(money(FULL.amount), display(FULL.id, FULL.amount)).replaceAll('$18,000', display(FULL.id, FULL.amount))] as [string,string]) : ASKED;
   return (
     <div className="apx wa">
       <div className="apx-open">
         <SiteHeader />
         <main className="wrap apx-hero">
-          <p className="mono apx-tag fade-up"><Link href="/web-apps">Web apps</Link><span aria-hidden>/</span>{SPRINT.name}<i aria-hidden />{money(SPRINT.amount)} · {time}</p>
+          <p className="mono apx-tag fade-up"><Link href="/web-apps">Web apps</Link><span aria-hidden>/</span>{SPRINT.name}<i aria-hidden />{display(SPRINT.id, SPRINT.amount)} · {time}</p>
 
           <div className="care-hero-grid">
             <h1 className="apx-title care-title fp-title">
@@ -69,7 +75,7 @@ export function ScopingSprintPage() {
               </div>
             </div>
             <dl className="apx-facts">
-              {FACTS.map(([value, label]) => <div key={label}><dd>{value}</dd><dt className="mono">{label}</dt></div>)}
+              {facts.map(([value, label]) => <div key={label}><dd>{value}</dd><dt className="mono">{label}</dt></div>)}
             </dl>
           </div>
         </main>
@@ -111,14 +117,14 @@ export function ScopingSprintPage() {
         <StageFits here={SPRINT.id} />
       </section>
 
-      <section aria-labelledby="founding-title" className="wrap wa-founding-wrap">
+      {region === 'us' && <section aria-labelledby="founding-title" className="wrap wa-founding-wrap">
         <div className="wa-founding">
           <p className="mono">The Founding Ten</p>
           <h2 id="founding-title"><span>{pct}% off</span> app builds for our first {FOUNDING.places} clients.</h2>
           <p>Until {FOUNDING.ends}, or sooner if all ten places are taken.</p>
           <Link href={CONTACT} className="wa-founding-go">Claim a place <ArrowUpRight /></Link>
         </div>
-      </section>
+      </section>}
 
       <section aria-labelledby="asked-title" className="wrap apx-block">
         <header className="apx-head">
@@ -126,13 +132,13 @@ export function ScopingSprintPage() {
           <h2 id="asked-title">Four straight answers.</h2>
         </header>
         <dl className="apx-asked">
-          {ASKED.map(([q, a]) => <div key={q}><dt>{q}</dt><dd>{a}</dd></div>)}
+          {asked.map(([q, a]) => <div key={q}><dt>{q}</dt><dd>{a}</dd></div>)}
         </dl>
       </section>
 
       <section aria-labelledby="price-title" className="wrap apx-close">
         <p className="mono">{SPRINT.name} · One-time</p>
-        <h2 id="price-title">{money(SPRINT.amount)}</h2>
+        <h2 id="price-title">{display(SPRINT.id, SPRINT.amount)}</h2>
         <div className="apx-close-row">
           <p>{SPRINT.terms} Tell us about the app you have in mind.</p>
           <div className="apx-close-go">

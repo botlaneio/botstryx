@@ -1,3 +1,5 @@
+import {headers} from 'next/headers';
+import {regionForHostname, regionalAmount, formatRegionalMoney} from '@/lib/regional-pricing';
 import Link from 'next/link';
 import {Button} from '@astryxdesign/core/Button';
 
@@ -40,13 +42,17 @@ const ASKED: [string, string][] = [
 ];
 
 /** The AI Assistant page: what it answers, what it learns from, when it hands over, and a real one to try. */
-export function AssistantPage() {
+export async function AssistantPage() {
+  const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
+  const display = (id: string, amount: number) => region === 'in' ? formatRegionalMoney(regionalAmount(id, amount, region), region) : money(amount);
+  const facts = region === 'in' ? FACTS.map(([v,l], i) => i === 0 ? [display(AI.id, AI.amount), l] as [string,string] : [v,l] as [string,string]).filter(([,l]) => !l.includes('Founding Ten')) : FACTS;
+  const asked = region === 'in' ? ASKED.map(([q,a]) => [q, a.replaceAll(money(AI.amount), display(AI.id, AI.amount))] as [string,string]) : ASKED;
   return (
     <div className="apx wa ai">
       <div className="apx-open">
         <SiteHeader />
         <main className="wrap apx-hero">
-          <p className="mono apx-tag fade-up"><Link href="/custom-solutions">Custom solutions</Link><span aria-hidden>/</span>{AI.name}<i aria-hidden />{money(AI.amount)} one-time</p>
+          <p className="mono apx-tag fade-up"><Link href="/custom-solutions">Custom solutions</Link><span aria-hidden>/</span>{AI.name}<i aria-hidden />{display(AI.id, AI.amount)} one-time</p>
 
           <div className="care-hero-grid">
             <h1 className="apx-title care-title fp-title">
@@ -72,7 +78,7 @@ export function AssistantPage() {
               </div>
             </div>
             <dl className="apx-facts">
-              {FACTS.map(([value, label]) => <div key={label}><dd>{value}</dd><dt className="mono">{label}</dt></div>)}
+              {facts.map(([value, label]) => <div key={label}><dd>{value}</dd><dt className="mono">{label}</dt></div>)}
             </dl>
           </div>
         </main>
@@ -143,13 +149,13 @@ export function AssistantPage() {
           <h2 id="asked-title">Four straight answers.</h2>
         </header>
         <dl className="apx-asked">
-          {ASKED.map(([q, a]) => <div key={q}><dt>{q}</dt><dd>{a}</dd></div>)}
+          {asked.map(([q, a]) => <div key={q}><dt>{q}</dt><dd>{a}</dd></div>)}
         </dl>
       </section>
 
       <section aria-labelledby="price-title" className="wrap apx-close">
         <p className="mono">{AI.name} · One-time</p>
-        <h2 id="price-title">{money(AI.amount)}</h2>
+        <h2 id="price-title">{display(AI.id, AI.amount)}</h2>
         <div className="apx-close-row">
           <p>Trained on your business, and on your site day and night. Tell us about the questions you answer most.</p>
           <div className="apx-close-go">
