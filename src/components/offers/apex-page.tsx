@@ -1,3 +1,5 @@
+import {headers} from 'next/headers';
+import {regionForHostname, regionalAmount, formatRegionalMoney} from '@/lib/regional-pricing';
 import Link from 'next/link';
 import {Button} from '@astryxdesign/core/Button';
 
@@ -41,7 +43,9 @@ const ASKED: [string, string][] = [
 ];
 
 /** The Apex website package: one site, considered at five scales. */
-export function ApexPage() {
+export async function ApexPage() {
+  const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
+  const displayPrice = region === 'in' ? formatRegionalMoney(regionalAmount('website-apex', 0, region), region) : PRICE;
   return (
     <div className="apx">
       <div className="apx-open">
@@ -67,7 +71,7 @@ export function ApexPage() {
               </div>
             </div>
             <dl className="apx-facts">
-              {FACTS.map(([value, label]) => <div key={label}><dd>{value}</dd><dt className="mono">{label}</dt></div>)}
+              {(region === 'in' ? [[displayPrice, 'One-time project'], ...FACTS.slice(1)] : FACTS).map(([value, label]) => <div key={label}><dd>{value}</dd><dt className="mono">{label}</dt></div>)}
             </dl>
           </div>
         </main>
@@ -119,7 +123,7 @@ export function ApexPage() {
 
       <section aria-labelledby="price-title" className="wrap apx-close">
         <p className="mono">Apex · One-time project</p>
-        <h2 id="price-title">{PRICE}</h2>
+        <h2 id="price-title">{displayPrice}</h2>
         <div className="apx-close-row">
           <p>Scoped in writing and agreed before any work starts. Tell us what you’re putting into the world.</p>
           <div className="apx-close-go">

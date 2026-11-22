@@ -1,3 +1,5 @@
+import {headers} from 'next/headers';
+import {regionForHostname, regionalAmount, formatRegionalMoney} from '@/lib/regional-pricing';
 import Link from 'next/link';
 import {Button} from '@astryxdesign/core/Button';
 
@@ -52,7 +54,9 @@ const STEPS: PathStep[] = [
 const delay = (i: number) => ({'--i': i}) as React.CSSProperties;
 
 /** The Core website package: what it is, the five pages, what's included and the price, how it runs, who it fits. */
-export function CorePage() {
+export async function CorePage() {
+  const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
+  const displayPrice = region === 'in' ? formatRegionalMoney(regionalAmount('website-core', 0, region), region) : PRICE;
   return (
     <>
       <div className="stage">
@@ -94,7 +98,7 @@ export function CorePage() {
             <dl className="rail spec-rail fade-up" style={delay(3)}>
               <div className="rail-item">
                 <dt className="idx mono">Core</dt>
-                <dd className="name">{PRICE}</dd>
+                <dd className="name">{displayPrice}</dd>
                 <dd className="price">One-time project</dd>
               </div>
               {SPECS.filter(([k]) => k !== 'Editing').map(([k, v]) => (
@@ -160,7 +164,7 @@ export function CorePage() {
               <span className="tag">One-time project</span>
             </div>
             <div>
-              <p className="amount">{PRICE}</p>
+              <p className="amount">{displayPrice}</p>
               <p className="terms">Scope and price agreed before we start.</p>
             </div>
             <dl>

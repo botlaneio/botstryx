@@ -1,3 +1,5 @@
+import {headers} from 'next/headers';
+import {regionForHostname, regionalAmount, formatRegionalMoney} from '@/lib/regional-pricing';
 import Link from 'next/link';
 import {Button} from '@astryxdesign/core/Button';
 
@@ -55,7 +57,9 @@ const FAQ: [string, string][] = [
 const delay = (i: number) => ({'--i': i}) as React.CSSProperties;
 
 /** The Ascend website package: two hands-on demos of what it adds, then the price, the path and the questions. */
-export function AscendPage() {
+export async function AscendPage() {
+  const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
+  const displayPrice = region === 'in' ? formatRegionalMoney(regionalAmount('website-ascend', 0, region), region) : PRICE;
   return (
     <>
       <div className="stage">
@@ -96,7 +100,7 @@ export function AscendPage() {
             <dl className="rail spec-rail stats fade-up" style={delay(3)}>
               <div className="rail-item">
                 <dt className="idx mono">Ascend</dt>
-                <dd className="name">{PRICE}</dd>
+                <dd className="name">{displayPrice}</dd>
                 <dd className="price">One-time project</dd>
               </div>
               {STATS.map(([n, label]) => (
@@ -204,7 +208,7 @@ export function AscendPage() {
               <span className="tag">One-time project</span>
             </div>
             <div>
-              <p className="amount">{PRICE}</p>
+              <p className="amount">{displayPrice}</p>
               <p className="terms">Scope and price agreed before we start.</p>
             </div>
             <dl>
