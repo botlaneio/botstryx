@@ -1,4 +1,6 @@
 import type {MetadataRoute} from 'next';
+import {headers} from 'next/headers';
+import {regionForHostname} from '@/lib/regional-pricing';
 
 import {POSTS} from '@/lib/insights';
 import {source} from '@/lib/source';
@@ -13,10 +15,12 @@ const PAGES = [
   '/blog', '/changelog', '/help', '/contact', '/privacy', '/terms',
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
+  const base = region === 'in' ? 'https://botlane.in' : SITE_URL;
   return [
-    ...PAGES.map((path) => ({url: `${SITE_URL}${path}`, priority: path === '' ? 1 : 0.7})),
-    ...source.getPages().map((page) => ({url: `${SITE_URL}${page.url}`, priority: page.url === '/docs' ? 0.7 : 0.5})),
-    ...POSTS.map((post) => ({url: `${SITE_URL}/blog/${post.slug}`, lastModified: post.date, priority: 0.5})),
+    ...PAGES.map((path) => ({url: `${base}${path}`, priority: path === '' ? 1 : 0.7})),
+    ...source.getPages().map((page) => ({url: `${base}${page.url}`, priority: page.url === '/docs' ? 0.7 : 0.5})),
+    ...POSTS.map((post) => ({url: `${base}/blog/${post.slug}`, lastModified: post.date, priority: 0.5})),
   ];
 }

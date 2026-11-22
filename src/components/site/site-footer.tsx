@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import {headers} from 'next/headers';
+import {regionForHostname} from '@/lib/regional-pricing';
 import {Button} from '@astryxdesign/core/Button';
 
 import {Logo} from '@/components/brand/logo';
@@ -75,6 +77,8 @@ async function year() {
  * small print, and the wordmark set very large and faint along the bottom edge.
  */
 export async function SiteFooter() {
+  const region = regionForHostname((await headers()).get('host')?.split(':')[0] ?? 'botlane.io');
+  const operatingEntity = region === 'in' ? 'Vedanta Ventures · botLane India' : COMPANY;
   return (
     <footer className="site-footer">
       <div className="wrap">
@@ -111,7 +115,7 @@ export async function SiteFooter() {
 
         <div className="footer-base">
           <div className="legal">
-            <span>© {await year()} {COMPANY}</span>
+            <span>© {await year()} {operatingEntity}</span>
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
           </div>

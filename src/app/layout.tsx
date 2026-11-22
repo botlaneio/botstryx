@@ -1,4 +1,6 @@
 import {Suspense} from 'react';
+import {headers} from 'next/headers';
+import {regionForHostname} from '@/lib/regional-pricing';
 import type {Metadata, Viewport} from 'next';
 import {Instrument_Sans, JetBrains_Mono} from 'next/font/google';
 
@@ -22,7 +24,7 @@ const jetbrains = JetBrains_Mono({
   display: 'swap',
 });
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   // Makes canonical and social-preview links absolute, on botlane.io whatever address served the page.
   metadataBase: new URL(SITE_URL),
   alternates: {
@@ -39,6 +41,21 @@ export const metadata: Metadata = {
   },
   twitter: {card: 'summary_large_image', images: [DEFAULT_SHARE_IMAGE]},
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const host = (await headers()).get('host')?.split(':')[0] ?? 'botlane.io';
+  const region = regionForHostname(host);
+  const domain = region === 'in' ? 'https://botlane.in' : SITE_URL;
+  return {
+    ...baseMetadata,
+    metadataBase: new URL(domain),
+    alternates: {
+      ...baseMetadata.alternates,
+      canonical: './',
+      languages: {'en-US': 'https://botlane.io', 'en-IN': 'https://botlane.in'},
+    },
+  };
+}
 
 export const viewport: Viewport = {
   // The page opens dark whatever the device is set to, so the browser's own bar matches it.
