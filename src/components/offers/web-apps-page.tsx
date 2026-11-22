@@ -18,12 +18,6 @@ const CONTACT = '/contact?need=web-app';
 const [SPRINT, MVP, FULL] = APPS;
 const pct = Math.round(FOUNDING.discount * 100);
 
-const FACTS: [string, string][] = [
-  [money(SPRINT.amount), SPRINT.name],
-  [money(MVP.amount), MVP.name],
-  [`${money(FULL.amount)}+`, FULL.name],
-];
-
 const PROMISES: [string, string][] = [
   ['A fixed quote before the build', 'The scoping sprint ends with requirements, wireframes, a technical plan and one price for the build. You decide with all of it in front of you.'],
   ['Priced stage by stage', 'Start with the sprint, build a first version to test with real people, then go on to the full product. Each stage is agreed before it starts.'],
@@ -102,7 +96,7 @@ export async function WebAppsPage() {
         </header>
         <div className="wa-price">
           <ol className="wa-promises">
-            {PROMISES.map(([title, body], i) => (
+            {promises.map(([title, body], i) => (
               <li key={title}>
                 <span className="mono num-badge">0{i + 1}</span>
                 <h3>{title}</h3>
