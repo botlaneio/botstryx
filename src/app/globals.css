@@ -1038,6 +1038,8 @@ body {
   }
   @media (min-width: 900px) {
     .footer-cols { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    /* Four columns while the Account column is hidden (ACCOUNTS_OPEN in src/lib/site.ts). */
+    .footer-cols:has(> nav:nth-child(4):last-child) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   }
   .footer-cols h2 {
     margin: 0 0 12px;
