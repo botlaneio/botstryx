@@ -17,4 +17,8 @@ export const postShareImage = (slug: string) => `/og/${slug}.png`;
 // Who runs the site, for the privacy policy and the terms (botpro src/lib/site.ts). One Wyoming LLC trades as botLane.
 export const COMPANY = 'BotLane LLC';
 export const COMPANY_FORM = 'a limited liability company registered in Wyoming, USA';
+// Sign-in and the client portal are previews with sample data. Until accounts are connected, the menu and footer
+// don't link to them and search engines are asked to skip them. Set true to bring the links back.
+export const ACCOUNTS_OPEN = false;
+
 export const CONTACT_EMAIL = 'admin@botlane.io';

@@ -6,6 +6,8 @@ import {Button} from '@astryxdesign/core/Button';
 import {Logo} from '@/components/brand/logo';
 import {ArrowRight} from '@/components/icons';
 
+import {ACCOUNTS_OPEN} from '@/lib/site';
+
 import {ThemeToggle} from './theme-toggle';
 
 // Words, links and the company name as botpro's footer gives them (src/components/site/site-footer.tsx,
@@ -94,7 +96,7 @@ export async function SiteFooter() {
           </div>
 
           <div className="footer-cols">
-            {COLUMNS.map((col) => (
+            {COLUMNS.filter((col) => ACCOUNTS_OPEN || col.id !== 'account').map((col) => (
               <nav key={col.id} aria-labelledby={`footer-${col.id}`}>
                 <h2 id={`footer-${col.id}`} className="mono">{col.heading}</h2>
                 <ul>

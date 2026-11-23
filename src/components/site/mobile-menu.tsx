@@ -7,6 +7,7 @@ import {Button} from '@astryxdesign/core/Button';
 import {Drawer} from '@astryxdesign/core/Drawer';
 
 import {Logo} from '@/components/brand/logo';
+import {ACCOUNTS_OPEN} from '@/lib/site';
 import {ArrowRight, ArrowUpRight, GitHubMark, GoogleMark, Mail, MicrosoftMark} from '@/components/icons';
 
 import {Hamburger} from './hamburger';
@@ -174,23 +175,27 @@ export function MobileMenu({links}: {links: {label: string; href: string}[]}) {
               <span className="inline-flex items-center gap-2.5">Start a project <ArrowRight /></span>
             </Button>
 
-            {/* Two by two. "Sign in with" is said once, above, so each button needs only its mark and name. */}
-            <div className="mnav-signin">
-              <p id="mnav-signin" className="mono">Sign in with</p>
-              <ul aria-labelledby="mnav-signin">
-                {PROVIDERS.map((p) => (
-                  <li key={p.name}>
-                    <Link href={SIGN_IN} onClick={close} className="signin" aria-label={`Sign in with ${p.name}`}>
-                      {p.icon}
-                      {p.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <p className="mnav-signup">
-              New to botLane? <Link href="/account" onClick={close}>Create an account</Link>
-            </p>
+            {ACCOUNTS_OPEN ? (
+              <>
+                {/* Two by two. "Sign in with" is said once, above, so each button needs only its mark and name. */}
+                <div className="mnav-signin">
+                  <p id="mnav-signin" className="mono">Sign in with</p>
+                  <ul aria-labelledby="mnav-signin">
+                    {PROVIDERS.map((p) => (
+                      <li key={p.name}>
+                        <Link href={SIGN_IN} onClick={close} className="signin" aria-label={`Sign in with ${p.name}`}>
+                          {p.icon}
+                          {p.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <p className="mnav-signup">
+                  New to botLane? <Link href="/account" onClick={close}>Create an account</Link>
+                </p>
+              </>
+            ) : null}
             <p className="mnav-legal">
               <Link href="/privacy" onClick={close} aria-current={here('/privacy')}>Privacy</Link>
               <Link href="/terms" onClick={close} aria-current={here('/terms')}>Terms</Link>

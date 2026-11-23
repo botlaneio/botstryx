@@ -4,7 +4,7 @@ import type {Metadata} from 'next';
 import {Account} from '@/components/account/account';
 import {SiteFooter} from '@/components/site/site-footer';
 
-export const metadata: Metadata = {title: 'Account · botLane'};
+export const metadata: Metadata = {title: 'Account · botLane', robots: {index: false, follow: false}};
 
 type Search = Promise<{[key: string]: string | string[] | undefined}>;
 

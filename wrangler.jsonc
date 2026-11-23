@@ -1,7 +1,8 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "botstryx",
-	"main": ".open-next/worker.js",
+	// custom-worker.ts wraps OpenNext's .open-next/worker.js with a short page cache.
+	"main": "custom-worker.ts",
 	"compatibility_date": "2026-10-30",
 	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
 	// The site's address until a custom domain is set, plus a preview address for each uploaded version.
@@ -31,6 +32,11 @@
 	"images": {
 		// Next.js image optimisation, done by Cloudflare Images.
 		"binding": "IMAGES"
+	},
+	// The deployed version's id: custom-worker.ts keys its page cache on it, so each deploy starts fresh.
+	// Left out of `previews`, which run on workers.dev where the page cache is off.
+	"version_metadata": {
+		"binding": "CF_VERSION_METADATA"
 	},
 	"d1_databases": [
 		{
